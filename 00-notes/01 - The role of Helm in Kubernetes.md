@@ -9,7 +9,7 @@ The Kubernetes documentation states this directly:
 > *"Kubernetes is not a platform as a service (PaaS) and doesn't have or enforce a formal notion of an application. Instead, applications are informal and described with metadata."*
 
 Helm supplies that unit.
-It groups an application's manifests into one versioned package, a **chart**, and tracks every installation of that chart as one **release** that we upgrade, roll back, and remove with a single command.
+It groups an application's manifests into one versioned package, a **chart,** and tracks every installation of that chart as one **release** that we upgrade, roll back, and remove with a single command.
 
 ## What one application is made of
 
@@ -26,9 +26,9 @@ A small web application with a database already spans eleven objects in one name
 | `StatefulSet` | runs the database Pod | `spec.selector` over its Pod template labels |
 | `NetworkPolicy` (database) | admits traffic to the database only from the app Pods | `podSelector`, plus a `from` rule matching the app Pod labels |
 | `ConfigMap`, `Secret` | configuration and credentials for both workloads | referenced by name from the Pod specs |
-| `PersistentVolumeClaim` | the database's storage | referenced by name from the StatefulSet |
+| `PersistentVolumeClaim` | the database's storage | created by the StatefulSet from its `volumeClaimTemplates`, one per Pod |
 
-Two mechanisms hold all of this together: **names** and **labels**.
+Two mechanisms hold all of this together: **names** and **labels.**
 Names connect an Ingress to a Service or a Pod to a ConfigMap.
 Labels connect everything that selects Pods:
 
@@ -94,7 +94,7 @@ The documentation names three concepts:
 | **Repository** | *"A repository is the place where charts are collected and shared."* Public charts are listed on Artifact Hub. Container registries with OCI support store and share charts as well. |
 | **Release** | *"A release is an instance of a chart running in a Kubernetes cluster. You can install one chart many times into the same cluster, and each installation creates a new release with its own release name."* |
 
-A fourth input, the **values**, turns a chart into a release: *"To create a release, Helm merges a packaged chart with configuration information."*
+A fourth input, the **values,** turns a chart into a release: *"To create a release, Helm merges a packaged chart with configuration information."*
 
 ### Where the package-manager comparison holds
 

@@ -1,0 +1,8 @@
+# Bitnami moved the versioned image tags from docker.io/bitnami to docker.io/bitnamilegacy.
+# Pass this file with --values on every helm template, install, and upgrade of WordPress 23.1.x.
+
+image:
+  repository: bitnamilegacy/wordpress
+mariadb:
+  image:
+    repository: bitnamilegacy/mariadb
