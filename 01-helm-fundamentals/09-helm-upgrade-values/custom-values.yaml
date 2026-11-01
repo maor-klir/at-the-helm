@@ -1,0 +1,20 @@
+# Values for WordPress 23.1.x, exercise 09 onward.
+
+# Bitnami moved the versioned image tags from docker.io/bitnami to docker.io/bitnamilegacy.
+image:
+  repository: bitnamilegacy/wordpress
+mariadb:
+  image:
+    repository: bitnamilegacy/mariadb
+
+# Our own WordPress admin user. The password comes from the existing Secret
+# custom-wp-credentials (key wordpress-password), so wordpressPassword is ignored.
+wordpressUsername: maor
+existingSecret: custom-wp-credentials
+
+# A HorizontalPodAutoscaler keeps 2 to 10 WordPress Pods, replacing replicaCount: 3.
+# targetCPU and targetMemory keep the chart's default of 50.
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10

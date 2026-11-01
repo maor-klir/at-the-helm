@@ -15,9 +15,10 @@ In this exercise, you'll focus on understanding the implications of not deleting
 
 ## Step-by-Step Guide
 
-1. **Install WordPress:**
+Run the commands from this folder.
 
-   Run the commands from this folder. The overrides file is in exercise 03's folder:
+1. **Install WordPress:**
+   The overrides file is in exercise 03's folder:
 
    ```bash
    helm -n wordpress install local-wp bitnami/wordpress --version 23.1.20 --create-namespace --values ../03-installing-wordpress-chart/wp-repo-overrides.yaml
@@ -25,7 +26,7 @@ In this exercise, you'll focus on understanding the implications of not deleting
 
    > **Bitnami images moved:** pin `--version 23.1.20` and pass the `bitnamilegacy` overrides file (see exercise 03). Without `--version`, Helm installs the latest chart (34.x), which uses different images.
 
-   Watch the pods until both are `Running` and ready, which takes about a minute, then stop the watch with `Ctrl+C`:
+   Watch the Pods until both are `Running` and ready, which takes about a minute, then stop the watch with `Ctrl+C`:
 
    ```bash
    kubectl -n wordpress get pods --watch
@@ -42,8 +43,8 @@ In this exercise, you'll focus on understanding the implications of not deleting
    It holds `mariadb-password`, the password of the `bn_wordpress` user that WordPress connects with, and `mariadb-root-password`. Keep both values in shell variables for the comparison in step 5, not in a file in this public repository:
 
    ```bash
-   OLD_DB_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-password}' | base64 --decode)
-   OLD_ROOT_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-root-password}' | base64 --decode)
+   OLD_DB_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-password}' | base64 -d)
+   OLD_ROOT_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-root-password}' | base64 -d)
    ```
 
    The WordPress admin password is in `local-wp-wordpress`, under the key `wordpress-password` (see exercise 04).
@@ -72,13 +73,13 @@ In this exercise, you'll focus on understanding the implications of not deleting
 
    ```bash
    helm -n wordpress install local-wp bitnami/wordpress --version 23.1.20 --create-namespace --values ../03-installing-wordpress-chart/wp-repo-overrides.yaml
-   NEW_DB_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-password}' | base64 --decode)
-   NEW_ROOT_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-root-password}' | base64 --decode)
+   NEW_DB_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-password}' | base64 -d)
+   NEW_ROOT_PW=$(kubectl -n wordpress get secret local-wp-mariadb -o jsonpath='{.data.mariadb-root-password}' | base64 -d)
    [ "$OLD_DB_PW" = "$NEW_DB_PW" ] && echo same || echo different
    [ "$OLD_ROOT_PW" = "$NEW_ROOT_PW" ] && echo same || echo different
    ```
 
-   The MariaDB data on the reused PVC still expects the old passwords, while the new Secret holds new ones. After about three minutes, both pods have restarted:
+   The MariaDB data on the reused PVC still expects the old passwords, while the new Secret holds new ones. After about three minutes, both Pods have restarted:
 
    ```bash
    kubectl -n wordpress get pods
@@ -87,7 +88,7 @@ In this exercise, you'll focus on understanding the implications of not deleting
    ```
 
    - WordPress never becomes ready. Its log stops at `Trying to connect to the database server`, and after a minute the container exits with `Could not connect to the database` and ends up in `CrashLoopBackOff`.
-   - The MariaDB log rejects both logins: `Access denied for user 'bn_wordpress'` from WordPress, and `Access denied for user 'root'@'localhost'` from the pod's own liveness probe, which runs `mariadb-admin status` with the new root password. The probe fails, so Kubernetes restarts MariaDB as well (`kubectl -n wordpress get events` shows `Container mariadb failed liveness probe, will be restarted`).
+   - The MariaDB log rejects both logins: `Access denied for user 'bn_wordpress'` from WordPress, and `Access denied for user 'root'@'localhost'` from the Pod's own liveness probe, which runs `mariadb-admin status` with the new root password. The probe fails, so Kubernetes restarts MariaDB as well (`kubectl -n wordpress get events` shows `Container mariadb failed liveness probe, will be restarted`).
 
    > **Why the passwords don't change:** the WordPress chart's README says *"Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available."*
 

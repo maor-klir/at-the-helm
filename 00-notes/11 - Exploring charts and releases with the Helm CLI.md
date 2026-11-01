@@ -34,6 +34,9 @@ Each added repository gets its own index file there, e.g. `bitnami-index.yaml`.
 `helm repo update` refreshes the cache: *"Update gets the latest information about charts from the respective chart repositories. Information is cached locally, where it is used by commands like 'helm search'."*
 It also accepts repository names, so `helm repo update bitnami` refreshes only one.
 
+**`helm install` reads the same cache:** in Helm's source, a reference like `bitnami/wordpress` is resolved against the cached index file, not the live repository.
+A version published after our last `helm repo update` doesn't exist for `helm install` or `helm show`, and pinning it fails with an error that ends in `(try 'helm repo update')`.
+
 **OCI registries need no `helm repo add`:** a chart in an OCI registry is referenced directly as `oci://<registry>/<path>/<chart>`.
 Helm's registry documentation says *"Support for the `oci://` protocol is also available in various other subcommands"* and lists `helm pull`, `helm push`, `helm show`, `helm template`, `helm install`, and `helm upgrade`.
 `helm search` is not on the list.
@@ -73,8 +76,12 @@ Each subcommand prints one part of the chart, and `helm show all` prints them to
 | `helm show crds` | the CustomResourceDefinition files |
 | `helm show all` | *"all its content (values.yaml, Chart.yaml, README)"* |
 
+**The two version numbers move independently:** `version` is the chart's own version, and `appVersion` is the version of the application it deploys (see **01 - The role of Helm in Kubernetes**).
+WordPress charts 23.1.20 and 23.1.28 both deploy WordPress 6.6.2, yet the rendered image moves from `6.6.2-debian-12-r7` to `6.6.2-debian-12-r18`.
+The 34.x charts deploy WordPress 7.1.
+
 **Without `--version`, Helm reads the latest version:** the reference pages say *"If this is not specified, the latest version is used"*.
-`helm show values bitnami/wordpress` prints the values of chart 34.2.3, not of the 23.1.20 we installed, so we pass the version we want:
+`helm show values bitnami/wordpress` prints the values of the latest chart, 34.x, not of the 23.1.20 we installed, so we pass the version we want:
 
 ```bash
 helm show chart bitnami/wordpress --version 23.1.20

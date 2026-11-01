@@ -36,6 +36,8 @@ The reference page pairs it with waiting: *"Use '--cascade foreground' with '--w
 | namespace `wordpress` | `helm install --create-namespace` | kept |
 | objects created with `kubectl` | us | kept |
 
+**Whether a PVC survives depends on what created it:** a PVC in the chart's templates is deleted with the release unless it carries `helm.sh/resource-policy: keep`, and a PVC that a StatefulSet created from its `volumeClaimTemplates` is never deleted by Helm.
+
 ### Objects Helm never managed
 
 **StatefulSet PVCs come from the controller, not the chart:** a StatefulSet lists `volumeClaimTemplates`, and the Kubernetes StatefulSet documentation says *"For each VolumeClaimTemplate entry defined in a StatefulSet, each Pod receives one PersistentVolumeClaim."*
