@@ -19,11 +19,11 @@ I encourage you to try implementing the above steps on your own before looking a
 
 Here’s a concise guide to help you install NGINX from your Helm repository:
 
-1. **Copy Your Helm Repository Link**:
+1. **Copy Your Helm Repository Link:**
 
    - Make sure to copy the entire link without the `index.yaml`.
 
-2. **Add the Repository with Helm**:
+2. **Add the Repository with Helm:**
 
    - Open your terminal and run the following command:
      ```bash
@@ -31,28 +31,28 @@ Here’s a concise guide to help you install NGINX from your Helm repository:
      ```
    - You can replace `<repo name>` with any name you prefer, such as your GitHub username.
 
-3. **Confirm the Repository Addition**:
+3. **Confirm the Repository Addition:**
 
    - Check if the repository was added successfully by running:
      ```bash
      helm repo list
      ```
 
-4. **Search for the NGINX Chart**:
+4. **Search for the NGINX Chart:**
 
    - Look for the NGINX chart by executing:
      ```bash
      helm search repo nginx
      ```
 
-5. **Install NGINX Using Helm**:
+5. **Install NGINX Using Helm:**
 
    - To install the chart, use the following command:
      ```bash
      helm install super-nginx <repo name>/<chart name>
      ```
 
-6. **Verify the Installation**:
+6. **Verify the Installation:**
    - Finally, check if your pods are running:
      ```bash
      kubectl get pods

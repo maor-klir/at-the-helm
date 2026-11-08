@@ -16,16 +16,16 @@ Take a moment to explore these steps on your own; don't hesitate to experiment b
 
 ## Step-by-Step Guide
 
-1. **Remove Static Strings**: Open your existing deployment and service templates to eliminate hard-coded strings like "nginx".
-2. **Use `.Release.Name`**: In your deployment configuration, utilize `{{ .Release.Name }}` to name it dynamically based on the installation.
+1. **Remove Static Strings:** Open your existing deployment and service templates to eliminate hard-coded strings like "nginx".
+2. **Use `.Release.Name`:** In your deployment configuration, utilize `{{ .Release.Name }}` to name it dynamically based on the installation.
 
-3. **Implement `.Chart.Name`**: For your service, set the name with `{{ .Chart.Name }}-svc`. This keeps it distinct across different installations.
+3. **Implement `.Chart.Name`:** For your service, set the name with `{{ .Chart.Name }}-svc`. This keeps it distinct across different installations.
 
-4. **Adjust Labels**: Update labels in your templates to incorporate both `{{ .Release.Name }}` and `{{ .Chart.Name }}`. This ensures uniqueness and proper association of resources.
+4. **Adjust Labels:** Update labels in your templates to incorporate both `{{ .Release.Name }}` and `{{ .Chart.Name }}`. This ensures uniqueness and proper association of resources.
 
-5. **Test Installation**: Once you’ve made these changes, install your Helm chart with a command like `helm install local-nginx <path to chart>` to see it in action.
+5. **Test Installation:** Once you’ve made these changes, install your Helm chart with a command like `helm install local-nginx <path to chart>` to see it in action.
 
-6. **Verify Deployments**: Check your Kubernetes setup for the new deployments and their corresponding labels to confirm everything is functioning correctly.
+6. **Verify Deployments:** Check your Kubernetes setup for the new deployments and their corresponding labels to confirm everything is functioning correctly.
 
 ## Conclusion
 

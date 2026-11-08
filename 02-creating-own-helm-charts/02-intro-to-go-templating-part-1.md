@@ -17,21 +17,21 @@ Give it a shot! Once you've given it your best effort, feel free to check out th
 
 ## Step-by-Step Guide
 
-1. **Create a New Directory**: Start by making a new directory called `intro-go-templating`.
+1. **Create a New Directory:** Start by making a new directory called `intro-go-templating`.
 
    ```bash
    mkdir intro-go-templating
    cd intro-go-templating
    ```
 
-2. **Set Up Necessary Files**: Create `Chart.yaml`, `values.yaml`, and a `templates` directory.
+2. **Set Up Necessary Files:** Create `Chart.yaml`, `values.yaml`, and a `templates` directory.
 
    ```bash
    touch Chart.yaml values.yaml
    mkdir templates
    ```
 
-3. **Edit `Chart.yaml`**: Open the `Chart.yaml` file and add the following details:
+3. **Edit `Chart.yaml`:** Open the `Chart.yaml` file and add the following details:
 
    ```yaml
    apiVersion: v2
@@ -40,36 +40,36 @@ Give it a shot! Once you've given it your best effort, feel free to check out th
    appVersion: 0.1.0
    ```
 
-4. **Create a Template File**: Within the `templates` directory, create a file named `sandbox.yaml` and add the following line:
+4. **Create a Template File:** Within the `templates` directory, create a file named `sandbox.yaml` and add the following line:
 
    ```yaml
    test: true
    ```
 
-5. **Run Helm Template Command**: Execute the command:
+5. **Run Helm Template Command:** Execute the command:
 
    ```bash
    helm template .
    ```
 
-6. **Add Values to `values.yaml`**: Open the `values.yaml` file and add:
+6. **Add Values to `values.yaml`:** Open the `values.yaml` file and add:
 
    ```yaml
    test:
      description: 'I am a string'
    ```
 
-7. **Update `sandbox.yaml`**: In `sandbox.yaml`, use the value from `values.yaml`:
+7. **Update `sandbox.yaml`:** In `sandbox.yaml`, use the value from `values.yaml`:
 
    ```yaml
    test: {{ .Values.test.description }}
    ```
 
-8. **Test the Output**: Again run `helm template .` to see how the output looks.
+8. **Test the Output:** Again run `helm template .` to see how the output looks.
 
-9. **Use Comments**: Experiment with comments—try using both YAML comments and Go comments. Check what remains in the generated file.
+9. **Use Comments:** Experiment with comments—try using both YAML comments and Go comments. Check what remains in the generated file.
 
-10. **Trim Whitespace**: Test the whitespace trimming feature by modifying lines and using the leading dash with the template syntax.
+10. **Trim Whitespace:** Test the whitespace trimming feature by modifying lines and using the leading dash with the template syntax.
 
 By this point, you should have a clear understanding of how to use Go Templating with Helm.
 

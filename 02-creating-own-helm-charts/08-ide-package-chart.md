@@ -17,13 +17,13 @@ Give it a shot, and see how far you can go before checking the detailed steps be
 
 ## Step-by-Step Guide
 
-1. **Confirm the Chart Generation**: Use `helm template` to check that your chart is generated correctly.
-2. **Lint Your Chart**: Run `helm lint <path to chart>` to ensure there are no errors (note the suggestion to add an icon, which can be optional).
-3. **Install Your Chart**: Execute `helm install local <path to chart>` to deploy your chart, but make sure to uninstall any previous installations first with `helm uninstall`.
-4. **Package Your Chart**: Use the command `helm package <path to chart>` to create a versioned chart archive.
-5. **Check the Archive**: Locate the `.tgz` file generated, and open `Chart.yaml` to verify the version included in the package.
-6. **Repackage if Necessary**: If you change the version in your `Chart.yaml`, run `helm package` again to create a new versioned package.
-7. **Install from the Archive**: Finally, install your Helm chart using the command `helm install <release-name> <path to tgz file>`.
+1. **Confirm the Chart Generation:** Use `helm template` to check that your chart is generated correctly.
+2. **Lint Your Chart:** Run `helm lint <path to chart>` to ensure there are no errors (note the suggestion to add an icon, which can be optional).
+3. **Install Your Chart:** Execute `helm install local <path to chart>` to deploy your chart, but make sure to uninstall any previous installations first with `helm uninstall`.
+4. **Package Your Chart:** Use the command `helm package <path to chart>` to create a versioned chart archive.
+5. **Check the Archive:** Locate the `.tgz` file generated, and open `Chart.yaml` to verify the version included in the package.
+6. **Repackage if Necessary:** If you change the version in your `Chart.yaml`, run `helm package` again to create a new versioned package.
+7. **Install from the Archive:** Finally, install your Helm chart using the command `helm install <release-name> <path to tgz file>`.
 
 ## Conclusion
 

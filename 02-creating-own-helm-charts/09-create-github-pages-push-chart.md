@@ -18,38 +18,38 @@ Take a moment to try implementing this process on your own before checking out t
 
 Here’s a clear step-by-step guide to help you set up your GitHub repository and publish your Helm charts:
 
-1. **Create a GitHub Repository**:
+1. **Create a GitHub Repository:**
 
    - Go to GitHub and select "New Repository."
    - Name it (e.g., `helm-charts`) and provide a short description.
    - Set it as a **public repository** and add a README file. Use the **MIT license** for permissions.
    - Click on "Create repository."
 
-2. **Enable GitHub Pages**:
+2. **Enable GitHub Pages:**
 
    - Navigate to the **Settings** of your repository.
    - Scroll to the **Pages** section in the left-side menu.
    - Select the **main branch** as your source and save the settings.
 
-3. **Clone Your Repository**:
+3. **Clone Your Repository:**
 
    - Use SSH or HTTPS to clone the repository to your local machine, ensuring it's in a directory that is not part of any existing Git repository.
 
-4. **Move Your Helm Chart**:
+4. **Move Your Helm Chart:**
 
    - Locate your Helm chart (e.g., `nginx-0.1.0.tgz`) and move it to your cloned `helm-charts` folder.
 
-5. **Index the Chart**:
+5. **Index the Chart:**
 
    - In your `helm-charts` folder, run the command `helm repo index .` to create an `index.yaml` file that lists all available charts.
 
-6. **Commit and Push Changes**:
+6. **Commit and Push Changes:**
 
    - Use Git to add your new files (`index.yaml` and the chart file).
    - Commit your changes with a message (e.g., `feat(nginx): publish nginx chart version 0.1.0`).
    - Push the changes back to the remote repository.
 
-7. **Access Your Published Charts**:
+7. **Access Your Published Charts:**
    - Go back to the GitHub Pages URL created for your repository.
    - Verify that your `index.yaml` and chart files are accessible via this URL.
 

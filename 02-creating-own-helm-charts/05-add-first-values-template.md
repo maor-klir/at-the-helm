@@ -20,39 +20,39 @@ Ready to give it a shot? Let’s see what you can come up with before looking at
 
 ## Step-by-Step Guide
 
-1. **Open your `values.yaml` file**:
+1. **Open your `values.yaml` file:**
 
    - Create or update the following parameters:
      - `replicaCount` to set the number of replicas.
      - An object `image` containing `name` and `tag` for the image.
      - Parameters for `service.type` and `service.port`.
 
-2. **Document your parameters**:
+2. **Document your parameters:**
 
    - Write clear comments beside each parameter to explain their purpose.
 
-3. **Modify your `deployment.yaml`**:
+3. **Modify your `deployment.yaml`:**
 
    - Interpolate the values from the `values.yaml` file:
      - For the `replicaCount`: Use `.Values.replicaCount`.
      - For the image: Use `.Values.image.name` and `.Values.image.tag`.
 
-4. **Update your `service.yaml`**:
+4. **Update your `service.yaml`:**
 
    - Replace hardcoded values with the new parameters:
      - For service type: Use `.Values.service.type`.
      - For service port: Use `.Values.service.port`.
 
-5. **Add the HTTP container port configuration**:
+5. **Add the HTTP container port configuration:**
 
    - Create a new section for `containerPorts` in `values.yaml`.
    - Add an `http` parameter under this section to specify the port.
 
-6. **Reference the container port in both `deployment.yaml` and `service.yaml`**:
+6. **Reference the container port in both `deployment.yaml` and `service.yaml`:**
 
    - Use `.Values.containerPorts.http` for the container port.
 
-7. **Test your changes**:
+7. **Test your changes:**
    - Use the Helm template command to regenerate your templates and verify that everything is working as intended.
 
 ## Conclusion

@@ -16,25 +16,25 @@ Now, take a moment to try implementing the above steps on your own before you pe
 
 ## Step-by-Step Guide
 
-1. **Explore the Dot Context**: Begin by understanding how the dot (`.`) operates in different contexts within your Helm templates. It represents the current context and is crucial for accessing the surrounding data.
+1. **Explore the Dot Context:** Begin by understanding how the dot (`.`) operates in different contexts within your Helm templates. It represents the current context and is crucial for accessing the surrounding data.
 
-2. **Identify Core Objects**:
+2. **Identify Core Objects:**
 
    - Use `.Values` to extract values from your `values.yaml`.
    - Use `.Release` to get information about the release.
    - Use `.Chart` to fetch details about the chart.
 
-3. **Implement Basic Functions**:
+3. **Implement Basic Functions:**
 
    - Start with the `lower` function and practice passing a value to it, observing how it returns the lowercase version of the string.
    - Use the terminal to check the output of `helm template` after each change.
 
-4. **Work with the Replace Function**:
+4. **Work with the Replace Function:**
 
    - Test the `replace` function to substitute white spaces with dashes in a string.
    - Pass multiple parameters to functions and see how they affect the output.
 
-5. **Utilize the Pipe Operator**:
+5. **Utilize the Pipe Operator:**
    - Apply the pipe operator to chain functions, such as combining `replace` and `lower`.
    - Experiment by switching the order of functions to see how it impacts the results, particularly with cases sensitive to capitalization.
 
