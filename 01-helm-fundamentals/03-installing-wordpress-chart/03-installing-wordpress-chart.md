@@ -2,8 +2,6 @@
 
 ## Overview
 
-This exercise is a great opportunity to dive into the Helm ecosystem and learn how to deploy applications in a Kubernetes cluster seamlessly.
-
 In this exercise, we'll be installing a WordPress application using a Helm chart from the Bitnami repository. To give you a head start before we jump into the step-by-step guide, here’s an outline of what you'll be doing:
 
 1. Ensure your Kubernetes cluster is running. Check the status using `kubectl version`.
@@ -18,6 +16,7 @@ In this exercise, we'll be installing a WordPress application using a Helm chart
 Run the commands from this folder.
 
 1. **Check the Cluster:**
+
    Ensure your Kubernetes cluster is up and running. You can do this by running:
 
    ```bash
@@ -25,6 +24,7 @@ Run the commands from this folder.
    ```
 
 2. **Add the Bitnami Repository:**
+
    If your cluster is running fine, add the Bitnami Helm repository:
 
    ```bash
@@ -33,6 +33,7 @@ Run the commands from this folder.
    ```
 
 3. **Search for the WordPress Chart:**
+
    Search for the WordPress chart to find its exact name:
 
    ```bash
@@ -40,15 +41,19 @@ Run the commands from this folder.
    ```
 
 4. **Install the Chart:**
+
    Choose the version you want to install (e.g., 23.1.20) and use the `helm install` command:
 
    ```bash
    helm -n wordpress install local-wp bitnami/wordpress --version 23.1.20 --create-namespace --values ./wp-repo-overrides.yaml
    ```
 
-   > **Bitnami images moved:** the versioned image tags this chart uses are gone from `docker.io/bitnami` and now live in `docker.io/bitnamilegacy`. `./wp-repo-overrides.yaml` sets `image.repository` and `mariadb.image.repository` to the `bitnamilegacy` images. Pass it on every `helm template`, `install`, and `upgrade` of WordPress 23.1.x, running the commands from this folder. Without it, the Pods fail with `ErrImagePull`.
+   > **Bitnami images moved:** the versioned image tags this chart uses are gone from `docker.io/bitnami` and now live in `docker.io/bitnamilegacy`.
+   > `./wp-repo-overrides.yaml` sets `image.repository` and `mariadb.image.repository` to the `bitnamilegacy` images.
+   > Pass it on every `helm template`, `install`, and `upgrade` of WordPress 23.1.x, running the commands from this folder. Without it, the Pods fail with `ErrImagePull`.
 
 5. **Check the Pods:**
+
    Check the status of the Pods to ensure they are running:
 
    ```bash
@@ -56,15 +61,19 @@ Run the commands from this folder.
    ```
 
 6. **Check the Service:**
+
    The chart already exposes WordPress with a `LoadBalancer` Service, `local-wp-wordpress`:
 
    ```bash
    kubectl -n wordpress get svc
    ```
 
-   > **k3d-argocd cluster:** k3s's built-in ServiceLB gives the Service the node IPs as external IPs (`172.18.0.2`, `172.18.0.3`, `172.18.0.5`). Those addresses are on the k3d Docker network on the home server, so the laptop can't reach them. A `NodePort` Service has the same problem, so `kubectl expose` isn't needed.
+   > **k3d-argocd cluster:** k3s's built-in ServiceLB gives the Service the node IPs as external IPs (`172.18.0.2`, `172.18.0.3`, `172.18.0.5`).
+   > Those addresses are on the k3d Docker network on the home server, so the laptop can't reach them.
+   > A `NodePort` Service has the same problem, so `kubectl expose` isn't needed.
 
 7. **Forward a Local Port:**
+
    Forward a local port to the Service, silently in the background:
 
    ```bash
@@ -73,8 +82,9 @@ Run the commands from this folder.
 
    Open `http://localhost:9090` in your browser, and you should see your WordPress site up and running. If the page doesn't load, check with `jobs` that the forward is still running. Stop it with `kill %1`.
 
-   > **Through the LoadBalancer IPs:** the home server can reach the Docker network, so an SSH tunnel through it works too: `ssh -N -L 9090:172.18.0.5:80 pi-hole`, then open `http://localhost:9090`. Run it instead of the port-forward, not next to it, since both use port 9090.
+   > **Through the LoadBalancer IPs:** the home server can reach the Docker network, so an SSH tunnel through it works too: `ssh -N -L 9090:172.18.0.5:80 pi-hole`, then open `http://localhost:9090`.
+   > Run it instead of the port-forward, not next to it, since both use port 9090.
 
 ## Conclusion
 
-This exercise has hopefully shown you how straightforward it is to manage applications with Helm charts. Keep exploring the various options Helm provides, and you'll find that your skills will increase significantly.
+In this exercise, we installed WordPress from the Bitnami repository, pinned to chart 23.1.20 with the `bitnamilegacy` image overrides, and reached it through a port-forward.

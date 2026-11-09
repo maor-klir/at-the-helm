@@ -2,7 +2,8 @@
 
 ## Overview
 
-In this exercise, we will walk through the process of removing a specific release from our Kubernetes cluster. Before diving into the step-by-step guide, I encourage you to give it a go on your own. Here’s a high-level overview of what you’ll need to do:
+In this exercise, we will walk through the process of removing a specific release from our Kubernetes cluster.
+Before diving into the step-by-step guide, I encourage you to give it a go on your own. Here’s a high-level overview of what you’ll need to do:
 
 In this exercise, you will learn how to uninstall a Helm release and clean up all associated resources. Here’s a quick summary of the main steps to get you started:
 
@@ -15,6 +16,7 @@ In this exercise, you will learn how to uninstall a Helm release and clean up al
 ## Step-by-Step Guide
 
 1. **List Installed Releases:**
+
    The release `local-wp` lives in the `wordpress` namespace, so pass `-n wordpress` (or use `-A` to list releases in all namespaces):
 
    ```bash
@@ -36,6 +38,7 @@ In this exercise, you will learn how to uninstall a Helm release and clean up al
    ```
 
 4. **Stop the Port-Forward:**
+
    Exercise 03 uses a background `kubectl port-forward` instead of `kubectl expose`, so no hand-made Service is left to delete. The forward points at a Service that no longer exists, so stop it:
 
    ```bash
@@ -49,7 +52,10 @@ In this exercise, you will learn how to uninstall a Helm release and clean up al
    kubectl -n wordpress get pvc
    ```
 
-   `data-local-wp-mariadb-0` is still there. MariaDB is a StatefulSet, and its PVC comes from the StatefulSet's `volumeClaimTemplates`, not from the chart's templates, so Helm never managed it. Kubernetes keeps StatefulSet PVCs when the StatefulSet is deleted (`persistentVolumeClaimRetentionPolicy` defaults to `Retain`). The WordPress PVC, `local-wp-wordpress`, is one of the chart's templates, so Helm deletes it with the release.
+   `data-local-wp-mariadb-0` is still there. MariaDB is a StatefulSet, and its PVC comes from the StatefulSet's `volumeClaimTemplates`, not from the chart's templates, so Helm never managed it.
+   Kubernetes keeps StatefulSet PVCs when the StatefulSet is deleted (`persistentVolumeClaimRetentionPolicy` defaults to `Retain`).
+
+   The WordPress PVC, `local-wp-wordpress`, is one of the chart's templates, so Helm deletes it with the release.
 
    Delete the MariaDB PVC:
 
@@ -57,7 +63,9 @@ In this exercise, you will learn how to uninstall a Helm release and clean up al
    kubectl -n wordpress delete pvc data-local-wp-mariadb-0
    ```
 
-   > **k3d-argocd cluster:** the StorageClass is k3s's `local-path`, whose reclaim policy is `Delete`, so deleting the PVC also deletes its PersistentVolume. `kubectl get pv` shows each volume's `RECLAIM POLICY` directly. With `Retain`, the PersistentVolume would stay and need deleting by hand.
+   > **k3d-argocd cluster:** the StorageClass is k3s's `local-path`, whose reclaim policy is `Delete`, so deleting the PVC also deletes its PersistentVolume.
+   > `kubectl get pv` shows each volume's `RECLAIM POLICY` directly.
+   > With `Retain`, the PersistentVolume would stay and need deleting by hand.
 
 6. **Confirm Deletion of Resources:**
 
@@ -74,4 +82,4 @@ In this exercise, you will learn how to uninstall a Helm release and clean up al
 
 ## Conclusion
 
-By following the steps above, you’ve successfully learned how to uninstall a Helm release and clean up its resources from your Kubernetes cluster. Remember, it’s important to check for lingering resources, particularly PersistentVolumes, to maintain a tidy environment.
+After uninstalling a release, check for lingering resources, particularly PersistentVolumeClaims and the PersistentVolumes behind them.

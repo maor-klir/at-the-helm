@@ -15,6 +15,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
 ## Step-by-Step Guide
 
 1. **Add the Bitnami Repository:**
+
    Open your terminal and run the command to add the Bitnami Helm repository:
 
    ```bash
@@ -22,6 +23,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
    ```
 
 2. **Update the Repository:**
+
    To update your local cache with the latest charts, run:
 
    ```bash
@@ -29,6 +31,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
    ```
 
 3. **Search for the WordPress Chart:**
+
    Execute the following command to find WordPress in your added repositories:
 
    ```bash
@@ -36,6 +39,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
    ```
 
 4. **Show the Chart Metadata:**
+
    Use this command to display the metadata for the Bitnami WordPress chart:
 
    ```bash
@@ -45,6 +49,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
    Without `--version`, Helm shows the latest chart (34.x). 23.1.20 is the version the following exercises install.
 
 5. **Add Another Repository (Prometheus Community):**
+
    First, copy the installation command from the Prometheus community repository and run it in your terminal:
 
    ```bash
@@ -52,6 +57,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
    ```
 
 6. **List Your Added Repositories:**
+
    Verify that both repositories are added with:
 
    ```bash
@@ -59,6 +65,7 @@ Before you check out the step-by-step guide, try to implement the solution yours
    ```
 
 7. **Search for Charts in the Prometheus Repository:**
+
    Now, you can look for Prometheus charts like this:
 
    ```bash
@@ -67,4 +74,4 @@ Before you check out the step-by-step guide, try to implement the solution yours
 
 ## Conclusion
 
-We’ve explored how to add and manage Helm repositories effectively. We learned how to update our local cache, search for charts, and view their metadata. This knowledge is crucial as you continue your journey with Kubernetes and Helm.
+We’ve explored how to add and manage Helm repositories effectively. We learned how to update our local cache, search for charts, and view their metadata.

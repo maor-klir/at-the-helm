@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this exercise, we're going to dive into how to override the default values provided in the WordPress Helm chart by providing our own values through the CLI. This is an important skill that will help ensure your applications run smoothly and securely.
+In this exercise, we're going to dive into how to override the default values provided in the WordPress Helm chart by providing our own values through the CLI.
 
 In this exercise, we'll be focusing on the following main steps to implement custom configuration values for your WordPress deployment using Helm:
 
@@ -18,6 +18,7 @@ In this exercise, we'll be focusing on the following main steps to implement cus
 Run the commands from this folder.
 
 1. **Find the Values to Override:**
+
    On Artifact Hub, select chart version 23.1.20 (the page opens on the latest version, 34.x) and look for the MariaDB authentication parameters. Or print them from the CLI:
 
    ```bash
@@ -29,6 +30,7 @@ Run the commands from this folder.
    > **Corrected keys:** the original exercise text used `mariadb.rootPassword` and `mariadb.userPassword`, which don't exist in chart 23.1.20. Helm accepts them without an error, and the passwords stay random.
 
 2. **Install with `--set`:**
+
    Each `--set` takes the full dotted path of a value:
 
    ```bash
@@ -40,7 +42,9 @@ Run the commands from this folder.
 
    > **Bitnami images moved:** pin `--version 23.1.20` and pass the `bitnamilegacy` overrides file (see exercise 03).
 
-   > **Sensitive values:** a password typed after `--set` ends up in the shell history, and Helm stores user-supplied values in the release record, where `helm get values` prints them in plain text. For real passwords, pass them through variables, e.g. `--set mariadb.auth.rootPassword="$MARIADB_ROOT_PASSWORD"`, and never commit them to this repository. Exercise 08 takes the WordPress password from an existing Secret instead.
+   > **Sensitive values:** a password typed after `--set` ends up in the shell history, and Helm stores user-supplied values in the release record, where `helm get values` prints them in plain text.
+   > For real passwords, pass them through variables, e.g. `--set mariadb.auth.rootPassword="$MARIADB_ROOT_PASSWORD"`, and never commit them to this repository.
+   > Exercise 08 takes the WordPress password from an existing Secret instead.
 
 3. **Monitor the Deployment:**
 

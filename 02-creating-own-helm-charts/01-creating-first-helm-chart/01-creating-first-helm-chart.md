@@ -29,6 +29,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    ```
 
 2. **Create the Nginx Chart Directory:**
+
    Inside it, create the chart's directory, `nginx`:
 
    ```bash
@@ -38,6 +39,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    Helm takes the chart's name from `Chart.yaml`, not from the directory, so a name such as `nginx-chart` works as well.
 
 3. **Create `Chart.yaml`:**
+
    Inside `creating-charts/nginx`, create a file called `Chart.yaml` with the following content:
 
    ```yaml
@@ -49,9 +51,11 @@ To build the chart yourself, run those steps in an empty directory instead, then
    appVersion: 1.27.0
    ```
 
-   The file name is case-sensitive: with `chart.yaml`, Helm stops with `unable to detect chart`. `apiVersion: v2` is the chart format for Helm 3 and Helm 4. `version` is the chart's own version, and `appVersion` is the version of Nginx it deploys.
+   The file name is case-sensitive: with `chart.yaml`, Helm stops with `unable to detect chart`.
+   `apiVersion: v2` is the chart format for Helm 3 and Helm 4. `version` is the chart's own version, and `appVersion` is the version of Nginx it deploys.
 
 4. **Generate `values.yaml`:**
+
    Create an empty `values.yaml`. It stays empty until the templates read values from it:
 
    ```bash
@@ -59,6 +63,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    ```
 
 5. **Create the `templates` Directory:**
+
    Helm renders every file in this directory into the Kubernetes manifests it installs:
 
    ```bash
@@ -66,6 +71,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    ```
 
 6. **Write `deployment.yaml`:**
+
    Inside `templates`, create a `deployment.yaml` file and populate it as follows:
 
    ```yaml
@@ -95,6 +101,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    The Pod template's labels must match `spec.selector.matchLabels`. The API server rejects a Deployment whose selector doesn't match them: `` `selector` does not match template `labels` ``.
 
 7. **Create `service.yaml`:**
+
    Next to it, create a `service.yaml` file with this content:
 
    ```yaml
@@ -117,6 +124,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    The Service selects the Pods by the same `app: nginx` label.
 
 8. **Create `.helmignore`:**
+
    This file is optional. Create `creating-charts/nginx/.helmignore` with these patterns:
 
    ```text
@@ -125,7 +133,9 @@ To build the chart yourself, run those steps in an empty directory instead, then
    .git/
    ```
 
-   `.env*` keeps local environment files, which can hold secrets, out of the chart. `.DS_Store*` matches the metadata files macOS Finder creates, and `.git/` a Git directory, in case the chart has its own repository. Helm applies these patterns whenever it loads the chart from a directory: in `helm package`, and also in `helm template`, `helm install`, and `helm upgrade`.
+   `.env*` keeps local environment files, which can hold secrets, out of the chart.
+   `.DS_Store*` matches the metadata files macOS Finder creates, and `.git/` a Git directory, in case the chart has its own repository.
+   Helm applies these patterns whenever it loads the chart from a directory: in `helm package`, and also in `helm template`, `helm install`, and `helm upgrade`.
 
 9. **Render the Templates:**
 
@@ -150,7 +160,10 @@ To build the chart yourself, run those steps in an empty directory instead, then
 
     `[INFO]` is a suggestion, not an error.
 
-    `helm lint` checks `Chart.yaml` and renders the templates, but it doesn't send the objects to the API server. A misspelled field such as `replica: 1`, or Pod labels that don't match the selector, pass `helm lint`, and in Helm 4.3.1 they also pass `helm install --dry-run=server`. To have the API server validate every object without creating anything, pipe the rendered manifests to `kubectl apply --dry-run=server`. The `nginx` namespace doesn't exist yet, so the check runs in `default`:
+    `helm lint` checks `Chart.yaml` and renders the templates, but it doesn't send the objects to the API server.
+    A misspelled field such as `replica: 1`, or Pod labels that don't match the selector, pass `helm lint`, and in Helm 4.3.1 they also pass `helm install --dry-run=server`.
+
+    To have the API server validate every object without creating anything, pipe the rendered manifests to `kubectl apply --dry-run=server`. The `nginx` namespace doesn't exist yet, so the check runs in `default`:
 
     ```bash
     helm template creating-charts/nginx | kubectl -n default apply --dry-run=server -f -
@@ -159,6 +172,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
     Both objects come back as `created (server dry run)`. With the misspelled field, the API server rejects the Deployment: `strict decoding error: unknown field "spec.replica"`.
 
 11. **Install the Chart:**
+
     Install the chart as release `local-nginx`, in its own namespace:
 
     ```bash
@@ -184,6 +198,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
     The page title is `<title>Welcome to nginx!</title>`.
 
 13. **Clean Up:**
+
     Once you've validated your Helm chart, uninstall it and delete the namespace:
 
     ```bash
@@ -192,7 +207,9 @@ To build the chart yourself, run those steps in an empty directory instead, then
     kubectl delete namespace nginx
     ```
 
-    Once the Pod has terminated, the second command finds no resources. The chart has no PersistentVolumeClaims, so nothing else is left behind. Helm doesn't delete the namespace that `--create-namespace` created, because the namespace isn't part of the release.
+    Once the Pod has terminated, the second command finds no resources.
+    The chart has no PersistentVolumeClaims, so nothing else is left behind.
+    Helm doesn't delete the namespace that `--create-namespace` created, because the namespace isn't part of the release.
 
 ## Conclusion
 

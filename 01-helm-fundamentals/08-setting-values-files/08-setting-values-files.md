@@ -39,7 +39,8 @@ Here’s how to set custom values for your WordPress release using a YAML file. 
    replicaCount: 3
    ```
 
-   These are the WordPress admin credentials, not the MariaDB ones from exercise 07. The password stays out of the file. The chart's `values.yaml` says about `existingSecret`: "NOTE: Must contain key `wordpress-password`" and "NOTE: When it's set, the `wordpressPassword` parameter is ignored".
+   These are the WordPress admin credentials, not the MariaDB ones from exercise 07.
+   The password stays out of the file. The chart's `values.yaml` says about `existingSecret`: "NOTE: Must contain key `wordpress-password`" and "NOTE: When it's set, the `wordpressPassword` parameter is ignored".
 
    > **Bitnami images moved:** the first block is the `bitnamilegacy` override from exercise 03, so this one file is all the install needs.
 
@@ -54,7 +55,8 @@ Here’s how to set custom values for your WordPress release using a YAML file. 
    unset WP_PW
    ```
 
-   `read -rs` reads the password without echoing it, so it doesn't end up in the shell history the way a literal `--from-literal=wordpress-password=…` would. The Secret's name has no `local-wp-` prefix, so it isn't mistaken for an object the release created.
+   `read -rs` reads the password without echoing it, so it doesn't end up in the shell history the way a literal `--from-literal=wordpress-password=…` would.
+   The Secret's name has no `local-wp-` prefix, so it isn't mistaken for an object the release created.
 
 4. **Install with the YAML File:**
 
@@ -73,7 +75,8 @@ Here’s how to set custom values for your WordPress release using a YAML file. 
 
    Three WordPress Pods start next to the MariaDB Pod.
 
-   > **k3d-argocd cluster:** the chart README lists "ReadWriteMany volumes for deployment scaling" as a prerequisite, while k3s's `local-path` volumes are `ReadWriteOnce`. The volume is bound to one node, so the scheduler runs all three WordPress Pods on that node: `kubectl -n wordpress get pods -o wide` shows them on the same node as the volume.
+   > **k3d-argocd cluster:** the chart README lists "ReadWriteMany volumes for deployment scaling" as a prerequisite, while k3s's `local-path` volumes are `ReadWriteOnce`.
+   > The volume is bound to one node, so the scheduler runs all three WordPress Pods on that node: `kubectl -n wordpress get pods -o wide` shows them on the same node as the volume.
 
 6. **Log In with the Custom Credentials:**
 
@@ -91,4 +94,5 @@ Here’s how to set custom values for your WordPress release using a YAML file. 
 
 ## Conclusion
 
-In this lecture, we learned how to set custom values for a WordPress release with a YAML file, emphasizing the importance of managing sensitive information securely. By implementing these practices, you enhance the maintainability and security of your Helm charts.
+In this lecture, we learned how to set custom values for a WordPress release with a YAML file, emphasizing the importance of managing sensitive information securely.
+By implementing these practices, you enhance the maintainability and security of your Helm charts.

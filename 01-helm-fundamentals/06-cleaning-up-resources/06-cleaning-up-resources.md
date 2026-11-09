@@ -2,7 +2,9 @@
 
 ## Overview
 
-In this guide, we'll explore how Helm interacts with persistent data through the installation and uninstallation of WordPress. You'll learn what can happen if PersistentVolumeClaims aren't properly managed. Before diving into the step-by-step guide, I encourage you to challenge yourself and try implementing the solution based on the overview provided.
+In this guide, we'll explore how Helm interacts with persistent data through the installation and uninstallation of WordPress.
+You'll learn what can happen if PersistentVolumeClaims aren't properly managed.
+Before diving into the step-by-step guide, I encourage you to challenge yourself and try implementing the solution based on the overview provided.
 
 In this exercise, you'll focus on understanding the implications of not deleting PersistentVolumeClaims when uninstalling a Helm release. The main steps you should try to implement are:
 
@@ -18,6 +20,7 @@ In this exercise, you'll focus on understanding the implications of not deleting
 Run the commands from this folder.
 
 1. **Install WordPress:**
+
    The overrides file is in exercise 03's folder:
 
    ```bash
@@ -88,7 +91,8 @@ Run the commands from this folder.
    ```
 
    - WordPress never becomes ready. Its log stops at `Trying to connect to the database server`, and after a minute the container exits with `Could not connect to the database` and ends up in `CrashLoopBackOff`.
-   - The MariaDB log rejects both logins: `Access denied for user 'bn_wordpress'` from WordPress, and `Access denied for user 'root'@'localhost'` from the Pod's own liveness probe, which runs `mariadb-admin status` with the new root password. The probe fails, so Kubernetes restarts MariaDB as well (`kubectl -n wordpress get events` shows `Container mariadb failed liveness probe, will be restarted`).
+   - The MariaDB log rejects both logins: `Access denied for user 'bn_wordpress'` from WordPress, and `Access denied for user 'root'@'localhost'` from the Pod's own liveness probe, which runs `mariadb-admin status` with the new root password.
+     The probe fails, so Kubernetes restarts MariaDB as well (`kubectl -n wordpress get events` shows `Container mariadb failed liveness probe, will be restarted`).
 
    > **Why the passwords don't change:** the WordPress chart's README says *"Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available."*
 
@@ -112,4 +116,7 @@ Run the commands from this folder.
 
 ## Conclusion
 
-In this exercise, we learned the importance of managing persistent data associated with Helm releases. By not cleaning up PersistentVolumeClaims, we can end up with old data that doesn't match a new install's configuration, and the application can't start. Values the chart generates at random, like these passwords, change with every new install, so they have to be stored, or set explicitly at install time, as exercises 07 and 08 do.
+In this exercise, we learned the importance of managing persistent data associated with Helm releases.
+By not cleaning up PersistentVolumeClaims, we can end up with old data that doesn't match a new install's configuration, and the application can't start.
+
+Values the chart generates at random, like these passwords, change with every new install, so they have to be stored, or set explicitly at install time, as exercises 07 and 08 do.
