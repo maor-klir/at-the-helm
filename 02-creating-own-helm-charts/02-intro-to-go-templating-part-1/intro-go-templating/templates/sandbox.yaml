@@ -1,0 +1,8 @@
+# I am a YAML comment, and I will remain in the generated YAML
+{{- /* I am a GO comment, and I will NOT remain. */}}
+test: {{ .Values.test }}
+labels:
+  {{- /* The app label comes from the Release */}}
+  app: {{ .Release.Name }}
+  {{- /* The chart label comes from the Chart information */}}
+  chart: {{ .Chart.Name }}
