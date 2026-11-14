@@ -1,9 +1,9 @@
-# Introduction to Go Templating
+# Introduction to the Helm Template Language, Part 1
 
 ## Overview
 
-In this exercise, we will lay the groundwork for understanding how to effectively use Go templating when working with Helm charts.
-As we go through the process of creating, packaging, and publishing charts, you'll find that Go templating is an essential tool that you'll frequently use.
+In this exercise, we will lay the groundwork for understanding how to effectively use the Helm template language when working with Helm charts.
+As we go through the process of creating, packaging, and publishing charts, you'll find that the Helm template language is an essential tool that you'll frequently use.
 
 Here's what you'll aim to achieve:
 
@@ -240,5 +240,5 @@ Use ` -}}` only when the next line should move up, and don't put dashes on both 
 
 ## Conclusion
 
-In this exercise, we explored the fundamentals of Go templating, from setting up a simple Helm chart to using values, comments, and whitespace trimming.
+In this exercise, we explored the fundamentals of the Helm template language, from setting up a simple Helm chart to using values, comments, and whitespace trimming.
 YAML is indentation-sensitive, so trimming whitespace and getting indentation right comes up in almost every Helm chart.

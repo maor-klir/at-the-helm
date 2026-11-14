@@ -1,4 +1,4 @@
-# Introduction to Go Templating
+# Introduction to the Helm Template Language, Part 3
 
 ## Overview
 
@@ -137,4 +137,4 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-intro
 ## Conclusion
 
 By implementing conditionals in your Helm templates, you can render different output depending on the values.
-Conditionals, loops, and the other control structures come back in more depth in the Go templating section.
+Conditionals, loops, and the other control structures come back in more depth in the Go templating deep-dive section.

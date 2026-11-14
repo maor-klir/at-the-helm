@@ -1,10 +1,10 @@
-# Introduction to Go Templating in Helm
+# Introduction to the Helm Template Language, Part 2
 
 ## Overview
 
-In this guide, we’ll be diving into Go templating, its functions, and how to use them within your Helm charts.
+In this guide, we’ll be diving into the Helm template language, its functions, and how to use them within your Helm charts.
 
-In this exercise, we’re going to explore how Go template functions work, and by the end, you should be able to use these functions to transform values in your Helm charts. Here’s a high-level summary of the main steps to follow:
+In this exercise, we’re going to explore how template functions work, and by the end, you should be able to use these functions to transform values in your Helm charts. Here’s a high-level summary of the main steps to follow:
 
 1. Understand the meaning of the dot (`.`) and its context in Helm templating.
 2. Familiarize yourself with the top-level objects, starting with `.Values`, `.Release`, and `.Chart`.
@@ -24,7 +24,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
    Helm's built-in objects documentation lists the others: `.Files`, `.Capabilities`, `.Template`, and `.Subcharts`.
    All of them start with a capital letter: "The built-in values always begin with a capital letter. This is in keeping with Go's naming convention."
 
-   The dot changes inside `range` and `with` blocks, which set it to the current element or value. An `if` block leaves it unchanged. Exercises in the Go templating section cover these blocks.
+   The dot changes inside `range` and `with` blocks, which set it to the current element or value. An `if` block leaves it unchanged. Exercises in the Go templating deep-dive section cover these blocks.
 
 2. **Inspect the Built-in Objects:**
 
@@ -156,4 +156,4 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
 
 ## Conclusion
 
-To summarize, Go templating in Helm relies on the context provided by the dot (`.`), on functions, and on the pipe operator that chains them. Each of these elements plays a key role in customizing and managing your Helm charts.
+To summarize, the Helm template language relies on the context provided by the dot (`.`), on functions, and on the pipe operator that chains them. Each of these elements plays a key role in customizing and managing your Helm charts.

@@ -213,4 +213,4 @@ To build the chart yourself, run those steps in an empty directory instead, then
 
 ## Conclusion
 
-In this exercise, we started with some essential Kubernetes manifests and set the stage for future enhancements using Go templating.
+In this exercise, we started with some essential Kubernetes manifests and set the stage for future enhancements using the Helm template language.
