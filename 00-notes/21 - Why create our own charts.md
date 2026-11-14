@@ -45,7 +45,7 @@ The chart template guide describes what happens to the files in `templates/`:
 Every object our application needs is a file we write there, including objects a published chart leaves out, such as a NetworkPolicy or a PodDisruptionBudget.
 Each field gets the value or default we choose.
 
-**Templates also hold logic:** conditionals and loops decide which objects and fields are rendered (see **02 - Benefits and limitations of Helm**), and functions can stop a render whose values would produce a broken release.
+**Templates also hold logic:** conditionals and loops decide which objects and fields are rendered (see **02 - Benefits and limitations of Helm** and **24 - Values and release information in a chart**), and functions can stop a render whose values would produce a broken release.
 
 The chart development tips describe `required`: *"The `required` function gives developers the ability to declare a value entry as required for template rendering. If the entry is empty in `values.yaml`, the template will not render and will return an error message supplied by the developer."*
 

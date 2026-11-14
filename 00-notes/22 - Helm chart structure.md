@@ -173,7 +173,7 @@ The Charts documentation describes the directory: *"All template files are store
 Most files render to Kubernetes manifests, which Helm sends to the API server.
 `NOTES.txt` and files whose names start with an underscore are the exceptions.
 
-**A template doesn't need any template actions:** text outside `{{ }}` is copied to the output unchanged (see **01 - The role of Helm in Kubernetes**).
+**A template doesn't need any template actions:** text outside `{{ }}` is copied to the output unchanged (see **01 - The role of Helm in Kubernetes** and **23 - Template syntax basics**).
 A plain Deployment manifest in `templates/` is therefore a valid template, and Helm installs it as written.
 
 The best practices set the naming:
@@ -231,3 +231,26 @@ The scaffold's `tests/test-connection.yaml` is a busybox Pod that runs `wget` ag
 | `templates/_*.tpl` | Helm | rendering; named templates only, no output |
 | `templates/NOTES.txt` | Helm | printed after `install` and `upgrade`, and by `status` |
 | `templates/tests/` | Helm | created by `helm test` |
+
+## Verify
+
+In an empty directory, the scaffold shows the layout:
+
+```bash
+cd "$(mktemp -d)"
+helm create demo
+find demo | sort
+```
+
+It has `Chart.yaml`, `values.yaml`, `.helmignore`, an empty `charts/`, and `templates/` with `_helpers.tpl`, `NOTES.txt`, and `tests/`, but no `values.schema.json`, `README.md`, `LICENSE`, `Chart.lock`, or `crds/`.
+
+The archive shows what `.helmignore` leaves out:
+
+```bash
+touch demo/notes.bak
+helm package demo
+tar tzf demo-0.1.0.tgz
+```
+
+The scaffold's `.helmignore` lists `*.bak`, so `notes.bak` is missing from the archive, while `.helmignore` itself is in it.
+The empty `charts/` directory is left out as well, because the archive holds only files.

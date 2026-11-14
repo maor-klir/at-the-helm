@@ -161,7 +161,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
     `[INFO]` is a suggestion, not an error.
 
     `helm lint` checks `Chart.yaml` and renders the templates, but it doesn't send the objects to the API server.
-    A misspelled field such as `replica: 1`, or Pod labels that don't match the selector, pass `helm lint`, and in Helm 4.3.1 they also pass `helm install --dry-run=server`.
+    A misspelled field such as `replica: 1`, or Pod labels that don't match the selector, pass `helm lint`, and in Helm 4.3.2 they also pass `helm install --dry-run=server`.
 
     To have the API server validate every object without creating anything, pipe the rendered manifests to `kubectl apply --dry-run=server`. The `nginx` namespace doesn't exist yet, so the check runs in `default`:
 

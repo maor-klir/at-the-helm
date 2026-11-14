@@ -17,7 +17,9 @@ For our WordPress release, the manifest holds a Deployment, a StatefulSet, two S
 `helm -n wordpress uninstall local-wp` deleted all of them, together with the release record.
 
 **`--keep-history` keeps the record:** the flag is described as *"remove all associated resources and mark the release as deleted, but retain the release history"*.
+
 `helm list --uninstalled` then shows the release, an option the reference page limits to that case: *"show uninstalled releases (if 'helm uninstall --keep-history' was used)"*.
+Plain `helm list` shows it too, with the status `uninstalled`, because it lists releases in any status (see **11 - Exploring charts and releases with the Helm CLI**).
 
 Without the flag, the Using Helm guide notes, *"it is no longer possible to rollback an uninstalled resource."*
 

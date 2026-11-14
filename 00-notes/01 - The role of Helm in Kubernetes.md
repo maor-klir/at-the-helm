@@ -126,6 +126,8 @@ Manifests in a chart are templates, rendered to plain YAML before anything reach
 Go's `text/template` package defines the mechanism: *"Templates are executed by applying them to a data structure."*
 Everything between `{{` and `}}` is evaluated against that data — the values, the release, the chart's metadata — and *"all text outside actions is copied to the output unchanged."*
 
+The syntax and the objects a template reads are covered in **23 - Template syntax basics**, and how values and release information make a chart reusable in **24 - Values and release information in a chart**.
+
 Templating removes the label problem from the previous section.
 `helm create` defines the selector labels once, as a named template in `templates/_helpers.tpl`:
 

@@ -53,7 +53,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
 
    `.Template.Name` is the path of the template being rendered.
    `.Capabilities` describes the cluster, but `helm template` doesn't contact one: "Any values that would normally be looked up or retrieved in-cluster will be faked locally."
-   So `.Capabilities.KubeVersion` is v1.37.0, the Kubernetes version Helm 4.3.1 was built against, not k3d-argocd's 1.35; `--kube-version 1.35.5` sets it explicitly. Remove the four lines again.
+   So `.Capabilities.KubeVersion` is v1.37.0, the Kubernetes version Helm 4.3.2 was built against, not k3d-argocd's 1.35; `--kube-version 1.35.5` sets it explicitly. Remove the four lines again.
 
 3. **Learn the Function Syntax:**
 

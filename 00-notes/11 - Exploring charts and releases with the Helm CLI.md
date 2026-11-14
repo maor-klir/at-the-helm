@@ -115,6 +115,10 @@ The chart reference forms `helm install` accepts, and the release record it writ
 Our kubeconfig context sets no namespace, so Helm looks in `default`, and `helm get values local-wp` fails with `Error: release: not found`.
 We pass `-n wordpress`, or use `helm list -A` to *"list releases across all namespaces"*.
 
+**`helm list` shows releases in every status:** the reference page says *"By default, it lists all releases in any status."*
+A release uninstalled with `--keep-history` appears as `uninstalled`, and one whose install failed appears as `failed`.
+Status flags such as `--deployed`, `--failed`, and `--uninstalled` narrow the list; there is no `-a` flag, which fails with `unknown shorthand flag: 'a'`.
+
 `helm status` gives a summary of one release.
 The Using Helm guide puts it this way: *"To keep track of a release's state, or to re-read configuration information, you can use `helm status`"*.
 In Helm 4.3.1 it prints the last deployment time, namespace, status, revision, and description, followed by the release's resources, the last test run, and the chart's notes.
