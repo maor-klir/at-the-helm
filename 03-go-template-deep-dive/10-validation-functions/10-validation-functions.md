@@ -16,15 +16,15 @@ Take a moment to try this on your own, and then refer to the step-by-step guide 
 
 ## Step-by-Step Guide
 
-1. **Define Required Values**: In your `deployment.yaml`, check if `securityContext.enabled` is true.
-2. **Implement Required Checks**:
+1. **Define Required Values:** In your `deployment.yaml`, check if `securityContext.enabled` is true.
+2. **Implement Required Checks:**
    - Add a check for `runAsUser`, using the `required` function.
    - Add a similar check for `fsGroup`.
-3. **Suppress Output**: Assign the result of the required checks to a dummy variable to avoid printing values in the rendered template.
-4. **Test Validations**:
+3. **Suppress Output:** Assign the result of the required checks to a dummy variable to avoid printing values in the rendered template.
+4. **Test Validations:**
    - Run your Helm template and observe the validation in action by temporarily removing `runAsUser`.
-5. **Enhance with Fail Function**: Implement the `fail` function to ensure that `runAsUser` is not equal to zero, providing a clear error message if this occurs.
-6. **Format Error Messages**: Consider outputting your error messages in JSON format for better readability or machine processing.
+5. **Enhance with Fail Function:** Implement the `fail` function to ensure that `runAsUser` is not equal to zero, providing a clear error message if this occurs.
+6. **Format Error Messages:** Consider outputting your error messages in JSON format for better readability or machine processing.
 
 ## Conclusion
 

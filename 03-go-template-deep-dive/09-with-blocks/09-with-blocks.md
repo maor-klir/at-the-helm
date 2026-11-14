@@ -15,7 +15,7 @@ Now’s your chance to try it out on your own! See if you can implement this bef
 
 ## Step-by-Step Guide
 
-1. **Set up values.yaml**: Define your security context options:
+1. **Set up values.yaml:** Define your security context options:
 
    ```yaml
    securityContext:
@@ -24,7 +24,7 @@ Now’s your chance to try it out on your own! See if you can implement this bef
      fsGroup: 2000
    ```
 
-2. **Modify your template**: Add a deployment template that conditionally includes the security context:
+2. **Modify your template:** Add a deployment template that conditionally includes the security context:
 
    ```yaml
    {{- if .Values.securityContext.enabled }}
@@ -34,7 +34,7 @@ Now’s your chance to try it out on your own! See if you can implement this bef
    {{- end }}
    ```
 
-3. **Use with block**: Enhance readability by using a with block to group security context values:
+3. **Use with block:** Enhance readability by using a with block to group security context values:
 
    ```yaml
    {{- with .Values.securityContext }}
@@ -46,9 +46,9 @@ Now’s your chance to try it out on your own! See if you can implement this bef
    {{- end }}
    ```
 
-4. **Test your configuration**: Use `helm template` to render and check if everything is working as expected. Adjust your values in `values.yaml` and verify the changes.
+4. **Test your configuration:** Use `helm template` to render and check if everything is working as expected. Adjust your values in `values.yaml` and verify the changes.
 
-5. **Manage variable scopes**: Remember that variables defined inside blocks aren’t accessible outside those blocks; plan your scope accordingly.
+5. **Manage variable scopes:** Remember that variables defined inside blocks aren’t accessible outside those blocks; plan your scope accordingly.
 
 ## Conclusion
 

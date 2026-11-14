@@ -13,14 +13,14 @@ Give it a shot, and see if you can work through the implementation independently
 
 ## Step-by-Step Guide
 
-1. **Refactor Service Definitions**: Begin by changing your service definitions from lists to maps. For example, instead of having a list of services, create key-value pairs where keys represent service identifiers (e.g., `svc1`, `svc2`).
-2. **Syntax Adjustments**: Modify your syntax to use double quotes for strings representing the service keys. This will help clarify that you are using a map.
+1. **Refactor Service Definitions:** Begin by changing your service definitions from lists to maps. For example, instead of having a list of services, create key-value pairs where keys represent service identifiers (e.g., `svc1`, `svc2`).
+2. **Syntax Adjustments:** Modify your syntax to use double quotes for strings representing the service keys. This will help clarify that you are using a map.
 
-3. **Initialize Default Values**: In your deployment configurations, set any services to default to an empty dictionary if none are provided. This can help maintain stability.
+3. **Initialize Default Values:** In your deployment configurations, set any services to default to an empty dictionary if none are provided. This can help maintain stability.
 
-4. **Update service.yaml**: Refactor the `service.yaml` such that you're now working with key-value pairs instead of indexed lists. Instead of using `$idx`, use the key variable to iterate through your services.
+4. **Update service.yaml:** Refactor the `service.yaml` such that you're now working with key-value pairs instead of indexed lists. Instead of using `$idx`, use the key variable to iterate through your services.
 
-5. **Test your Changes**: Save your modifications and run the `helm template` command again. Check that the output reflects the new service names with keys included and that order perturbations do not affect your object generation.
+5. **Test your Changes:** Save your modifications and run the `helm template` command again. Check that the output reflects the new service names with keys included and that order perturbations do not affect your object generation.
 
 ## Conclusion
 

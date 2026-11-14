@@ -14,14 +14,14 @@ Give this a try and see how it goes!
 
 ## Step-by-Step Guide
 
-1. **Set Up Your Template**: Start by creating a basic template where you'll utilize the dot variable.
-2. **Add the Range Function**: Inside your template, use the `range` function to iterate over a list or a map. For instance, define a map with keys like `port` and `type`.
+1. **Set Up Your Template:** Start by creating a basic template where you'll utilize the dot variable.
+2. **Add the Range Function:** Inside your template, use the `range` function to iterate over a list or a map. For instance, define a map with keys like `port` and `type`.
 
-3. **Print the Dot Variable**: Use `{{ . }}` within and outside the range block to see what the value of the dot represents in different contexts.
+3. **Print the Dot Variable:** Use `{{ . }}` within and outside the range block to see what the value of the dot represents in different contexts.
 
-4. **Use the Dollar Sign**: Replace occurrences of the dot with the dollar sign (`$`), then check how it affects the values you can access.
+4. **Use the Dollar Sign:** Replace occurrences of the dot with the dollar sign (`$`), then check how it affects the values you can access.
 
-5. **Render Your Template**: Finally, run the command to render your template and observe how the output varies based on your changes.
+5. **Render Your Template:** Finally, run the command to render your template and observe how the output varies based on your changes.
 
 ## Conclusion
 

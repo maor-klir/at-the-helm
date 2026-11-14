@@ -13,13 +13,13 @@ Give it a shot to implement these steps independently before we walk through the
 
 ## Step-by-Step Guide
 
-1. **Set up your workspace**: Make sure you have your NGNX chart and the relevant files ready.
-2. **Modify the `values.yaml` file**: Copy the service portion from the `intro-go-templating/values.yaml` and paste it into a new `values.yaml` file after the container ports section.
-3. **Create the `service.yaml` file**: In this file, paste the contents of your copied service information. Ensure the indentation is correct (4 spaces).
-4. **Refactor the naming**: Use named templates to refactor the service’s name for better reusability.
-5. **Implement conditionals**: Add if-else statements to conditionally render the container ports based on whether the service is enabled.
-6. **Test your changes**: Run the `helm template` command to verify that your service information is rendered correctly based on the conditions set in the previous step.
-7. **Explore additional configurations**: Experiment with adding more complex if-else structures, such as changing the replica count based on the environment.
+1. **Set up your workspace:** Make sure you have your NGNX chart and the relevant files ready.
+2. **Modify the `values.yaml` file:** Copy the service portion from the `intro-go-templating/values.yaml` and paste it into a new `values.yaml` file after the container ports section.
+3. **Create the `service.yaml` file:** In this file, paste the contents of your copied service information. Ensure the indentation is correct (4 spaces).
+4. **Refactor the naming:** Use named templates to refactor the service’s name for better reusability.
+5. **Implement conditionals:** Add if-else statements to conditionally render the container ports based on whether the service is enabled.
+6. **Test your changes:** Run the `helm template` command to verify that your service information is rendered correctly based on the conditions set in the previous step.
+7. **Explore additional configurations:** Experiment with adding more complex if-else structures, such as changing the replica count based on the environment.
 
 ## Conclusion
 

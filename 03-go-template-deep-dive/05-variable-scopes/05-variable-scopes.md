@@ -18,17 +18,17 @@ Give it a go, and once you’ve made your attempts, feel free to check the step-
 
 Here’s how you can approach the task systematically:
 
-1. **Declare a Variable**: Open your `_helpers.tpl` file and declare a variable using the colon-equal syntax (e.g., `{{ $fullName := .Values.name }}`).
+1. **Declare a Variable:** Open your `_helpers.tpl` file and declare a variable using the colon-equal syntax (e.g., `{{ $fullName := .Values.name }}`).
 
-2. **Access the Variable**: In your `deployment.yaml`, try to access the variable declared in `helpers.tpl`. Notice that this will lead to an error since the scope of the variable is limited to its block.
+2. **Access the Variable:** In your `deployment.yaml`, try to access the variable declared in `helpers.tpl`. Notice that this will lead to an error since the scope of the variable is limited to its block.
 
-3. **Using If-Else**: Wrap your variable declaration within an `if` condition (e.g., `{{ if .Values.customName }} ... {{ else }} ... {{ end }}`) and assign different values to `$fullName`.
+3. **Using If-Else:** Wrap your variable declaration within an `if` condition (e.g., `{{ if .Values.customName }} ... {{ else }} ... {{ end }}`) and assign different values to `$fullName`.
 
-4. **Scope Confirmation**: Ensure that the use of `$fullName` in `_helpers.tpl` falls within the same block of code where it is declared.
+4. **Scope Confirmation:** Ensure that the use of `$fullName` in `_helpers.tpl` falls within the same block of code where it is declared.
 
-5. **Rescope if Necessary**: Instead of using `:=` within the `if`, use `=` to update the variable without redefining it, allowing it to be accessed in nested blocks.
+5. **Rescope if Necessary:** Instead of using `:=` within the `if`, use `=` to update the variable without redefining it, allowing it to be accessed in nested blocks.
 
-6. **Rerun the Template**: Run `helm template` again to confirm that there are no errors and everything works as intended.
+6. **Rerun the Template:** Run `helm template` again to confirm that there are no errors and everything works as intended.
 
 ## Conclusion
 

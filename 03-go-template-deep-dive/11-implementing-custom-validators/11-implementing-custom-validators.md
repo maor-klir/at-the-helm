@@ -17,28 +17,28 @@ Give it a shot! Try to implement the solution on your own before looking at the 
 
 ## Step-by-Step Guide
 
-1. **Define the Port Range Validator**:
+1. **Define the Port Range Validator:**
 
    - Open your `helpers.tpl` file and define a new named template called `validators.portRange`.
    - Within this template, expect a port value in the context.
    - Cast the port from string to integer, and implement an if-check to ensure it falls within the allowed range (1 - 65535).
 
-2. **Add the Service Type Validator**:
+2. **Add the Service Type Validator:**
 
    - Create another named template named `validators.serviceType`.
    - Check the service type against a predefined list of allowed types (e.g., cluster IP and node port).
    - Use the `has` function to verify if the provided service type is valid.
 
-3. **Include Validators in Service Template**:
+3. **Include Validators in Service Template:**
 
    - Navigate to your `service.yaml` and include both validation templates, passing in the port and type values as needed.
 
-4. **Run the Helm Template Command**:
+4. **Run the Helm Template Command:**
 
    - Use the `helm template` command to see the output.
    - Test with different port and service type values to ensure that the validations are working as intended.
 
-5. **Adjust and Optimize**:
+5. **Adjust and Optimize:**
    - If necessary, modify the placement of the validations in your code for efficiency.
    - Explore the possibility of creating reusable validation functions for other parts of your application.
 
