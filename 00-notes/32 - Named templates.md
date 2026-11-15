@@ -3,7 +3,7 @@
 # Named templates
 
 A chart repeats the same pieces in many places: the resource name in every object, and the same labels in a Deployment's metadata, its selector, its Pod template, and a Service's selector.
-Repeated by hand, one missed copy breaks the chart quietly: a Service whose selector no longer matches the Pod labels selects no Pods and routes no traffic.
+Repeated by hand, one missed copy still renders and installs without an error: a Service whose selector no longer matches the Pod labels selects no Pods and routes no traffic.
 
 A named template defines such a piece once, and `include` renders it wherever it's needed.
 

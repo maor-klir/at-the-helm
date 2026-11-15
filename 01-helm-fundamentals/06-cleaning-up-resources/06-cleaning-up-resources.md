@@ -3,16 +3,15 @@
 ## Overview
 
 In this guide, we'll explore how Helm interacts with persistent data through the installation and uninstallation of WordPress.
-You'll learn what can happen if PersistentVolumeClaims aren't properly managed.
-Before diving into the step-by-step guide, I encourage you to challenge yourself and try implementing the solution based on the overview provided.
+We'll see what happens when MariaDB's PersistentVolumeClaim outlives the release: a reinstall generates new passwords, but the database on the volume still expects the old ones.
 
-In this exercise, you'll focus on understanding the implications of not deleting PersistentVolumeClaims when uninstalling a Helm release. The main steps you should try to implement are:
+The main steps are:
 
 1. Install the Bitnami WordPress chart.
 2. Retrieve the generated passwords from the MariaDB and WordPress Secrets.
 3. Uninstall the WordPress release using `helm uninstall`.
 4. Verify that the Secrets have been removed while the PersistentVolumeClaims remain.
-5. Attempt to install WordPress again and observe any issues that arise due to configuration mismatches.
+5. Install WordPress again, and see WordPress fail to connect to the database, which still has the old passwords.
 6. Manually delete the PersistentVolumeClaim for the MariaDB data.
 
 ## Step-by-Step Guide
@@ -116,7 +115,6 @@ Run the commands from this folder.
 
 ## Conclusion
 
-In this exercise, we learned the importance of managing persistent data associated with Helm releases.
 By not cleaning up PersistentVolumeClaims, we can end up with old data that doesn't match a new install's configuration, and the application can't start.
 
 Values the chart generates at random, like these passwords, change with every new install, so they have to be stored, or set explicitly at install time, as exercises 07 and 08 do.

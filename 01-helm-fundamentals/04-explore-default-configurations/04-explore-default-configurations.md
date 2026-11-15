@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this guide, we’re diving into the default configurations you encounter when deploying a WordPress website using Helm in a Kubernetes cluster.
+In this guide, we're diving into the default configurations you encounter when deploying a WordPress website using Helm in a Kubernetes cluster.
 
 In this exercise, you will:
 
@@ -47,4 +47,3 @@ Here's a concise roadmap to help you get through the exercise. The release `loca
 ## Conclusion
 
 In this session, we explored how to access the WordPress admin panel and retrieve the default configurations set up within the Kubernetes cluster.
-This knowledge is essential as you continue to learn about managing applications with Kubernetes.

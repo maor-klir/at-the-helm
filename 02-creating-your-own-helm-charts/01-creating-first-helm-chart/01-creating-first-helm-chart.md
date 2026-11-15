@@ -4,7 +4,7 @@
 
 In this exercise, we'll be diving into the process of creating our very first Helm chart for deploying Nginx to Kubernetes.
 
-Here’s a quick overview of what we’ll be doing:
+Here's a quick overview of what we'll be doing:
 
 1. Create a new directory to hold your Helm chart.
 2. Create the `Chart.yaml` file containing metadata about your chart.
@@ -213,4 +213,4 @@ To build the chart yourself, run those steps in an empty directory instead, then
 
 ## Conclusion
 
-In this exercise, we started with some essential Kubernetes manifests and set the stage for future enhancements using the Helm template language.
+In this exercise, we turned plain Kubernetes manifests, a Deployment and a Service, into a chart, which the next exercises extend with the Helm template language.

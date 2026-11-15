@@ -2,11 +2,9 @@
 
 ## Overview
 
-In this exercise, we will focus on upgrading Helm releases effectively.
-As our applications evolve, we often need to modify or update our configurations without the hassle of uninstalling and reinstalling Helm releases.
-Instead, we can make use of the `helm upgrade` command to get the job done smoothly.
+In this exercise, we'll change the values of an installed release with `helm upgrade`, which records them in a new revision instead of uninstalling and reinstalling the release.
 
-Before diving into the step-by-step guide, here’s a quick summary of the main steps you should try to implement on your own:
+Here's a quick summary of the main steps:
 
 1. Enable auto-scaling in your `custom-values.yaml` configuration.
 2. Set the minimum and maximum replicas for the auto-scaling feature.
@@ -88,4 +86,4 @@ Run the commands from this folder. The release `local-wp` from exercise 08 shoul
 
 ## Conclusion
 
-In this guide, we tackled how to upgrade Helm releases smoothly using the `helm upgrade` command, without any unnecessary reinstalls. We also learned the significance of managing configurations effectively to get the desired outcomes.
+In this guide, we changed a Helm release's values with the `helm upgrade` command, without reinstalling it.

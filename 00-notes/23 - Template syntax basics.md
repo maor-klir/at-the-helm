@@ -76,7 +76,7 @@ The Go template syntax trims that whitespace with a dash next to the delimiter:
 
 > *"if an action's left delimiter (by default "{{") is followed immediately by a minus sign and white space, all trailing white space is trimmed from the immediately preceding text. Similarly, if the right delimiter ("}}") is preceded by white space and a minus sign, all leading white space is trimmed from the immediately following text."*
 
-Helm's chart template guide adds the warning that explains most surprises: *"Be careful! Newlines are whitespace!"*
+Helm's chart template guide adds that the newline at the end of a line counts too: *"Be careful! Newlines are whitespace!"*
 
 ### Where the dash goes
 

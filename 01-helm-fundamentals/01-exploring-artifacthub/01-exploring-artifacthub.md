@@ -2,11 +2,9 @@
 
 ## Overview
 
-In this guide, we're diving into Artifact Hub, an essential resource for finding various Helm charts from reputable publishers.
-Our goal is to help you understand how to navigate this tool and successfully deploy applications in your Kubernetes cluster, such as WordPress.
-Before jumping into the detailed steps, let’s explore what you should aim to accomplish.
+In this guide, we'll explore Artifact Hub, a directory of Helm charts from many publishers, with badges that mark verified publishers.
 
-In this exercise, you will learn how to use Artifact Hub to find Helm charts. Here's a quick summary of the main steps you'll want to try on your own:
+Here's a quick summary of the main steps:
 
 1. Go to Artifact Hub and use the search box to find a specific application (like WordPress).
 2. Filter the results to show only Helm charts, focusing on verified publishers.
@@ -51,4 +49,4 @@ In this exercise, you will learn how to use Artifact Hub to find Helm charts. He
 
 ## Conclusion
 
-In this session, we've explored how to effectively use Artifact Hub to find Helm charts. Before installing a chart, check its maintenance status and reliability.
+In this session, we've explored how to use Artifact Hub to find Helm charts. Before installing a chart, check when it was last updated and what its security report lists.

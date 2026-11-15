@@ -3,7 +3,7 @@
 ## Overview
 
 In this exercise, we will dive into working with Helm charts and repositories using the Helm CLI. The goal here is to familiarize ourselves with adding and managing repositories, as well as searching for specific charts.
-Before you check out the step-by-step guide, try to implement the solution yourself based on this flow:
+Here's a quick summary of the main steps:
 
 1. Identify and add the Bitnami repository using the Helm CLI `helm repo` commands.
 2. Update the repository to fetch the latest chart information.
@@ -74,4 +74,4 @@ Before you check out the step-by-step guide, try to implement the solution yours
 
 ## Conclusion
 
-We’ve explored how to add and manage Helm repositories effectively. We learned how to update our local cache, search for charts, and view their metadata.
+We've explored how to add and manage Helm repositories. We learned how to update our local cache, search for charts, and view their metadata.

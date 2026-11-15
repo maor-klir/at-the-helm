@@ -2,9 +2,9 @@
 
 ## Overview
 
-In this session, we’ll dive into how you can use conditionals to make your templates more dynamic and flexible.
+In this exercise, we'll use conditionals to make a template render different output depending on the values.
 
-Here’s what you’ll aim to implement:
+Here's what you'll aim to implement:
 
 1. Add an `environment` value to your `values.yaml` file.
 2. Write an `if` condition in your template that checks whether the environment is `production`.

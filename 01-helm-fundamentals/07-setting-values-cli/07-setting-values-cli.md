@@ -2,9 +2,7 @@
 
 ## Overview
 
-In this exercise, we're going to dive into how to override the default values provided in the WordPress Helm chart by providing our own values through the CLI.
-
-In this exercise, we'll be focusing on the following main steps to implement custom configuration values for your WordPress deployment using Helm:
+In this exercise, we'll override the WordPress chart's default values from the command line with `--set`. Here's a quick summary of the main steps:
 
 1. **Explore the Default Values:** Review the default configuration values of the WordPress chart.
 2. **Identify Key Parameters:** Identify the specific parameters you want to set (like root and user passwords for MariaDB).
@@ -84,5 +82,5 @@ Run the commands from this folder.
 
 ## Conclusion
 
-In this lecture, we learned how to override default configuration values in the WordPress Helm chart using the CLI.
-By setting specific parameters like the root and user passwords for MariaDB, we can maintain consistency and ensure smoother deployments.
+In this exercise, we learned how to override default configuration values in the WordPress Helm chart using the CLI.
+Passwords set explicitly stay the same across reinstalls, so a reinstall that keeps the MariaDB volume still matches the database, and WordPress can connect.

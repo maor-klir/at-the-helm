@@ -2,8 +2,7 @@
 
 ## Overview
 
-In this exercise, we will lay the groundwork for understanding how to effectively use the Helm template language when working with Helm charts.
-As we go through the process of creating, packaging, and publishing charts, you'll find that the Helm template language is an essential tool that you'll frequently use.
+In this exercise, we'll write our first templates in the Helm template language, which every chart uses to turn its values into manifests.
 
 Here's what you'll aim to achieve:
 

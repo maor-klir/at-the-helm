@@ -2,16 +2,15 @@
 
 ## Overview
 
-In this guide, we will explore some important flags you can use with the `helm upgrade` command to ensure a smooth upgrade process in your Kubernetes deployments.
-Our focus is on preventing issues during upgrades by using specific options that help manage resources effectively.
+In this guide, we'll use two `helm upgrade` flags that act when an upgrade fails.
+`--rollback-on-failure` waits for the objects to be ready and returns the release to its previous successful revision if they aren't, and `--cleanup-on-fail` deletes objects the failed upgrade created.
 
-Before we dive into the step-by-step guide, let's summarize what you'll be implementing in this exercise.
-You'll try to successfully upgrade a Helm release while incorporating helpful flags to manage potential failures. Here’s a quick rundown of what you should aim to do:
+You'll upgrade a Helm release once successfully, then run a failing upgrade with these flags. Here's a quick rundown of what you should aim to do:
 
 1. Identify the Service type you need to update for your deployment (change from LoadBalancer to NodePort).
 2. Modify your custom values YAML file accordingly.
 3. Execute the Helm upgrade command with the relevant flags to handle potential errors.
-4. Validate the upgrade and check Helm's revision history to ensure everything is functioning correctly.
+4. Check the result and Helm's revision history.
 5. Uninstall the release and clean up what it leaves behind.
 
 ## Step-by-Step Guide
@@ -108,5 +107,4 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
 
 ## Conclusion
 
-In this guide, we learned how to effectively utilize Helm upgrade flags to streamline the deployment process and make it more resilient to failures.
-By leveraging options like `--rollback-on-failure` and `--cleanup-on-fail`, you can maintain a clean state in your Kubernetes environment, even when things don't go according to plan.
+In this guide, `--rollback-on-failure` returned the release to its last successful revision when the upgrade timed out, and `--cleanup-on-fail` would have deleted any objects the failed revision added.

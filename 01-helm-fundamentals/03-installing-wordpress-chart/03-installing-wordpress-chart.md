@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this exercise, we'll be installing a WordPress application using a Helm chart from the Bitnami repository. To give you a head start before we jump into the step-by-step guide, here’s an outline of what you'll be doing:
+In this exercise, we'll be installing a WordPress application using a Helm chart from the Bitnami repository. Here's an outline of what you'll be doing:
 
 1. Ensure your Kubernetes cluster is running. Check the status using `kubectl version`.
 2. Add the Bitnami repository to your Helm repositories (if not yet done so).

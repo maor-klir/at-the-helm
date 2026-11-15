@@ -139,7 +139,7 @@ Helm's documentation says so directly:
 - **Helm's own functions and objects:** such as `include`, `tpl`, `required`, `toYaml`, `.Values`, `.Release`, and `.Files`
 
 The rendered output must also be valid YAML, so whitespace control (`{{-`, `-}}`) and indentation functions such as `nindent` matter as much as the logic (see **23 - Template syntax basics**).
-Errors come from two places: the renderer, for template and YAML mistakes, and the API server, for objects that render cleanly but are still invalid:
+Errors come from two places: the renderer, for template and YAML mistakes, and the API server, for objects that render without an error but are still invalid:
 
 > *"Debugging templates can be tricky because the rendered templates are sent to the Kubernetes API server, which may reject the YAML files for reasons other than formatting."*
 

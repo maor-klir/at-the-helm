@@ -20,7 +20,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    Our Nginx chart from section 02 repeats the same labels in three places in its Deployment, the Deployment's labels, its `spec.selector.matchLabels`, and its Pod template's labels, and once more in the Service's selector.
    The names repeat too: `{{ .Release.Name }}-{{ .Chart.Name }}` in the Deployment and the Service.
 
-   An update that misses one copy breaks the chart quietly. If the Pod labels change but the Service's selector doesn't, the Pods run but receive no traffic.
+   An update that misses one copy still renders and installs without an error. If the Pod labels change but the Service's selector doesn't, the Pods run but receive no traffic.
 
 2. **Bring In a Deployment and Its Values:**
 

@@ -2,12 +2,12 @@
 
 ## Overview
 
-In this guide, we'll explore how to use the Helm Upgrade command to install a more recent version of a chart—specifically, the Bitnami WordPress chart.
-Before diving into the step-by-step process, I encourage you to first try implementing the solution on your own. Here’s a brief overview of the steps you’ll want to follow:
+In this guide, we'll explore how to use the `helm upgrade` command to install a more recent version of a chart—specifically, the Bitnami WordPress chart.
+Here's a brief overview of the steps you'll want to follow:
 
 1. Update your local Helm repositories with the command `helm repo update`.
 2. Search for the latest version of the Bitnami WordPress chart.
-3. Use the Helm Upgrade command to set the new version.
+3. Use the `helm upgrade` command to set the new version.
 4. Confirm that your Pods are running correctly after the upgrade.
 5. Check the release history to view changes.
 
@@ -66,4 +66,5 @@ The release `local-wp` from exercise 09 should be at revision 2, on chart 23.1.2
 
 ## Conclusion
 
-We’ve learned how to use the Helm Upgrade command to update the version of our Bitnami WordPress chart seamlessly. Patch updates should be non-breaking, while major version changes could require further consideration.
+We've learned how to use the `helm upgrade` command to move our Bitnami WordPress release to a newer chart version.
+Patch updates should be non-breaking, while a major version may break compatibility, so check the chart's upgrade notes before moving to one.

@@ -2,8 +2,7 @@
 
 ## Overview
 
-This exercise will dive into the concept of rollbacks in Helm, particularly focusing on how to revert changes made during a Helm upgrade that didn't go as planned.
-A good example is an upgradeded WordPress release that did not go as planned, we'll learn how to roll back to the last functional version smoothly.
+This exercise rolls back a failed Helm upgrade, one that sets an image tag that doesn't exist, by returning the release to its last working revision with `helm rollback`.
 
 A quick summary of the main steps:
 
@@ -85,5 +84,4 @@ The release `local-wp` from exercise 10 should be at revision 3, on chart 23.1.2
 
 ## Conclusion
 
-We learned the importance of rollbacks in Helm, especially when facing issues after an upgrade.
 A rollback removes the objects Helm created in the failed revision, while the Deployment keeps its old ReplicaSets, up to its `revisionHistoryLimit`.

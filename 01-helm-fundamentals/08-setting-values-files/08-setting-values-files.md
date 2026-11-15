@@ -2,9 +2,9 @@
 
 ## Overview
 
-In this lecture, we’ll learn how to manage our WordPress release better by leveraging YAML file configurations, providing a cleaner and more maintainable solution.
+In this exercise, we'll keep the release's values in a YAML file instead of `--set` flags, and pass the same file to every install and upgrade.
 
-In this exercise, you will implement a system that allows you to set custom values for your WordPress release using a YAML file. Before diving into the step-by-step guide, I encourage you to try and accomplish the following on your own:
+Here's a quick summary of the main steps:
 
 1. Check that no WordPress release is installed.
 2. Create a YAML file to define custom values for WordPress.
@@ -13,7 +13,7 @@ In this exercise, you will implement a system that allows you to set custom valu
 
 ## Step-by-Step Guide
 
-Here’s how to set custom values for your WordPress release using a YAML file. Run the commands from this folder:
+Here's how to set custom values for your WordPress release using a YAML file. Run the commands from this folder:
 
 1. **Check for Installed Releases:**
 
@@ -94,5 +94,4 @@ Here’s how to set custom values for your WordPress release using a YAML file. 
 
 ## Conclusion
 
-In this lecture, we learned how to set custom values for a WordPress release with a YAML file, emphasizing the importance of managing sensitive information securely.
-By implementing these practices, you enhance the maintainability and security of your Helm charts.
+In this exercise, we set custom values for a WordPress release with a YAML file. The password stays out of the file: the chart reads it from the existing Secret `custom-wp-credentials`.
