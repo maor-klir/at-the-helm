@@ -1,4 +1,4 @@
-# Iterating over Lists with `range` in Helm Templates
+# Iterating over lists with `range` in Helm templates
 
 ## Overview
 
@@ -10,20 +10,20 @@ Here's what we'll aim to implement:
 3. Loop over the list with `range`, and reach the chart's top-level values with `$`.
 4. Separate the rendered Services into YAML documents, and give each one a unique name.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
 It continues from exercise 04's chart, which exercise 05 left unchanged, so to follow the steps, copy `../04-variables/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Turn the Service Settings into a List:**
+1. **Turn the Service settings into a list:**
 
    In `values.yaml`, replace the `service` block with a `services` list, starting with one item:
 
    ```yaml
-   ## Settings for NGINX services
+   ## Settings for nginx Services
    ##
-   ## @param services[*].type The type of service in front of the Nginx pods
-   ## @param services[*].port The port where the service is receiving requests
+   ## @param services[*].type The type of Service in front of the nginx Pods
+   ## @param services[*].port The port where the Service is receiving requests
    services:
      - type: ClusterIP
        port: 80
@@ -32,7 +32,7 @@ It continues from exercise 04's chart, which exercise 05 left unchanged, so to f
    Renaming `service` to `services` changes the chart's interface: values files written for the old one stop working, so a real chart would release this as a new major version.
    Both templates still read `.Values.service`, and the render fails with `nil pointer evaluating interface {}.enabled`.
 
-2. **Render the Container Port Only When There Are Services:**
+2. **Render the container port only when there are Services:**
 
    The Service template is rewritten in step 3; until then, empty `templates/service.yaml` so the Deployment can render on its own.
    In `templates/deployment.yaml`, render the container's `ports` only when the list has items:
@@ -104,15 +104,15 @@ It continues from exercise 04's chart, which exercise 05 left unchanged, so to f
    Pass `$` to the three `include` calls, and render again. The next error is `nil pointer evaluating interface {}.containerPorts`, at `.Values.containerPorts.http`, for the same reason.
    Change it to `$.Values.containerPorts.http`, and the Service renders. Exercise 08 covers the dot in depth.
 
-4. **Add a Second Service:**
+4. **Add a second Service:**
 
    Add a NodePort Service to the list. This is the block in `go-templating-deep-dive/values.yaml`:
 
    ```yaml
-   ## Settings for NGINX services
+   ## Settings for nginx Services
    ##
-   ## @param services[*].type The type of service in front of the Nginx pods
-   ## @param services[*].port The port where the service is receiving requests
+   ## @param services[*].type The type of Service in front of the nginx Pods
+   ## @param services[*].port The port where the Service is receiving requests
    services:
      - type: ClusterIP
        port: 80
@@ -141,7 +141,7 @@ It continues from exercise 04's chart, which exercise 05 left unchanged, so to f
 
    Only one Service is created: the second Service's keys overwrite the first's, so only the NodePort Service is left.
 
-5. **Separate the Documents with `---`:**
+5. **Separate the documents with `---`:**
 
    Add `---` as the first line inside the loop:
 
@@ -156,7 +156,7 @@ It continues from exercise 04's chart, which exercise 05 left unchanged, so to f
    Render again: each Service is now its own document, but both are named `release-name-go-templating-deep-dive`.
    A namespace holds one Service per name, so only one of them could exist.
 
-6. **Make the Names Unique with the Index:**
+6. **Make the names unique with the index:**
 
    Append the index to the name. This is the file in `go-templating-deep-dive/templates/service.yaml`:
 

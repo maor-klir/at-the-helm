@@ -1,4 +1,4 @@
-# Exploring Helm Repositories
+# Exploring Helm repositories
 
 ## Overview
 
@@ -12,9 +12,9 @@ Here's a quick summary of the main steps:
 5. Add another repository, such as the Prometheus community, and verify the added repositories.
 6. Perform a search for charts in the newly added repository.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
-1. **Add the Bitnami Repository:**
+1. **Add the Bitnami repository:**
 
    Open your terminal and run the command to add the Bitnami Helm repository:
 
@@ -22,7 +22,7 @@ Here's a quick summary of the main steps:
    helm repo add bitnami https://charts.bitnami.com/bitnami
    ```
 
-2. **Update the Repository:**
+2. **Update the repository:**
 
    To update your local cache with the latest charts, run:
 
@@ -30,7 +30,7 @@ Here's a quick summary of the main steps:
    helm repo update
    ```
 
-3. **Search for the WordPress Chart:**
+3. **Search for the WordPress chart:**
 
    Execute the following command to find WordPress in your added repositories:
 
@@ -38,7 +38,7 @@ Here's a quick summary of the main steps:
    helm search repo wordpress
    ```
 
-4. **Show the Chart Metadata:**
+4. **Show the chart metadata:**
 
    Use this command to display the metadata for the Bitnami WordPress chart:
 
@@ -48,7 +48,7 @@ Here's a quick summary of the main steps:
 
    Without `--version`, Helm shows the latest chart (34.x). 23.1.20 is the version the following exercises install.
 
-5. **Add Another Repository (Prometheus Community):**
+5. **Add another repository (Prometheus Community):**
 
    First, copy the installation command from the Prometheus community repository and run it in your terminal:
 
@@ -56,7 +56,7 @@ Here's a quick summary of the main steps:
    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
    ```
 
-6. **List Your Added Repositories:**
+6. **List your added repositories:**
 
    Verify that both repositories are added with:
 
@@ -64,7 +64,7 @@ Here's a quick summary of the main steps:
    helm repo list
    ```
 
-7. **Search for Charts in the Prometheus Repository:**
+7. **Search for charts in the Prometheus repository:**
 
    Now, you can look for Prometheus charts like this:
 

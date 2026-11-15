@@ -1,4 +1,4 @@
-# Introduction to the Helm Template Language, Part 3
+# Introduction to the Helm template language, part 3
 
 ## Overview
 
@@ -11,12 +11,12 @@ Here's what you'll aim to implement:
 3. Render different labels for production and for other environments, using `if`, `else`, and `end`.
 4. Remove the empty line the conditional leaves behind, using dashes.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `intro-go-templating/` is the end state of this exercise.
 It continues from exercise 03's chart, so to follow the steps, copy `../03-intro-to-go-templating-part-2/intro-go-templating` into an empty directory and edit that copy.
 
-1. **Add an Environment Value:**
+1. **Add an environment value:**
 
    Add an `environment` key to `values.yaml`:
 
@@ -25,7 +25,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-intro
    environment: production
    ```
 
-2. **Write the Condition:**
+2. **Write the condition:**
 
    Add these lines to the end of `sandbox.yaml`, under `labels`:
 
@@ -46,7 +46,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-intro
 
    `eq` also takes more than two arguments, and is true if the first one equals any of the others: `eq .Values.environment "production" "prod"` matches both values. Every `if` is closed with an `end`.
 
-3. **Render the Template:**
+3. **Render the template:**
 
    ```bash
    helm template intro-go-templating
@@ -64,7 +64,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-intro
      public-ingress: true
    ```
 
-4. **Switch the Environment:**
+4. **Switch the environment:**
 
    Set `environment: staging` in `values.yaml` and render again, or override the value without editing the file: `helm template intro-go-templating --set environment=staging`.
    The `else` branch renders now:
@@ -77,7 +77,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-intro
 
    Any value other than `production` renders the `else` branch. So does a missing value: without the `environment` key, `eq` returns false instead of failing.
 
-5. **Remove the Empty Line:**
+5. **Remove the empty line:**
 
    Add a dash to the opening braces of `if`, `else`, and `end`, so each one trims the newline and indentation before it (see the "How the Dashes Trim Whitespace" section of exercise 02).
    This is the file in `intro-go-templating/templates/sandbox.yaml`, with `environment: staging` in `values.yaml`:
@@ -116,7 +116,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-intro
      public-ingress: false
    ```
 
-6. **Chain Conditions with `else if`:**
+6. **Chain conditions with `else if`:**
 
    An `else` can start another condition directly.
    The Go `text/template` docs: "To simplify the appearance of if-else chains, the else action of an if may include another if directly".

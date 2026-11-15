@@ -1,4 +1,4 @@
-# Exploring Generated Values and Persistent Data in Helm
+# Exploring generated values and persistent data in Helm
 
 ## Overview
 
@@ -14,7 +14,7 @@ The main steps are:
 5. Install WordPress again, and see WordPress fail to connect to the database, which still has the old passwords.
 6. Manually delete the PersistentVolumeClaim for the MariaDB data.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder.
 
@@ -95,7 +95,7 @@ Run the commands from this folder.
 
    > **Why the passwords don't change:** the WordPress chart's README says *"Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available."*
 
-6. **Clean Up:**
+6. **Clean up:**
 
    Uninstall the release again, then delete the MariaDB PVC that Helm leaves behind:
 

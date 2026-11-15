@@ -1,4 +1,4 @@
-# Helm Upgrade: Helpful Flags and Best Practices
+# Helpful flags for `helm upgrade`
 
 ## Overview
 
@@ -13,11 +13,11 @@ You'll upgrade a Helm release once successfully, then run a failing upgrade with
 4. Check the result and Helm's revision history.
 5. Uninstall the release and clean up what it leaves behind.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The release `local-wp` from exercise 11 should be at revision 5, on chart 23.1.28.
 
-1. **Update Service Type:**
+1. **Update the Service type:**
 
    `custom-values.yaml` in this folder is exercise 09's file with one more block:
 
@@ -30,7 +30,7 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
    > Switching to `NodePort` is a valid configuration change for a first, successful upgrade.
    > Neither type is reachable from the laptop, so the port-forward from exercise 03 stays the way in.
 
-2. **Run a Successful Upgrade:**
+2. **Run a successful upgrade:**
 
    ```bash
    helm -n wordpress upgrade local-wp bitnami/wordpress --version 23.1.28 --reuse-values --values custom-values.yaml
@@ -40,7 +40,7 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
 
    The Pods are unchanged, `local-wp-wordpress` is now a `NodePort` Service, and revision 6 is `deployed`.
 
-3. **Prepare the Failing Upgrade:**
+3. **Prepare the failing upgrade:**
 
    The same upgrade with the non-existent image tag from exercise 11, guarded by four flags:
 
@@ -62,7 +62,7 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
 
    `--set image.tag` wins over the values file because `--set` values are merged into `--values` with higher precedence, whatever their order on the command line.
 
-4. **Run the Upgrade Command:**
+4. **Run the upgrade command:**
 
    Run the command from step 3. The debug output shows Helm applying all 14 objects with server-side apply (`Patched resource`), then waiting: `waiting for resource … kind=Deployment expectedStatus=Current actualStatus=InProgress`. After two minutes, Helm gives up and rolls back:
 
@@ -71,7 +71,7 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
    context deadline exceeded
    ```
 
-5. **Review the Results:**
+5. **Review the results:**
 
    ```bash
    kubectl -n wordpress get pods,svc
@@ -83,7 +83,7 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
    Two WordPress Pods are running. Revision 7 is `failed`, with the description `Upgrade "local-wp" failed: …`, and revision 8 is `deployed`, with `Rollback to 6`.
    Revision 7's values still show `image.tag: non-existent`, which is where to look before fixing an upgrade; revision 8's don't.
 
-6. **Check Leftover ReplicaSets:**
+6. **Check leftover ReplicaSets:**
 
    ```bash
    kubectl -n wordpress get rs
@@ -92,7 +92,7 @@ Run the commands from this folder. The release `local-wp` from exercise 11 shoul
    The ReplicaSet with the broken image is at 0 Pods. As in exercise 11, the Deployment owns it and keeps it under its `revisionHistoryLimit` (10), so `--cleanup-on-fail` doesn't touch it.
    Deleting it is optional: `kubectl -n wordpress delete rs <replicaset-name>`.
 
-7. **Clean Up Resources:**
+7. **Clean up resources:**
 
    ```bash
    helm -n wordpress uninstall local-wp

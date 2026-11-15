@@ -1,4 +1,4 @@
-# A Deep Dive into Template Functions and Pipelines
+# Using template functions and pipelines
 
 ## Overview
 
@@ -6,17 +6,17 @@ In this session, we'll explore the template functions available in Helm and how 
 
 Here’s a brief summary of the steps you’ll want to take:
 
-1. **Create a new chart:** Copy the `intro-go-templating` chart into a new `go-templating-deep-dive` chart.
-2. **Explore the function list:** Find the string, dictionary, list, and logic functions in Helm's template function list.
-3. **Understand the function syntax:** See why operators such as `and` come first, like any other function.
-4. **Render lists and dictionaries:** Create them with `list` and `dict`, and turn them into valid YAML with `toYaml` and `nindent`.
+1. Copy the `intro-go-templating` chart into a new `go-templating-deep-dive` chart.
+2. Find the string, dictionary, list, and logic functions in Helm's template function list.
+3. See why operators such as `and` come first, like any other function.
+4. Create lists and dictionaries with `list` and `dict`, and turn them into valid YAML with `toYaml` and `nindent`.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
 To follow the steps, copy the chart from section 02's last templating exercise, `../../02-creating-your-own-helm-charts/04-intro-to-go-templating-part-3/intro-go-templating`, into an empty directory as `go-templating-deep-dive`, and edit that copy.
 
-1. **Create the Chart:**
+1. **Create the chart:**
 
    In the copied chart's `Chart.yaml`, rename the chart:
 
@@ -29,7 +29,7 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
 
    `values.yaml` stays as it is. `templates/sandbox.yaml` isn't a Kubernetes object, so this chart is only for `helm template`.
 
-2. **Explore the Function List:**
+2. **Explore the function list:**
 
    Helm's documentation lists every template function on one page, the Template Function List: "Helm includes many template functions you can take advantage of in templates. They are listed here and broken down by the following categories".
    The 18 categories range from String, Lists, and Dictionaries to Logic and Flow Control, Type Conversion, Semantic Versions, and Cryptographic and Security.
@@ -40,7 +40,7 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
 
    When a template needs an operation, this page is the place to look for a function that already does it.
 
-3. **Understand the Function Syntax:**
+3. **Understand the function syntax:**
 
    Comparisons and logical operators are functions too, so they follow the function syntax: the function name first, then its arguments.
    Instead of `value1 && value2`, a template writes `and value1 value2`.
@@ -50,7 +50,7 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
 
    Some functions take a fixed number of arguments; others, such as `and` and `list`, take any number.
 
-4. **Render a List:**
+4. **Render a list:**
 
    Replace the contents of `templates/sandbox.yaml` with a list:
 
@@ -64,7 +64,7 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
 
    The output is `list: [1 2 3]`, which looks like a list but is a string: the way Go prints the list, the same form the function list uses in its own example, "The above creates a list of `[1 2 3 4 5]`."
 
-5. **Convert the List to YAML:**
+5. **Convert the list to YAML:**
 
    `toYaml` turns the list into YAML. The function list describes it: "The `toYaml` and `toYamlPretty` functions encode an object (list, slice, array, dict, or object) into an indented YAML string."
 
@@ -101,7 +101,7 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
    With `indent 2` instead, which adds no new line, the render fails again with `block sequence entries are not allowed in this context`.
    That's why charts use `nindent` far more often than `indent`.
 
-7. **Match the Indentation to the Nesting:**
+7. **Match the indentation to the nesting:**
 
    The indent width has to fit where the value sits. Under nested keys, `nindent 2` puts the items at the level of `values`:
 
@@ -124,7 +124,7 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
 
    The items need at least the indentation of `example`, four spaces. Six spaces, two more than the key, is easier to read, and that's what the chart in this folder uses: `{{ list 1 2 3 | toYaml | nindent 6 }}`.
 
-8. **Build a Dictionary:**
+8. **Build a dictionary:**
 
    `dict` takes its arguments as key-value pairs: "Creating dictionaries is done by calling the `dict` function and passing it a list of pairs."
    A value can be another dictionary, created with `dict` in parentheses:

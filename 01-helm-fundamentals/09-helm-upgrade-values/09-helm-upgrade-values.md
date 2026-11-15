@@ -1,4 +1,4 @@
-# Upgrading Helm Releases: A Practical Guide
+# Upgrading a release with new values
 
 ## Overview
 
@@ -11,11 +11,11 @@ Here's a quick summary of the main steps:
 3. Run the `helm upgrade` command with necessary parameters and flags.
 4. Verify the upgrade and check the changes made to your application.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The release `local-wp` from exercise 08 should still be installed.
 
-1. **Check the Metrics Server:**
+1. **Check metrics-server:**
 
    The HorizontalPodAutoscaler needs Pod metrics:
 
@@ -26,7 +26,7 @@ Run the commands from this folder. The release `local-wp` from exercise 08 shoul
 
    > **k3d-argocd cluster:** metrics-server is already installed. `kubectl top pods` returns CPU and memory for every Pod once it's working.
 
-2. **Modify Your `custom-values.yaml`:**
+2. **Modify your `custom-values.yaml`:**
 
    `custom-values.yaml` in this folder is exercise 08's file with `replicaCount: 3` replaced by autoscaling:
 
@@ -39,7 +39,7 @@ Run the commands from this folder. The release `local-wp` from exercise 08 shoul
 
    Values the file doesn't set keep the chart's defaults, so `targetCPU` and `targetMemory` stay at 50.
 
-3. **Run the Upgrade Command:**
+3. **Run the upgrade command:**
 
    ```bash
    helm -n wordpress upgrade local-wp bitnami/wordpress --version 23.1.20 --reuse-values --values custom-values.yaml
@@ -51,7 +51,7 @@ Run the commands from this folder. The release `local-wp` from exercise 08 shoul
    > **The MariaDB passwords:** the generated MariaDB passwords survive the upgrade because the chart reads them back from the existing `local-wp-mariadb` Secret (the `common.secrets.passwords.manage` helper uses `lookup`), not because of `--reuse-values`.
    > `--reuse-values` only carries over values that were supplied with `--values` or `--set`.
 
-4. **Observe the Upgrade Process:**
+4. **Observe the upgrade process:**
 
    ```bash
    kubectl -n wordpress get pods --watch
@@ -65,7 +65,7 @@ Run the commands from this folder. The release `local-wp` from exercise 08 shoul
 
    > **Why `replicaCount: 3` has no effect:** the chart's Deployment template renders `replicas:` only when `autoscaling.enabled` is false. With autoscaling on, the HorizontalPodAutoscaler sets the number of Pods.
 
-5. **Validate Configurations:**
+5. **Validate configurations:**
 
    ```bash
    helm -n wordpress get values local-wp
@@ -74,7 +74,7 @@ Run the commands from this folder. The release `local-wp` from exercise 08 shoul
 
    The current values merge both revisions: `replicaCount: 3` from revision 1 next to the new `autoscaling` block. `--revision 1` shows the values as they were at the install.
 
-6. **Check History and Secrets:**
+6. **Check history and Secrets:**
 
    ```bash
    helm -n wordpress history local-wp

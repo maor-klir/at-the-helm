@@ -1,4 +1,4 @@
-# Introduction to the Helm Template Language, Part 1
+# Introduction to the Helm template language, part 1
 
 ## Overview
 
@@ -14,18 +14,18 @@ Here's what you'll aim to achieve:
 6. Run the `helm template` command to see the results.
 7. Compare YAML comments with Go comments, and trim the empty lines Go comments leave behind.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The finished chart is already in `intro-go-templating/`, so the steps describe its files.
 To build the chart yourself, run the steps in an empty directory instead, then compare your files with the ones here.
 
-1. **Create a New Directory:**
+1. **Create a new directory:**
 
    ```bash
    mkdir intro-go-templating
    ```
 
-2. **Set Up Necessary Files:**
+2. **Set up necessary files:**
 
    Create `Chart.yaml`, `values.yaml`, and a `templates` directory:
 
@@ -47,7 +47,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
 
    The chart deploys no application. It's a sandbox for trying out Go template syntax, so `appVersion` is only a placeholder.
 
-4. **Render the Empty Chart:**
+4. **Render the empty chart:**
 
    ```bash
    helm template intro-go-templating
@@ -55,7 +55,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
 
    The command succeeds and prints nothing, because `templates/` holds no files yet.
 
-5. **Create a Template File:**
+5. **Create a template file:**
 
    Within the `templates` directory, create a file named `sandbox.yaml` with the following line, then render the chart again:
 
@@ -73,13 +73,13 @@ To build the chart yourself, run the steps in an empty directory instead, then c
    > `helm lint` passes with a warning about the object name, and `helm install --dry-run=client` doesn't notice the problem either.
    > A real install fails: `helm install --dry-run=server` stops with `unable to build kubernetes objects from release manifest: error validating "": error validating data: [apiVersion not set, kind not set]`.
 
-6. **Add Values to `values.yaml`:**
+6. **Add values to `values.yaml`:**
 
    ```yaml
    test: I am a string
    ```
 
-7. **Use the Value in `sandbox.yaml`:**
+7. **Use the value in `sandbox.yaml`:**
 
    Replace `true` with the value from `values.yaml`:
 
@@ -89,7 +89,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
 
    The double curly braces delimit an action. Helm evaluates `.Values.test`, which comes from `values.yaml` or from values passed at install time, and writes the result in place of the action.
 
-8. **Test the Output:**
+8. **Test the output:**
 
    ```bash
    helm template intro-go-templating
@@ -97,7 +97,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
 
    The output now reads `test: I am a string`.
 
-9. **Use Comments:**
+9. **Use comments:**
 
    Add a YAML comment and a Go comment at the top of `sandbox.yaml`:
 
@@ -120,7 +120,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
    A Go comment has to start and end at the delimiters. The Go `text/template` docs say: "Comments do not nest and must start and end at the delimiters, as shown here."
    With spaces inside the braces, `{{ /* … */ }}`, the render fails with `parse error at (intro-go-templating/templates/sandbox.yaml:2): unexpected "/" in command`.
 
-10. **Add Labels with Go Comments:**
+10. **Add labels with Go comments:**
 
     Add labels that come from the release and the chart, each with a Go comment above it:
 
@@ -144,7 +144,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
 
     `helm template` names the release `release-name` unless you pass a name: `helm template my-sandbox intro-go-templating` renders `app: my-sandbox`.
 
-11. **Trim Whitespace:**
+11. **Trim whitespace:**
 
     A dash right after the opening braces trims all whitespace before the action, including the newline that ends the previous line.
     Add it, followed by a space, to every Go comment. This is the file in `intro-go-templating/templates/sandbox.yaml`:
@@ -182,7 +182,7 @@ To build the chart yourself, run the steps in an empty directory instead, then c
 
     The next section shows each dash position with the whitespace made visible.
 
-## How the Dashes Trim Whitespace
+## How the dashes trim whitespace
 
 Helm copies every character outside `{{ }}` to the output, including spaces and newlines.
 A Go comment outputs nothing, but the spaces before it and the newline after it are ordinary text, so they stay.

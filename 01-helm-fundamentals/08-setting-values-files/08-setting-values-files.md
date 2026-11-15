@@ -1,4 +1,4 @@
-# Setting Custom Values with YAML Files in Helm
+# Setting custom values with YAML files in Helm
 
 ## Overview
 
@@ -11,11 +11,11 @@ Here's a quick summary of the main steps:
 3. Securely manage WordPress credentials by using a Kubernetes Secret.
 4. Increase the replica count for your WordPress deployment.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Here's how to set custom values for your WordPress release using a YAML file. Run the commands from this folder:
 
-1. **Check for Installed Releases:**
+1. **Check for installed releases:**
 
    ```bash
    helm -n wordpress list
@@ -23,7 +23,7 @@ Here's how to set custom values for your WordPress release using a YAML file. Ru
 
    No release should be listed. The install in step 4 creates `local-wp` from scratch.
 
-2. **Create a YAML File:**
+2. **Create a YAML file:**
 
    `custom-values.yaml` in this folder sets the image repositories, the WordPress admin username, an existing Secret for the password, and the replica count:
 
@@ -44,7 +44,7 @@ Here's how to set custom values for your WordPress release using a YAML file. Ru
 
    > **Bitnami images moved:** the first block is the `bitnamilegacy` override from exercise 03, so this one file is all the install needs.
 
-3. **Manage Sensitive Values:**
+3. **Manage sensitive values:**
 
    The Secret has to exist before the install, and the namespace before the Secret:
 
@@ -58,7 +58,7 @@ Here's how to set custom values for your WordPress release using a YAML file. Ru
    `read -rs` reads the password without echoing it, so it doesn't end up in the shell history the way a literal `--from-literal=wordpress-password=…` would.
    The Secret's name has no `local-wp-` prefix, so it isn't mistaken for an object the release created.
 
-4. **Install with the YAML File:**
+4. **Install with the YAML file:**
 
    ```bash
    helm -n wordpress install local-wp bitnami/wordpress --version 23.1.20 --values custom-values.yaml
@@ -67,7 +67,7 @@ Here's how to set custom values for your WordPress release using a YAML file. Ru
 
    `helm get values` lists the image repositories, `wordpressUsername`, `existingSecret`, and `replicaCount` under `USER-SUPPLIED VALUES:`.
 
-5. **Verify the Installation:**
+5. **Verify the installation:**
 
    ```bash
    kubectl -n wordpress get pods --watch
@@ -78,7 +78,7 @@ Here's how to set custom values for your WordPress release using a YAML file. Ru
    > **k3d-argocd cluster:** the chart README lists "ReadWriteMany volumes for deployment scaling" as a prerequisite, while k3s's `local-path` volumes are `ReadWriteOnce`.
    > The volume is bound to one node, so the scheduler runs all three WordPress Pods on that node: `kubectl -n wordpress get pods -o wide` shows them on the same node as the volume.
 
-6. **Log In with the Custom Credentials:**
+6. **Log in with the custom credentials:**
 
    ```bash
    kubectl -n wordpress port-forward svc/local-wp-wordpress 9090:80 > /dev/null 2>&1 &

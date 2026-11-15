@@ -1,4 +1,4 @@
-# Packaging the Helm Chart
+# Packaging the Helm chart
 
 ## Overview
 
@@ -12,12 +12,12 @@ Here’s a brief overview of what you should attempt:
 3. See how the chart version names the archive, and package a second version.
 4. Install the chart from the archive file.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `creating-charts/nginx/` is unchanged from exercise 07.
 `creating-charts/nginx-0.1.0.tgz` is the archive packaged from it, the result of this exercise.
 
-1. **Check the Chart Before Packaging:**
+1. **Check the chart before packaging:**
 
    ```bash
    helm template creating-charts/nginx
@@ -46,7 +46,7 @@ Run the commands from this folder. The chart in `creating-charts/nginx/` is unch
    replicaset.apps/local-nginx-nginx-b86756955   3         3         3       3s
    ```
 
-2. **Package the Chart:**
+2. **Package the chart:**
 
    `helm package --help` describes the command: "This command packages a chart into a versioned chart archive file. If a path is given, this will look at that path for a chart (which must contain a Chart.yaml file) and then package that directory."
 
@@ -69,7 +69,7 @@ Run the commands from this folder. The chart in `creating-charts/nginx/` is unch
    Helm writes the archive's `Chart.yaml` from the parsed metadata, so its fields come out in alphabetical order; the other files are copied as they are.
    The same files are in `creating-charts/nginx-0.1.0.tgz`; only their timestamps differ.
 
-3. **Version the Archive:**
+3. **Version the archive:**
 
    The archive's name comes from the chart's name and version.
    The Charts documentation: "When generating a package, the `helm package` command will use the version that it finds in the `Chart.yaml` as a token in the package name."
@@ -84,7 +84,7 @@ Run the commands from this folder. The chart in `creating-charts/nginx/` is unch
    This writes `nginx-0.1.1.tgz` with `version: 0.1.1` inside, while `creating-charts/nginx/Chart.yaml` still says `0.1.0`.
    Delete the second archive again: `rm nginx-0.1.1.tgz`.
 
-4. **Install from the Archive:**
+4. **Install from the archive:**
 
    The archive is all Helm needs: `helm show chart nginx-0.1.0.tgz` reads its metadata, and `helm install` takes the file in place of the directory.
 
@@ -98,7 +98,7 @@ Run the commands from this folder. The chart in `creating-charts/nginx/` is unch
 
    `helm package --sign` can also sign the archive with a PGP key, writing a provenance file, `nginx-0.1.0.tgz.prov`, next to it. `helm install --verify` checks that file before installing.
 
-5. **Clean Up:**
+5. **Clean up:**
 
    ```bash
    helm -n nginx uninstall local-nginx

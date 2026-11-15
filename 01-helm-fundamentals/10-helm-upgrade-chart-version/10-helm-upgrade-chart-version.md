@@ -1,4 +1,4 @@
-# Helm Upgrade: Installing a New Version of a Chart
+# Upgrading a release to a new chart version
 
 ## Overview
 
@@ -11,23 +11,23 @@ Here's a brief overview of the steps you'll want to follow:
 4. Confirm that your Pods are running correctly after the upgrade.
 5. Check the release history to view changes.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 The release `local-wp` from exercise 09 should be at revision 2, on chart 23.1.20.
 
-1. **Update Repositories:**
+1. **Update the repositories:**
 
    ```bash
    helm repo update
    ```
 
-2. **Search for Chart Versions:**
+2. **Search for chart versions:**
 
    ```bash
    helm search repo bitnami/wordpress --versions
    ```
 
-3. **Select the New Version:**
+3. **Select the new version:**
 
    Pick `23.1.28`, the version exercises 11 and 12 pin.
 
@@ -36,7 +36,7 @@ The release `local-wp` from exercise 09 should be at revision 2, on chart 23.1.2
 
    Chart versions follow Semantic Versioning, `MAJOR.MINOR.PATCH`: a patch release should only fix bugs, a minor release may add features without breaking anything, and a major release may break existing installs. Going from 23.1.20 to 23.1.28 is a patch upgrade.
 
-4. **Run the Upgrade Command:**
+4. **Run the upgrade command:**
 
    ```bash
    helm -n wordpress upgrade local-wp bitnami/wordpress --version 23.1.28 --reset-then-reuse-values
@@ -47,7 +47,7 @@ The release `local-wp` from exercise 09 should be at revision 2, on chart 23.1.2
    > **Don't use `--reuse-values` here:** with `--reuse-values`, Helm replaces the new chart's defaults with the old release's merged values, including chart 23.1.20's image tags.
    > A server-side dry run of this upgrade with `--reuse-values` still renders `bitnamilegacy/wordpress:6.6.2-debian-12-r7`, while `--reset-then-reuse-values`, or no values flags at all, renders 23.1.28's `6.6.2-debian-12-r18`.
 
-5. **Check Pod Status:**
+5. **Check the Pods:**
 
    ```bash
    kubectl -n wordpress get pods --watch
@@ -56,7 +56,7 @@ The release `local-wp` from exercise 09 should be at revision 2, on chart 23.1.2
 
    New WordPress Pods roll out, and the image is now `6.6.2-debian-12-r18`. The HorizontalPodAutoscaler keeps two Pods. The MariaDB image moves from `11.4.3-debian-12-r1` to `11.4.4-debian-12-r0`, so its Pod restarts on the same volume.
 
-6. **View Release History:**
+6. **View the release history:**
 
    ```bash
    helm -n wordpress history local-wp

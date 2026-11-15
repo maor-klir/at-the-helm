@@ -1,4 +1,4 @@
-# Exploring Helm Charts with Artifact Hub
+# Exploring Helm charts with Artifact Hub
 
 ## Overview
 
@@ -12,37 +12,37 @@ Here's a quick summary of the main steps:
 4. Review the chart's templates and default values.
 5. Note the chart version to install; exercise 03 installs it.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 1. **Access Artifact Hub:**
 
    Open your web browser and navigate to [Artifact Hub](https://artifacthub.io).
 
-2. **Search for an Application:**
+2. **Search for an application:**
 
    In the search bar, type the name of an application you'd like to deploy, such as "WordPress", and press enter.
 
-3. **Filter Results:**
+3. **Filter results:**
 
    On the left side, filter the results to only show Helm charts. Look for badges indicating verified publishers for more reliable charts.
 
-4. **Select a Helm Chart:**
+4. **Select a Helm chart:**
 
    Click on the desired Helm chart to view its information, including installation instructions and required prerequisites.
 
-5. **Explore Documentation:**
+5. **Explore documentation:**
 
    Scroll through the documentation to find details about templates, default values, and values schemas.
 
-6. **Review Versions:**
+6. **Review versions:**
 
    Note the difference between application versions (like WordPress 6.6.2) and Helm chart versions (like 23.1.20) to understand the updates and changes.
 
-7. **Check Maintenance Activity:**
+7. **Check maintenance activity:**
 
    Look for signs of activity such as recent updates and vulnerability reports to ensure the chart is well-maintained.
 
-8. **Read the Installation Instructions:**
+8. **Read the installation instructions:**
 
    The page's install instructions use the latest chart, 34.x, which pulls the rolling `bitnami/*:latest` images into the `default` namespace.
    Don't install from here: exercise 03 installs chart 23.1.20 into the `wordpress` namespace, with the `bitnamilegacy` image overrides.

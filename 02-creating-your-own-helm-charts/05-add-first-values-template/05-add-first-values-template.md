@@ -1,4 +1,4 @@
-# Adding the First Values to the Nginx Chart
+# Adding the first values to the nginx chart
 
 ## Overview
 
@@ -12,17 +12,17 @@ Here's a quick summary of the main steps:
 3. Use the values in `deployment.yaml` and `service.yaml`.
 4. Render and lint the chart to confirm the output.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `creating-charts/nginx/` is the end state of this exercise.
 It continues from exercise 01's chart, so to follow the steps, copy `../01-creating-first-helm-chart/creating-charts` into an empty directory and edit that copy.
 
-1. **Make the Replica Count Configurable:**
+1. **Make the replica count configurable:**
 
    In `values.yaml`, add the replica count with a comment that documents it:
 
    ```yaml
-   ## @param replicaCount Number of Nginx replicas to deploy
+   ## @param replicaCount Number of nginx replicas to deploy
    replicaCount: 1
    ```
 
@@ -34,15 +34,15 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-creat
 
    `helm template creating-charts/nginx` renders `replicas: 1`. Change the value to `3` and render again to get `replicas: 3`, which is what the chart in this folder uses.
 
-2. **Make the Image Configurable:**
+2. **Make the image configurable:**
 
    Group the image name and tag under `image`:
 
    ```yaml
-   ## Settings for NGINX image
+   ## Settings for nginx image
    ##
-   ## @param image.name Nginx image name to use
-   ## @param image.tag Nginx image tag to use
+   ## @param image.name nginx image name to use
+   ## @param image.tag nginx image tag to use
    image:
      name: nginx
      tag: '1.27.0'
@@ -67,15 +67,15 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-creat
    Grouping the settings under `image` is a choice: flat keys such as `imageName` and `imageTag` work as well.
    The `helm create` scaffold groups them too, as `image.repository` and `image.tag`.
 
-3. **Make the Service Configurable:**
+3. **Make the Service configurable:**
 
    Add the service settings:
 
    ```yaml
-   ## Settings for NGINX service
+   ## Settings for nginx Service
    ##
-   ## @param service.type The type of service in front of the Nginx pods
-   ## @param service.port The port where the service is receiving requests
+   ## @param service.type The type of Service in front of the nginx Pods
+   ## @param service.port The port where the Service is receiving requests
    service:
      type: ClusterIP
      port: 80
@@ -91,15 +91,15 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-creat
    port: {{ .Values.service.port }}
    ```
 
-4. **Add the Container Port:**
+4. **Add the container port:**
 
-   The Service's `targetPort` has to match the port Nginx listens on in the container, not the Service's own port.
+   The Service's `targetPort` has to match the port nginx listens on in the container, not the Service's own port.
    `kubectl explain` defines the two fields: `port` is "The port that will be exposed by this service.", and `targetPort` is the "Number or name of the port to access on the pods targeted by the service."
 
    Add the container port as its own value, above the service settings:
 
    ```yaml
-   ## NGINX container ports
+   ## nginx container ports
    ##
    ## @param containerPorts.http
    containerPorts:
@@ -118,7 +118,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-creat
 
    One value now sets both fields, so they can't drift apart: `helm template creating-charts/nginx --set containerPorts.http=8080` renders `containerPort: 8080` and `targetPort: 8080`, while `port` stays 80.
 
-5. **Document the Values:**
+5. **Document the values:**
 
    Helm's best practices ask for every value to be documented: "Every defined property in `values.yaml` should be documented. The documentation string should begin with the name of the property that it describes, and then give at least a one-sentence description."
 
@@ -128,33 +128,33 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-creat
    The complete `values.yaml`, as in `creating-charts/nginx/values.yaml`:
 
    ```yaml
-   ## @param replicaCount Number of Nginx replicas to deploy
+   ## @param replicaCount Number of nginx replicas to deploy
    replicaCount: 3
 
-   ## Settings for NGINX image
+   ## Settings for nginx image
    ##
-   ## @param image.name Nginx image name to use
-   ## @param image.tag Nginx image tag to use
+   ## @param image.name nginx image name to use
+   ## @param image.tag nginx image tag to use
    image:
      name: nginx
      tag: '1.27.0'
 
-   ## NGINX container ports
+   ## nginx container ports
    ##
    ## @param containerPorts.http
    containerPorts:
      http: 80
 
-   ## Settings for NGINX service
+   ## Settings for nginx Service
    ##
-   ## @param service.type The type of service in front of the Nginx pods
-   ## @param service.port The port where the service is receiving requests
+   ## @param service.type The type of Service in front of the nginx Pods
+   ## @param service.port The port where the Service is receiving requests
    service:
      type: ClusterIP
      port: 80
    ```
 
-6. **Render and Lint the Chart:**
+6. **Render and lint the chart:**
 
    ```bash
    helm template creating-charts/nginx

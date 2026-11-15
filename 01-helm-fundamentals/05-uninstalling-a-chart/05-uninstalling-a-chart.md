@@ -1,4 +1,4 @@
-# Uninstalling a Helm Release
+# Uninstalling a Helm release
 
 ## Overview
 
@@ -10,9 +10,9 @@ In this exercise, we'll uninstall a Helm release and check what it leaves behind
 4. Look for any PersistentVolumeClaims (PVCs) that need to be deleted.
 5. Confirm that no PersistentVolumeClaims or PersistentVolumes are left, and delete the namespace.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
-1. **List Installed Releases:**
+1. **List installed releases:**
 
    The release `local-wp` lives in the `wordpress` namespace, so pass `-n wordpress` (or use `-A` to list releases in all namespaces):
 
@@ -20,7 +20,7 @@ In this exercise, we'll uninstall a Helm release and check what it leaves behind
    helm -n wordpress list
    ```
 
-2. **Uninstall the Release:**
+2. **Uninstall the release:**
 
    ```bash
    helm -n wordpress uninstall local-wp
@@ -28,13 +28,13 @@ In this exercise, we'll uninstall a Helm release and check what it leaves behind
 
    This also deletes the release history, the `sh.helm.release.v1.local-wp.v*` Secrets. Add `--keep-history` to keep them.
 
-3. **Check for Remaining Resources:**
+3. **Check for remaining resources:**
 
    ```bash
    kubectl -n wordpress get pods,svc
    ```
 
-4. **Stop the Port-Forward:**
+4. **Stop the port-forward:**
 
    Exercise 03 uses a background `kubectl port-forward` instead of `kubectl expose`, so no hand-made Service is left to delete. The forward points at a Service that no longer exists, so stop it:
 
@@ -64,7 +64,7 @@ In this exercise, we'll uninstall a Helm release and check what it leaves behind
    > `kubectl get pv` shows each volume's `RECLAIM POLICY` directly.
    > With `Retain`, the PersistentVolume would stay and need deleting by hand.
 
-6. **Confirm Deletion of Resources:**
+6. **Confirm deletion of resources:**
 
    ```bash
    kubectl -n wordpress get pvc

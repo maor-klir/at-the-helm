@@ -1,4 +1,4 @@
-# Exploring Default Configurations in WordPress on Kubernetes
+# Exploring default configurations in WordPress on Kubernetes
 
 ## Overview
 
@@ -10,21 +10,21 @@ In this exercise, you will:
 2. Retrieve default credentials for your WordPress installation from the created Kubernetes Secrets.
 3. Log in to the WordPress admin panel using the retrieved credentials.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Here's a concise roadmap to help you get through the exercise. The release `local-wp` from exercise 03 should be installed, with its port-forward running.
 
-1. **Access the Admin Panel:**
+1. **Access the admin panel:**
 
    Open `http://localhost:9090/wp-admin`.
 
-2. **Find Default Credentials:**
+2. **Find default credentials:**
 
    - Go to the WordPress chart documentation on Artifact Hub, version 23.1.20.
    - Look for the `WordPress configuration parameters`.
    - Note that the username defaults to `user`.
 
-3. **Retrieve the Password:**
+3. **Retrieve the password:**
 
    - Inspect the Secrets in the release's namespace, and identify the one that was created by Helm when installing WordPress:
 
@@ -40,7 +40,7 @@ Here's a concise roadmap to help you get through the exercise. The release `loca
 
    - `echo` adds the newline the password lacks. Without it, zsh marks the end of the output with a `%` that isn't part of the password.
 
-4. **Log In:**
+4. **Log in:**
 
    Return to the admin panel and enter your username and the decoded password to access your dashboard.
 

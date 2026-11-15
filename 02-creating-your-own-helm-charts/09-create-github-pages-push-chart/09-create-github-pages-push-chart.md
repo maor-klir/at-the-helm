@@ -1,4 +1,4 @@
-# Publishing the Chart with GitHub Pages
+# Publishing the chart with GitHub Pages
 
 ## Overview
 
@@ -13,17 +13,17 @@ Here’s a quick summary of what you should aim to implement:
 4. Add the packaged chart and generate an `index.yaml` file for it.
 5. Commit and push, then check that both files are served from the GitHub Pages URL.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 This exercise has no chart of its own: it publishes exercise 08's chart in a separate repository.
 The commands assume that repository is `maor-klir/helm-charts`, cloned next to this one, in `~/repositories/github/maor-klir/`.
 
-1. **Create a GitHub Repository:**
+1. **Create a GitHub repository:**
 
    On GitHub, create a new repository without a template:
 
    - Name it `helm-charts`, and give it a description such as "Repository to host Helm charts created during courses".
-   - Make it **public**.
+   - Make it **Public**.
    - Add a README file and the **MIT License**, and skip `.gitignore`.
 
    The repository has to be public for GitHub Pages on a free account: GitHub's documentation lists Pages for public repositories on GitHub Free, and for private ones only on the paid plans.
@@ -43,7 +43,7 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
    > **A `gh-pages` branch instead:** Helm's chart repository guide publishes from a separate `gh-pages` branch, so the default branch can hold the charts' source code.
    > For a repository that holds only packaged charts, as this one does, serving `main` works the same.
 
-3. **Clone the Repository:**
+3. **Clone the repository:**
 
    Clone it next to this repository, not inside it:
 
@@ -54,7 +54,7 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
 
    A clone inside `at-the-helm` would be a Git repository nested in another one: the outer repository would see it as an untracked folder, and `git add` would record it as an embedded repository instead of its files.
 
-4. **Add the Packaged Chart:**
+4. **Add the packaged chart:**
 
    Package exercise 08's chart straight into the clone. `-d` sets where `helm package` writes the archive:
 
@@ -64,7 +64,7 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
 
    Copying exercise 08's `creating-charts/nginx-0.1.0.tgz` into `helm-charts/` works as well.
 
-5. **Generate the Index:**
+5. **Generate the index:**
 
    ```bash
    cd helm-charts
@@ -99,7 +99,7 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
    Run `helm repo index` again every time you add a chart version.
    It rebuilds the file from the archives in the folder: "The `helm repo index` command will completely rebuild the `index.yaml` file from scratch, including only the charts that it finds locally."
 
-6. **Commit and Push:**
+6. **Commit and push:**
 
    ```bash
    git add index.yaml nginx-0.1.0.tgz
@@ -109,7 +109,7 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
 
    The push starts another deployment in the **Actions** tab.
 
-7. **Check the Published Files:**
+7. **Check the published files:**
 
    Once the deployment finishes, both files are served from the GitHub Pages URL:
 

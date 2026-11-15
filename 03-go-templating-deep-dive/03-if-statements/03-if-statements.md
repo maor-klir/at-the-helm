@@ -1,39 +1,39 @@
-# Mastering If-Else Statements in Helm Templates
+# Using `if` and `else` in Helm templates
 
 ## Overview
 
 In this exercise, we'll revisit `if` and `else` in Helm templates: to render a whole object, part of one, or a single value depending on the values.
 Here's a brief summary of what we'll implement:
 
-1. Add the Nginx chart's service settings to `values.yaml`.
+1. Add the nginx chart's service settings to `values.yaml`.
 2. Add a Service template that uses the named templates for its name, labels, and selector.
 3. Render the container port only when the Service is enabled.
 4. Choose the replica count inline with `if` and `else`, and keep the output free of extra spaces.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
 It continues from exercise 02's chart, so to follow the steps, copy `../02-named-templates/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Add the Service Values:**
+1. **Add the Service values:**
 
-   Add the Nginx chart's service settings to `values.yaml`, after `containerPorts`:
+   Add the nginx chart's service settings to `values.yaml`, after `containerPorts`:
 
    ```yaml
-   ## Settings for NGINX service
+   ## Settings for nginx Service
    ##
-   ## @param service.enabled Whether to deploy the service altogether or not
-   ## @param service.type The type of service in front of the Nginx pods
-   ## @param service.port The port where the service is receiving requests
+   ## @param service.enabled Whether to deploy the Service altogether or not
+   ## @param service.type The type of Service in front of the nginx Pods
+   ## @param service.port The port where the Service is receiving requests
    service:
      enabled: true
      type: ClusterIP
      port: 80
    ```
 
-2. **Add the Service Template:**
+2. **Add the Service template:**
 
-   From your working directory, copy the Nginx chart's Service into `templates/`:
+   From your working directory, copy the nginx chart's Service into `templates/`:
 
    ```bash
    cp ~/repositories/github/maor-klir/at-the-helm/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/service.yaml go-templating-deep-dive/templates/
@@ -69,7 +69,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-named
 
    The Service renders first, then the Deployment, and the Service's labels and selector match the Deployment's Pod labels.
 
-3. **Render Part of an Object Conditionally:**
+3. **Render part of an object conditionally:**
 
    An `if` can wrap a few lines inside a template as well as a whole object.
    In `templates/deployment.yaml`, render the container's `ports` only when the Service is enabled:
@@ -87,7 +87,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-named
    Set `service.enabled: false` in `values.yaml` and render again: the Service is gone, and the container has no `ports`.
    The chart in this folder keeps `enabled: false`; `helm template go-templating-deep-dive --set service.enabled=true` renders both again.
 
-4. **Choose a Value Inline:**
+4. **Choose a value inline:**
 
    An `if` and `else` can also produce a single value on one line.
    As a temporary experiment, choose the replica count from an `environment` value instead of `replicaCount`:
@@ -118,7 +118,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-named
 
    Revert the line to `replicas: {{ .Values.replicaCount }}` when you're done.
 
-5. **Chain Conditions with `else if`:**
+5. **Chain conditions with `else if`:**
 
    More than two cases chain with `else if`, closed by a single `end`:
 

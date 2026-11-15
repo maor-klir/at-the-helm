@@ -1,4 +1,4 @@
-# Introduction to the Helm Template Language, Part 2
+# Introduction to the Helm template language, part 2
 
 ## Overview
 
@@ -12,12 +12,12 @@ In this exercise, we’re going to explore how template functions work, and by t
 4. Experiment with the `lower` and `replace` functions.
 5. Use the pipe operator to chain function calls, and see when their order matters.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `intro-go-templating/` is the end state of this exercise.
 It continues from exercise 02's chart, so to follow the steps, copy `../02-intro-to-go-templating-part-1/intro-go-templating` into an empty directory and edit that copy.
 
-1. **Explore the Dot:**
+1. **Explore the dot:**
 
    In `{{ .Values.test }}`, the leading dot is the current context. At the top level of a template, it's the root object Helm passes to every template, and `.Values`, `.Release`, and `.Chart` are three of its fields.
 
@@ -26,7 +26,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
 
    The dot changes inside `range` and `with` blocks, which set it to the current element or value. An `if` block leaves it unchanged. Exercises in the Go templating deep-dive section cover these blocks.
 
-2. **Inspect the Built-in Objects:**
+2. **Inspect the built-in objects:**
 
    `.Values` holds the values from `values.yaml` and from the user. To see what `.Release`, `.Chart`, `.Template`, and `.Capabilities` hold, add these four lines to `sandbox.yaml` temporarily:
 
@@ -55,7 +55,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
    `.Capabilities` describes the cluster, but `helm template` doesn't contact one: "Any values that would normally be looked up or retrieved in-cluster will be faked locally."
    So `.Capabilities.KubeVersion` is v1.37.0, the Kubernetes version Helm 4.3.2 was built against, not k3d-argocd's 1.35; `--kube-version 1.35.5` sets it explicitly. Remove the four lines again.
 
-3. **Learn the Function Syntax:**
+3. **Learn the function syntax:**
 
    Add a Go comment that records the syntax, below the existing one:
 
@@ -65,7 +65,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
 
    Helm's documentation gives the syntax as `functionName arg1 arg2...`: the function name, then its arguments, separated by spaces, with no parentheses and no commas.
 
-4. **Use the `lower` Function:**
+4. **Use the `lower` function:**
 
    `lower` takes one argument and returns it in lowercase:
 
@@ -75,7 +75,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
 
    `helm template intro-go-templating` now renders `test: i am a string`.
 
-5. **Use the `replace` Function:**
+5. **Use the `replace` function:**
 
    `replace` takes three arguments, in this order: the string to replace, the string to replace it with, and the source string. Replace each space with a dash:
 
@@ -103,7 +103,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
 
    The output is `test: i-am-a-string`.
 
-7. **Use the Pipe Operator:**
+7. **Use the pipe operator:**
 
    The pipe passes the result of the command on its left to the command on its right.
    The Go `text/template` docs define where it goes: "In a chained pipeline, the result of each command is passed as the last argument of the following command." The same result without parentheses:
@@ -140,7 +140,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-intro
    Both orders give `i-am-a-string`, because lowercasing doesn't change spaces.
    Helm's documentation calls the piped form common: "Inverting the order is a common practice in templates. You will see `.val | quote` more often than `quote .val`. Either practice is fine."
 
-8. **See When the Order Matters:**
+8. **See when the order matters:**
 
    The order matters when one function changes what the other looks for. Replace the capital `I` with `E`, once after lowercasing and once before:
 

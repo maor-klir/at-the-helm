@@ -1,4 +1,4 @@
-# Using Release and Chart Information in Templates
+# Using release and chart information in templates
 
 ## Overview
 
@@ -12,12 +12,12 @@ Here's what you should aim to implement:
 3. Install the chart twice and check that both releases run side by side.
 4. Inspect the labels and annotations on the Deployment and its Pods.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `creating-charts/nginx/` is the end state of this exercise.
 It continues from exercise 05's chart, so to follow the steps, copy `../05-add-first-values-template/creating-charts` into an empty directory and edit that copy.
 
-1. **See Why Fixed Names Conflict:**
+1. **See why fixed names conflict:**
 
    Kubernetes requires each object's name to be unique within its kind and namespace: "Each object in your cluster has a Name that is unique for that type of resource."
    With exercise 05's chart, every release creates a Deployment named `nginx` and a Service named `nginx-svc`, so a second release of the same chart can't be installed next to the first.
@@ -42,7 +42,7 @@ It continues from exercise 05's chart, so to follow the steps, copy `../05-add-f
    helm -n nginx uninstall local-nginx
    ```
 
-2. **Name Objects After the Release and Chart:**
+2. **Name objects after the release and chart:**
 
    In `templates/deployment.yaml`, build the name from both objects:
 
@@ -66,7 +66,7 @@ It continues from exercise 05's chart, so to follow the steps, copy `../05-add-f
    > Its `fullname` helper uses the release name alone when it already contains the chart name, and truncates the result to 63 characters.
    > Exercise 11 covers `helm create`.
 
-3. **Make the Labels Unique per Release:**
+3. **Make the labels unique per release:**
 
    Names aren't the only thing two releases share. With only `app: nginx`, each release's Deployment selector and Service selector would also match the other release's Pods.
    The Kubernetes Deployment documentation warns against this: "Do not overlap labels or selectors with other controllers (including other Deployments and StatefulSets). Kubernetes doesn't stop you from overlapping, and if multiple controllers have overlapping selectors those controllers might conflict and behave unexpectedly."
@@ -85,7 +85,7 @@ It continues from exercise 05's chart, so to follow the steps, copy `../05-add-f
    Helm's best practices recommend standard names for these two labels: `app.kubernetes.io/name` for the application, and `app.kubernetes.io/instance` for the release, described as "This should be the `{{ .Release.Name }}`. It aids in differentiating between different instances of the same application."
    The `helm create` scaffold uses both as its selector labels; this chart keeps the shorter `app` and `release`.
 
-4. **Install Two Releases:**
+4. **Install two releases:**
 
    ```bash
    helm -n nginx install local-nginx creating-charts/nginx
@@ -102,7 +102,7 @@ It continues from exercise 05's chart, so to follow the steps, copy `../05-add-f
    Error: INSTALLATION FAILED: release name check failed: cannot reuse a name that is still in use
    ```
 
-5. **Inspect Labels and Annotations:**
+5. **Inspect labels and annotations:**
 
    ```bash
    kubectl -n nginx get pods --show-labels
@@ -132,7 +132,7 @@ It continues from exercise 05's chart, so to follow the steps, copy `../05-add-f
    The ReplicaSet gets the two annotations as well, because the Deployment controller copies the Deployment's annotations to it, but not the `managed-by` label: its labels come from the Pod template.
    The Pods have neither: their labels come only from the Pod template, and they have no annotations.
 
-6. **Clean Up:**
+6. **Clean up:**
 
    ```bash
    helm -n nginx uninstall local-nginx local-nginx-2

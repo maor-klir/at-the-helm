@@ -1,4 +1,4 @@
-# Exploring Variables in Helm Templates
+# Exploring variables in Helm templates
 
 ## Overview
 
@@ -10,24 +10,24 @@ Here's what we'll aim to implement:
 3. Trim the whitespace the `if` block leaves in the name.
 4. Replace the `if` with the `default` function.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
 It continues from exercise 03's chart, so to follow the steps, copy `../03-if-statements/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Add the `customName` Value:**
+1. **Add the `customName` value:**
 
    Add the value at the top of `values.yaml`, empty by default:
 
    ```yaml
-   ## @param customName allows to set a custom resource name for the Kubernetes resources in the chart.
+   ## @param customName allows setting a custom resource name for the Kubernetes resources in the chart.
    ##        Defaults to {{ .Release.Name }}-{{ .Chart.Name }}
    customName: ''
    ```
 
    The fallback is built from the release and chart names, so it can't be written in `values.yaml`; the template computes it when `customName` is empty.
 
-2. **Store the Name in a Variable:**
+2. **Store the name in a variable:**
 
    The Go template syntax defines a variable declaration: "A pipeline inside an action may initialize a variable to capture the result. The initialization has syntax `$variable := pipeline`".
    In `templates/_helpers.tpl`, capture the raw name in `$fullName`, and pipe the variable on instead of the expression:
@@ -47,7 +47,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
 
    The name is unchanged, `release-name-go-templating-deep-dive`.
 
-3. **Reassign the Variable with `if`:**
+3. **Reassign the variable with `if`:**
 
    Change `$fullName` when `customName` is set:
 
@@ -80,7 +80,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
 
    The newline before `{{ if` is plain text, so the named template's output starts with it.
 
-4. **Trim Every Line That Outputs Nothing:**
+4. **Trim every line that outputs nothing:**
 
    Start the `if`, the assignment, and the `end` with `{{-`:
 
@@ -99,7 +99,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
    With a custom name set, the newlines inside the body render too, and with only `{{- if`, the render fails again with `could not find expected ':'`.
    Starting every line that outputs nothing with `{{-` covers both cases.
 
-5. **Set a Custom Name:**
+5. **Set a custom name:**
 
    ```bash
    helm template go-templating-deep-dive --set customName=my-custom-release --set service.enabled=true
@@ -147,7 +147,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
    With a custom name set, the assignment runs and the render fails with `undefined variable: $fullName`.
    To keep the lines, wrap them in a Go comment, `{{/* … */}}`.
 
-7. **Compare with the Inline Form:**
+7. **Compare with the inline form:**
 
    The variable can be inlined, with parentheses around the `printf` call:
 

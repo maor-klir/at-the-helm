@@ -1,8 +1,8 @@
-# Creating an Nginx Helm Chart
+# Creating an nginx Helm chart
 
 ## Overview
 
-In this exercise, we'll be diving into the process of creating our very first Helm chart for deploying Nginx to Kubernetes.
+In this exercise, we'll be diving into the process of creating our very first Helm chart for deploying nginx to Kubernetes.
 
 Here's a quick overview of what we'll be doing:
 
@@ -10,25 +10,25 @@ Here's a quick overview of what we'll be doing:
 2. Create the `Chart.yaml` file containing metadata about your chart.
 3. Generate an empty `values.yaml` file to hold configuration values later on.
 4. Establish a `templates` directory that will contain the Helm templates for the Kubernetes manifests.
-5. Develop `deployment.yaml` and `service.yaml` files for your Nginx deployment.
+5. Develop `deployment.yaml` and `service.yaml` files for your nginx deployment.
 6. Add a `.helmignore` file.
 7. Utilize the Helm template command to generate Kubernetes manifests from your chart.
 8. Validate your chart using the `helm lint` command.
 9. Install the chart, check its Pod and Service, and uninstall it.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The finished chart is already in `creating-charts/nginx/`, so steps 1 to 8 describe its files.
 
 To build the chart yourself, run those steps in an empty directory instead, then compare your files with the ones here.
 
-1. **Create a New Directory:**
+1. **Create a new directory:**
 
    ```bash
    mkdir creating-charts
    ```
 
-2. **Create the Nginx Chart Directory:**
+2. **Create the nginx chart directory:**
 
    Inside it, create the chart's directory, `nginx`:
 
@@ -52,7 +52,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    ```
 
    The file name is case-sensitive: with `chart.yaml`, Helm stops with `unable to detect chart`.
-   `apiVersion: v2` is the chart format for Helm 3 and Helm 4. `version` is the chart's own version, and `appVersion` is the version of Nginx it deploys.
+   `apiVersion: v2` is the chart format for Helm 3 and Helm 4. `version` is the chart's own version, and `appVersion` is the version of nginx it deploys.
 
 4. **Generate `values.yaml`:**
 
@@ -62,7 +62,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    touch creating-charts/nginx/values.yaml
    ```
 
-5. **Create the `templates` Directory:**
+5. **Create the `templates` directory:**
 
    Helm renders every file in this directory into the Kubernetes manifests it installs:
 
@@ -137,7 +137,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
    `.DS_Store*` matches the metadata files macOS Finder creates, and `.git/` a Git directory, in case the chart has its own repository.
    Helm applies these patterns whenever it loads the chart from a directory: in `helm package`, and also in `helm template`, `helm install`, and `helm upgrade`.
 
-9. **Render the Templates:**
+9. **Render the templates:**
 
    ```bash
    helm template creating-charts/nginx
@@ -145,7 +145,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
 
    The output holds two manifests, each under a `# Source:` comment that names its template. Helm sorts them by kind, so the Service comes before the Deployment. From inside `creating-charts/nginx`, the chart path is `.`.
 
-10. **Lint the Chart:**
+10. **Lint the chart:**
 
     ```bash
     helm lint creating-charts/nginx
@@ -171,7 +171,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
 
     Both objects come back as `created (server dry run)`. With the misspelled field, the API server rejects the Deployment: `strict decoding error: unknown field "spec.replica"`.
 
-11. **Install the Chart:**
+11. **Install the chart:**
 
     Install the chart as release `local-nginx`, in its own namespace:
 
@@ -187,7 +187,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
     kubectl -n nginx get pods,svc
     ```
 
-    The `nginx-…` Pod is `Running`, and `nginx-svc` is a `ClusterIP` Service. To check that the Service reaches the Pod, forward a local port to it and request the Nginx welcome page:
+    The `nginx-…` Pod is `Running`, and `nginx-svc` is a `ClusterIP` Service. To check that the Service reaches the Pod, forward a local port to it and request the nginx welcome page:
 
     ```bash
     kubectl -n nginx port-forward svc/nginx-svc 9090:80 > /dev/null 2>&1 &
@@ -197,7 +197,7 @@ To build the chart yourself, run those steps in an empty directory instead, then
 
     The page title is `<title>Welcome to nginx!</title>`.
 
-13. **Clean Up:**
+13. **Clean up:**
 
     Once you've validated your Helm chart, uninstall it and delete the namespace:
 

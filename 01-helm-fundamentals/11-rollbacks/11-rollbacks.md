@@ -1,4 +1,4 @@
-# Rollbacks in Helm
+# Rolling back a failed upgrade
 
 ## Overview
 
@@ -12,11 +12,11 @@ A quick summary of the main steps:
 4. Use the `helm rollback` command to revert to the last successful version.
 5. Check what the rollback left behind.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 The release `local-wp` from exercise 10 should be at revision 3, on chart 23.1.28.
 
-1. **Perform Helm Upgrade:**
+1. **Run the failing upgrade:**
 
    Use `helm upgrade` on your release while setting a non-existent image tag.
 
@@ -34,7 +34,7 @@ The release `local-wp` from exercise 10 should be at revision 3, on chart 23.1.2
    > The `helm upgrade` reference says "Default when flag is omitted: 'hookOnly'", so the release is marked `deployed` even though the new Pod can't start.
    > With `--rollback-on-failure` (exercise 12), the same upgrade would wait for the Pods and roll back on its own.
 
-2. **Check Pods Status:**
+2. **Check the Pods:**
 
    ```bash
    kubectl -n wordpress get pods
@@ -44,7 +44,7 @@ The release `local-wp` from exercise 10 should be at revision 3, on chart 23.1.2
    The two existing Pods keep running. The new Pod fails before its main container: the chart's `prepare-base-dir` init container uses the same WordPress image, so the Pod goes to `Init:ErrImagePull`, then `Init:ImagePullBackOff`.
    `describe` shows `Failed to pull image "docker.io/bitnamilegacy/wordpress:non-existent"` for `spec.initContainers{prepare-base-dir}`.
 
-3. **View Helm History:**
+3. **View the release history:**
 
    ```bash
    helm -n wordpress history local-wp
@@ -52,7 +52,7 @@ The release `local-wp` from exercise 10 should be at revision 3, on chart 23.1.2
 
    Revision 4 is `deployed`, and revision 3 is `superseded`.
 
-4. **Rollback to Previous Revision:**
+4. **Roll back to the previous revision:**
 
    ```bash
    helm -n wordpress rollback local-wp 3
@@ -65,7 +65,7 @@ The release `local-wp` from exercise 10 should be at revision 3, on chart 23.1.2
    The values no longer contain `image.tag`, and the release records now go up to `sh.helm.release.v1.local-wp.v5`.
    The revision number can be left out: the `helm rollback` reference says "If this argument is omitted or set to 0, it will roll back to the previous release."
 
-5. **Check What the Rollback Left Behind:**
+5. **Check what the rollback left behind:**
 
    ```bash
    kubectl -n wordpress get rs

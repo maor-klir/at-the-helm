@@ -1,4 +1,4 @@
-# Installing Your First Helm Chart
+# Installing the WordPress chart
 
 ## Overview
 
@@ -11,11 +11,11 @@ In this exercise, we'll be installing a WordPress application using a Helm chart
 5. Verify the installation by checking the Pods and Services created.
 6. Expose the application to access it from your browser.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder.
 
-1. **Check the Cluster:**
+1. **Check the cluster:**
 
    Ensure your Kubernetes cluster is up and running. You can do this by running:
 
@@ -23,7 +23,7 @@ Run the commands from this folder.
    kubectl version
    ```
 
-2. **Add the Bitnami Repository:**
+2. **Add the Bitnami repository:**
 
    If your cluster is running fine, add the Bitnami Helm repository:
 
@@ -32,7 +32,7 @@ Run the commands from this folder.
    helm repo update
    ```
 
-3. **Search for the WordPress Chart:**
+3. **Search for the WordPress chart:**
 
    Search for the WordPress chart to find its exact name:
 
@@ -40,7 +40,7 @@ Run the commands from this folder.
    helm search repo wordpress
    ```
 
-4. **Install the Chart:**
+4. **Install the chart:**
 
    Choose the version you want to install (e.g., 23.1.20) and use the `helm install` command:
 
@@ -72,7 +72,7 @@ Run the commands from this folder.
    > Those addresses are on the k3d Docker network on the home server, so the laptop can't reach them.
    > A `NodePort` Service has the same problem, so `kubectl expose` isn't needed.
 
-7. **Forward a Local Port:**
+7. **Forward a local port:**
 
    Forward a local port to the Service, silently in the background:
 

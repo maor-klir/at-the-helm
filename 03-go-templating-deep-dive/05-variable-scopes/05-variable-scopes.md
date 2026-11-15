@@ -1,4 +1,4 @@
-# Understanding Variable Scope in Helm Templates
+# Understanding variable scope in Helm templates
 
 ## Overview
 
@@ -10,12 +10,12 @@ Here's what we'll aim to implement:
 3. Declare the variable before the `if`, and reassign it inside.
 4. See what `:=` does inside the `if` instead of `=`.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. This exercise ends where exercise 04 ends, so it has no chart copy of its own.
 To follow the steps, copy `../04-variables/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Use a Variable Outside Its Template:**
+1. **Use a variable outside its template:**
 
    In `templates/deployment.yaml`, add a placeholder label under `metadata.labels` that reads `$defaultName`, the variable from the `fullname` named template:
 
@@ -41,7 +41,7 @@ To follow the steps, copy `../04-variables/go-templating-deep-dive` into an empt
 
    Remove the placeholder label.
 
-2. **Declare the Variable Inside `if` and `else`:**
+2. **Declare the variable inside `if` and `else`:**
 
    In `templates/_helpers.tpl`, build the name with `if` and `else`, and declare `$fullName` with `:=` in each branch:
 
@@ -62,7 +62,7 @@ To follow the steps, copy `../04-variables/go-templating-deep-dive` into an empt
 
    Line 7 is the pipeline after the `end`. Each `$fullName` exists only inside its branch, so neither is left when the pipeline uses it.
 
-3. **Declare Before, Reassign Inside:**
+3. **Declare before, reassign inside:**
 
    Declare `$fullName` before the `if`, and reassign it inside with `=`, as in exercise 04:
 
@@ -83,7 +83,7 @@ To follow the steps, copy `../04-variables/go-templating-deep-dive` into an empt
    The render succeeds, and the Deployment is named `my-custom-release`.
    `$fullName` is now declared at the level of the `define`, so its scope runs to the `define`'s `end`, and the `if` nested inside can reassign it.
 
-4. **See What `:=` Does Inside the `if`:**
+4. **See what `:=` does inside the `if`:**
 
    Change the assignment inside the `if` to `:=`:
 
@@ -94,7 +94,7 @@ To follow the steps, copy `../04-variables/go-templating-deep-dive` into an empt
    Render again with `--set customName=my-custom-release`. There's no error, but the Deployment is named `release-name-go-templating-deep-dive`: the custom name is ignored.
    `:=` declares a second `$fullName` that hides the first one until the `end` and is then gone, so the pipeline after the `end` uses the unchanged first one.
 
-5. **Revert to the `default` Version:**
+5. **Revert to the `default` version:**
 
    Restore the named template from exercise 04, which needs no `if`:
 

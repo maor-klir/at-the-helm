@@ -1,8 +1,8 @@
-# Conditionally Deploying the Service
+# Conditionally deploying the Service
 
 ## Overview
 
-In this exercise, we're going to give users the option to turn off the Service in our Nginx chart.
+In this exercise, we're going to give users the option to turn off the Service in our nginx chart.
 Currently, the Service is always deployed; a new `service.enabled` value will decide whether it's rendered at all.
 
 Here’s a quick summary of the main steps you should aim to complete:
@@ -12,28 +12,28 @@ Here’s a quick summary of the main steps you should aim to complete:
 3. Render the chart with the Service enabled and disabled.
 4. Install the chart with the Service disabled, then turn it on and off again with upgrades.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `creating-charts/nginx/` is the end state of this exercise.
 It continues from exercise 06's chart, so to follow the steps, copy `../06-use-release-chart-information/creating-charts` into an empty directory and edit that copy.
 
-1. **Add the `enabled` Parameter:**
+1. **Add the `enabled` parameter:**
 
    Add `enabled` to the service settings in `values.yaml`, with its own `@param` line:
 
    ```yaml
-   ## Settings for NGINX service
+   ## Settings for nginx Service
    ##
-   ## @param service.enabled Whether to deploy the service altogether or not
-   ## @param service.type The type of service in front of the Nginx pods
-   ## @param service.port The port where the service is receiving requests
+   ## @param service.enabled Whether to deploy the Service altogether or not
+   ## @param service.type The type of Service in front of the nginx Pods
+   ## @param service.port The port where the Service is receiving requests
    service:
      enabled: true
      type: ClusterIP
      port: 80
    ```
 
-2. **Wrap the Service Template:**
+2. **Wrap the Service template:**
 
    Wrap all of `templates/service.yaml` in an `if` and close it with an `end`.
    This is the file in `creating-charts/nginx/templates/service.yaml`:
@@ -64,7 +64,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-use-r
 
    The dash in `{{- if` trims whitespace before the action. At the top of the file there's none, so here it changes nothing.
 
-3. **Render with the Service Enabled and Disabled:**
+3. **Render with the Service enabled and disabled:**
 
    ```bash
    helm template creating-charts/nginx
@@ -80,7 +80,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-use-r
 
    A missing value counts as false: with `--set service.enabled=null`, which removes the key, no Service is rendered. That's why the default of `true` belongs in `values.yaml`.
 
-4. **Install with the Service Disabled:**
+4. **Install with the Service disabled:**
 
    ```bash
    helm -n nginx install local-nginx creating-charts/nginx --create-namespace --set service.enabled=false
@@ -106,7 +106,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-use-r
    The first upgrade, revision 2, creates `local-nginx-nginx-svc`, a `ClusterIP` Service on port 80.
    The second, revision 3, deletes it, and `kubectl -n nginx get svc` finds no resources again: Helm removes the objects a new revision no longer renders.
 
-5. **Clean Up:**
+5. **Clean up:**
 
    ```bash
    helm -n nginx uninstall local-nginx

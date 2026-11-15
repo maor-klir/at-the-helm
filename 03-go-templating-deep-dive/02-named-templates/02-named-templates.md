@@ -1,4 +1,4 @@
-# Understanding Named Templates in Helm
+# Understanding named templates in Helm
 
 ## Overview
 
@@ -10,41 +10,41 @@ Here’s what we’ll aim to implement:
 3. Include them in a Deployment, with the right indentation for each place.
 4. Change the labels in one place and see every use update.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
 It continues from exercise 01's chart, so to follow the steps, copy `../01-functions-and-pipelines/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Spot the Duplication:**
+1. **Spot the duplication:**
 
-   Our Nginx chart from section 02 repeats the same labels in three places in its Deployment, the Deployment's labels, its `spec.selector.matchLabels`, and its Pod template's labels, and once more in the Service's selector.
+   Our nginx chart from section 02 repeats the same labels in three places in its Deployment, the Deployment's labels, its `spec.selector.matchLabels`, and its Pod template's labels, and once more in the Service's selector.
    The names repeat too: `{{ .Release.Name }}-{{ .Chart.Name }}` in the Deployment and the Service.
 
    An update that misses one copy still renders and installs without an error. If the Pod labels change but the Service's selector doesn't, the Pods run but receive no traffic.
 
-2. **Bring In a Deployment and Its Values:**
+2. **Bring in a Deployment and its values:**
 
-   From your working directory, copy the Nginx chart's Deployment into the chart's `templates/`:
+   From your working directory, copy the nginx chart's Deployment into the chart's `templates/`:
 
    ```bash
    cp ~/repositories/github/maor-klir/at-the-helm/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/deployment.yaml go-templating-deep-dive/templates/
    ```
 
-   It reads values the chart doesn't have yet. Replace `values.yaml` with the Nginx chart's settings for the Deployment; `test` and `environment` can go, since `sandbox.yaml` no longer uses them:
+   It reads values the chart doesn't have yet. Replace `values.yaml` with the nginx chart's settings for the Deployment; `test` and `environment` can go, since `sandbox.yaml` no longer uses them:
 
    ```yaml
-   ## @param replicaCount Number of Nginx replicas to deploy
+   ## @param replicaCount Number of nginx replicas to deploy
    replicaCount: 3
 
-   ## Settings for NGINX image
+   ## Settings for nginx image
    ##
-   ## @param image.name Nginx image name to use
-   ## @param image.tag Nginx image tag to use
+   ## @param image.name nginx image name to use
+   ## @param image.tag nginx image tag to use
    image:
      name: nginx
      tag: '1.27.0'
 
-   ## NGINX container ports
+   ## nginx container ports
    ##
    ## @param containerPorts.http
    containerPorts:
@@ -62,7 +62,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    The guide gives the reason: "if two templates are declared with the same name the last occurrence will be the one that is used. Since templates in subcharts are compiled together with top-level templates, it is best to name your templates with chart specific names."
    The dots after the chart name are only part of the string, a way to group names.
 
-4. **Define the Full Name:**
+4. **Define the full name:**
 
    Add a named template for the resource name:
 
@@ -109,7 +109,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
 
    Release names themselves are limited to 53 characters, and longer ones are rejected even by `helm template`: `the length must not be longer than 53`.
 
-5. **Include the Full Name:**
+5. **Include the full name:**
 
    In `templates/deployment.yaml`, replace the name with an `include`:
 
@@ -129,7 +129,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    The guide recommends `include`: "It is considered preferable to use `include` over `template` in Helm templates simply so that the output formatting can be handled better for YAML documents."
    Writing `{{ template "go-templating-deep-dive.selectorLabels" . | nindent 4 }}` doesn't pipe the result; the pipe applies to the context argument, and the render fails with `wrong type for value; expected string; got common.Values`.
 
-6. **See What the Context Does:**
+6. **See what the context does:**
 
    Pass `.Values` as the context instead of the dot:
 
@@ -140,7 +140,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    Inside the named template, the dot is now `.Values`, so `.Release.Name` looks for `.Values.Release.Name`, which doesn't exist.
    The render fails inside `_helpers.tpl`, at `<.Release.Name>`, with `nil pointer evaluating interface {}.Name`. Revert the line to pass `.`.
 
-7. **Define and Include the Labels:**
+7. **Define and include the labels:**
 
    Add a second named template for the labels:
 
@@ -183,7 +183,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    But the YAML has the wrong structure: `matchLabels` and the Pod template's `labels` are empty, and the labels become keys of `spec.selector` and `spec.template`.
    The API server rejects it: `helm template go-templating-deep-dive -s templates/deployment.yaml | kubectl -n default apply --dry-run=server -f -` reports `strict decoding error: unknown field "spec.selector.app"` and the same for the other labels.
 
-8. **Change the Labels in One Place:**
+8. **Change the labels in one place:**
 
    Add a `managed-by` label to the `selectorLabels` named template. This is the file in `go-templating-deep-dive/templates/_helpers.tpl`:
 
@@ -205,7 +205,7 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    The `helm create` scaffold keeps two named templates for that reason, a small `selectorLabels` for the selectors, and a `labels` that includes it and adds the rest.
    Helm also adds `app.kubernetes.io/managed-by: Helm` to every object it creates.
 
-9. **Choose Same Line or New Line:**
+9. **Choose same line or new line:**
 
    The `include` can also sit on the key's line, because `nindent` starts with a new line:
 

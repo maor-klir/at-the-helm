@@ -1,4 +1,4 @@
-# Iterating over Maps with `range` in Helm Templates
+# Iterating over maps with `range` in Helm templates
 
 ## Overview
 
@@ -10,12 +10,12 @@ Here's what we'll aim to implement:
 3. Check that the rendered Services no longer depend on the order of the values.
 4. Override a single Service, and compare that with overriding a list item.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
 It continues from exercise 06's chart, so to follow the steps, copy `../06-range-lists/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Turn the List into a Map:**
+1. **Turn the list into a map:**
 
    In exercise 06, each Service's name came from its position in the list, so reordering or removing an item renamed other Services.
    Services are quick to delete and create again, but a renamed StatefulSet gets new PersistentVolumeClaims and starts with empty volumes.
@@ -24,11 +24,11 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-range
    In `values.yaml`, give each Service a key instead. This is the block in `go-templating-deep-dive/values.yaml`:
 
    ```yaml
-   ## Settings for NGINX services
+   ## Settings for nginx Services
    ## services is a map with the following schema
    ##
-   ## @param services["*"].type The type of service in front of the Nginx pods
-   ## @param services["*"].port The port where the service is receiving requests
+   ## @param services["*"].type The type of Service in front of the nginx Pods
+   ## @param services["*"].port The port where the Service is receiving requests
    services:
      svc1:
        type: ClusterIP
@@ -47,7 +47,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-range
    The Services are already named `release-name-go-templating-deep-dive-svc1` and `release-name-go-templating-deep-dive-svc2`, because `range` gives a map's key as its first variable.
    The Go template syntax defines both cases: "`$index` and `$element` are set to the successive values of the array/slice index or map key and element, respectively."
 
-2. **Update the Defaults and the Loop Variable:**
+2. **Update the defaults and the loop variable:**
 
    The templates work, but they still read as if they iterated over a list.
    In `templates/deployment.yaml`, default to an empty map:
@@ -80,7 +80,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-range
 
    The output is the same; the template now says what it iterates over.
 
-3. **Reorder and Remove Services:**
+3. **Reorder and remove Services:**
 
    In `values.yaml`, move `svc2` above `svc1`, and render again.
    The output doesn't change: `svc1` still renders first, and it's still the ClusterIP Service.
@@ -95,7 +95,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-range
 
    An upgrade with these values would delete only `release-name-go-templating-deep-dive-svc1` and leave the other Service as it is. Move `svc2` back below `svc1` when you're done.
 
-4. **Override a Single Service:**
+4. **Override a single Service:**
 
    Helm's best practices recommend maps with overrides in mind: "it's often better to structure your values file using maps."
    Setting a list item, as in `--set servers[0].port=80`, "is prone to errors if at some later time the order of the `servers` is changed."
@@ -118,7 +118,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-range
    **Merging also affects removal:** `--set-json 'services={}'` removes nothing, because an empty map merges into the defaults without changing them.
    `--set services=null` removes the key, and with it every Service and the container's `ports`.
 
-5. **Choose Keys That Work in Names:**
+5. **Choose keys that work in names:**
 
    The key becomes part of each Service's name, so it has to follow the naming rules.
    A key such as `Svc_3` renders, but a server-side dry run rejects the Service: "a DNS-1035 label must consist of lower case alphanumeric characters or '-', start with an alphabetic character".

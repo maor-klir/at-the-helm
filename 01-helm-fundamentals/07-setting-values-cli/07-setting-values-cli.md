@@ -1,21 +1,21 @@
-# Setting Values via CLI in Helm
+# Setting values via the CLI in Helm
 
 ## Overview
 
 In this exercise, we'll override the WordPress chart's default values from the command line with `--set`. Here's a quick summary of the main steps:
 
-1. **Explore the Default Values:** Review the default configuration values of the WordPress chart.
-2. **Identify Key Parameters:** Identify the specific parameters you want to set (like root and user passwords for MariaDB).
-3. **Use CLI to Set Values:** Execute the Helm install command using the `--set` flag to specify your own values for the identified parameters.
-4. **Verify Deployment:** Check the deployment status and logs to ensure everything is running correctly.
-5. **Inspect Secrets:** Verify that the passwords set in your command are correctly reflected in the Kubernetes Secrets.
-6. **Reinstall with the Same Values:** Uninstall, keep the MariaDB volume, and confirm that a reinstall with the same passwords starts.
+1. Review the default configuration values of the WordPress chart.
+2. Identify the specific parameters you want to set, like the root and user passwords for MariaDB.
+3. Execute the Helm install command using the `--set` flag to specify your own values for the identified parameters.
+4. Check the deployment status and logs to ensure everything is running correctly.
+5. Verify that the passwords set in your command are correctly reflected in the Kubernetes Secrets.
+6. Uninstall, keep the MariaDB volume, and confirm that a reinstall with the same passwords starts.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands from this folder.
 
-1. **Find the Values to Override:**
+1. **Find the values to override:**
 
    On Artifact Hub, select chart version 23.1.20 (the page opens on the latest version, 34.x) and look for the MariaDB authentication parameters. Or print them from the CLI:
 
@@ -63,7 +63,7 @@ Run the commands from this folder.
 
    The Secret holds `myUserPassword` and `myAwesomePassword` instead of random strings. `helm get values` lists both under `USER-SUPPLIED VALUES:`, next to the image repositories from the overrides file.
 
-5. **Uninstall and Reinstall with the Same Values:**
+5. **Uninstall and reinstall with the same values:**
 
    ```bash
    helm -n wordpress uninstall local-wp
@@ -72,7 +72,7 @@ Run the commands from this folder.
 
    `data-local-wp-mariadb-0` is still there, as in exercise 06. Run the install command from step 2 again, with the same `--set` flags. This time the passwords match the data on the retained volume, so both Pods become ready.
 
-6. **Clean Up:**
+6. **Clean up:**
 
    ```bash
    helm -n wordpress uninstall local-wp

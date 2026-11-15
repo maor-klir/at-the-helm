@@ -1,4 +1,4 @@
-# Creating Charts with `helm create`
+# Creating charts with `helm create`
 
 ## Overview
 
@@ -13,12 +13,12 @@ Here's a summary of the main steps:
 4. See how the templates share names and labels through `_helpers.tpl`.
 5. Render and lint the generated chart.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Run the commands in an empty directory, so the new chart doesn't end up inside this repository.
 The steps describe what `helm create` generates today, checked with Helm 4.3.2; `creating-charts/backend-app/` in this folder is the older scaffold generated for the lecture.
 
-1. **Read the Help:**
+1. **Read the help:**
 
    ```bash
    helm create --help
@@ -30,7 +30,7 @@ The steps describe what `helm create` generates today, checked with Helm 4.3.2; 
    The help also lists `--starter` (`-p`), which generates the chart from your own template chart instead of the built-in scaffold: "The `helm create` command takes an optional `--starter` option that lets you specify a "starter chart"."
    An organization can keep its standard labels, security settings, and file layout in a starter chart.
 
-2. **Create the Chart:**
+2. **Create the chart:**
 
    ```bash
    cd "$(mktemp -d)"
@@ -78,7 +78,7 @@ The steps describe what `helm create` generates today, checked with Helm 4.3.2; 
    `values.yaml` holds documented defaults for everything the templates configure: the image, the ServiceAccount, the Service, Ingress, HTTPRoute, resources, probes, autoscaling, volumes, and scheduling.
    `image.tag` is empty, so the Deployment falls back to `appVersion` and runs `nginx:1.16.0`.
 
-4. **Explore the Templates:**
+4. **Explore the templates:**
 
    Each Kubernetes object has its own template, and the templates share names and labels through the named templates defined in `_helpers.tpl`: `backend-app.name`, `backend-app.fullname`, `backend-app.chart`, `backend-app.labels`, `backend-app.selectorLabels`, and `backend-app.serviceAccountName`.
    `templates/deployment.yaml` uses them with `include`:
@@ -105,7 +105,7 @@ The steps describe what `helm create` generates today, checked with Helm 4.3.2; 
    Ingress is stable and still widely used, and most public charts expose it; the Kubernetes documentation notes that its API is frozen and recommends Gateway: "The Kubernetes project recommends using Gateway instead of Ingress. The Ingress API has been frozen."
    Which one to enable depends on the controller the cluster runs, set with `ingress.enabled` or `httpRoute.enabled`, and `templates/NOTES.txt` prints how to reach the application through whichever is enabled.
 
-5. **Render and Lint the Chart:**
+5. **Render and lint the chart:**
 
    ```bash
    helm template my-app backend-app

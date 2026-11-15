@@ -1,22 +1,22 @@
-# Installing NGINX from Our Helm Repository
+# Installing nginx from our Helm repository
 
 ## Overview
 
-In this guide, we'll install our Nginx chart from the chart repository published in exercise 09, the same way we installed charts from the Bitnami and Prometheus community repositories.
+In this guide, we'll install our nginx chart from the chart repository published in exercise 09, the same way we installed charts from the Bitnami and Prometheus community repositories.
 
 Here's a high-level overview of what you will be doing:
 
 1. Add your chart repository to Helm, using its GitHub Pages URL.
 2. List your repositories to confirm the addition.
-3. Search for the Nginx chart.
+3. Search for the nginx chart.
 4. Install the chart from the repository.
 5. Verify the installation, then uninstall it.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 The chart repository is `https://maor-klir.github.io/helm-charts`, from exercise 09.
 
-1. **Add the Repository:**
+1. **Add the repository:**
 
    Add the repository under a name of your choice; your GitHub username works well:
 
@@ -27,7 +27,7 @@ The chart repository is `https://maor-klir.github.io/helm-charts`, from exercise
    Use the repository's base URL, without `index.yaml`: Helm appends `/index.yaml` itself.
    With the file name included, the request goes to `…/helm-charts/index.yaml/index.yaml`, and `helm repo add` fails with `404 Not Found`.
 
-2. **Confirm the Repository Addition:**
+2. **Confirm the repository addition:**
 
    ```bash
    helm repo list
@@ -44,7 +44,7 @@ The chart repository is `https://maor-klir.github.io/helm-charts`, from exercise
    maor-klir           	https://maor-klir.github.io/helm-charts
    ```
 
-3. **Search for the Nginx Chart:**
+3. **Search for the nginx chart:**
 
    ```bash
    helm search repo nginx
@@ -64,7 +64,7 @@ The chart repository is `https://maor-klir.github.io/helm-charts`, from exercise
 
    The search reads the local copy of each repository's index. After you publish a new chart version, run `helm repo update maor-klir` before searching for or installing it.
 
-4. **Install the Chart:**
+4. **Install the chart:**
 
    Install the chart as release `super-nginx`, using the `<repository>/<chart>` reference from the search:
 
@@ -72,7 +72,7 @@ The chart repository is `https://maor-klir.github.io/helm-charts`, from exercise
    helm -n nginx install super-nginx maor-klir/nginx --create-namespace
    ```
 
-5. **Verify the Installation:**
+5. **Verify the installation:**
 
    ```bash
    kubectl -n nginx get deploy,svc,pods
@@ -95,7 +95,7 @@ The chart repository is `https://maor-klir.github.io/helm-charts`, from exercise
 
    `helm -n nginx list` shows the release's chart as `nginx-0.1.0`, the version published in the repository.
 
-6. **Clean Up:**
+6. **Clean up:**
 
    ```bash
    helm -n nginx uninstall super-nginx
