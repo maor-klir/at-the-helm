@@ -59,7 +59,7 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
    Package exercise 08's chart straight into the clone. `-d` sets where `helm package` writes the archive:
 
    ```bash
-   helm package at-the-helm/02-creating-own-helm-charts/08-ide-package-chart/creating-charts/nginx -d helm-charts
+   helm package at-the-helm/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx -d helm-charts
    ```
 
    Copying exercise 08's `creating-charts/nginx-0.1.0.tgz` into `helm-charts/` works as well.

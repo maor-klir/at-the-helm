@@ -14,7 +14,7 @@ Here’s a brief summary of the steps you’ll want to take:
 ## Step-by-Step Guide
 
 Run the commands from this folder. The chart in `go-templating-deep-dive/` is the end state of this exercise.
-To follow the steps, copy the chart from section 02's last templating exercise, `../../02-creating-own-helm-charts/04-intro-to-go-templating-part-3/intro-go-templating`, into an empty directory as `go-templating-deep-dive`, and edit that copy.
+To follow the steps, copy the chart from section 02's last templating exercise, `../../02-creating-your-own-helm-charts/04-intro-to-go-templating-part-3/intro-go-templating`, into an empty directory as `go-templating-deep-dive`, and edit that copy.
 
 1. **Create the Chart:**
 

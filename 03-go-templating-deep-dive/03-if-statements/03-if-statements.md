@@ -36,7 +36,7 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-named
    From your working directory, copy the Nginx chart's Service into `templates/`:
 
    ```bash
-   cp ~/repositories/github/maor-klir/at-the-helm/02-creating-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/service.yaml go-templating-deep-dive/templates/
+   cp ~/repositories/github/maor-klir/at-the-helm/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/service.yaml go-templating-deep-dive/templates/
    ```
 
    Replace its hardcoded name, labels, and selector with the named templates from exercise 02.
