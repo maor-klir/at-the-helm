@@ -35,7 +35,8 @@ To follow the steps, copy the chart from section 02's last templating exercise, 
    The 18 categories range from String, Lists, and Dictionaries to Logic and Flow Control, Type Conversion, Semantic Versions, and Cryptographic and Security.
 
    - **String:** tests such as `contains`, `hasPrefix`, and `hasSuffix`, trimming with `trim`, and random strings with `randAlphaNum`.
-   - **Dictionaries:** `dict` creates one, and `hasKey`, `deepCopy`, and `merge` work on them. `merge` combines default labels with labels from the user, for example: "Merge two or more dictionaries into one, giving precedence to the dest dictionary".
+   - **Dictionaries:** `dict` creates one, and `hasKey`, `deepCopy`, and `merge` work on them.
+     `merge` combines default labels with labels from the user, for example: "Merge two or more dictionaries into one, giving precedence to the dest dictionary".
    - **Lists:** `list` creates one, and `append`, `first`, `has`, and others work on them.
 
    When a template needs an operation, this page is the place to look for a function that already does it.

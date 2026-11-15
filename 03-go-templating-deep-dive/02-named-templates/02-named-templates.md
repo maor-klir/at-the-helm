@@ -160,16 +160,16 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
    kind: Deployment
    metadata:
      name: {{ include "go-templating-deep-dive.fullname" . }}
-     labels:
+     labels: 
        {{- include "go-templating-deep-dive.selectorLabels" . | nindent 4 }}
    spec:
      replicas: {{ .Values.replicaCount }}
      selector:
-       matchLabels:
+       matchLabels: 
          {{- include "go-templating-deep-dive.selectorLabels" . | nindent 6 }}
      template:
        metadata:
-         labels:
+         labels: 
            {{- include "go-templating-deep-dive.selectorLabels" . | nindent 8 }}
        spec:
          containers:

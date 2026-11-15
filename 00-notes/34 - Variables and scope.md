@@ -81,10 +81,11 @@ The Go template syntax keeps variables inside the template that declares them: *
 - A named template's variable is undefined in the file that includes it: `$defaultName` used in `deployment.yaml` fails with `undefined variable "$defaultName"`.
 
 A named template receives values only through the context passed to `include` (see **32 - Named templates**).
+`$`, the one variable every template starts with, isn't shared either: it holds the value that template started with (see **35 - The dot and with blocks**).
 
 ## Verify
 
-Our `go-templating-deep-dive` chart builds the resource name with `$defaultName` and `default`:
+From `03-go-templating-deep-dive/04-variables`, our `go-templating-deep-dive` chart builds the resource name with `$defaultName` and `default`:
 
 ```bash
 helm template go-templating-deep-dive -s templates/deployment.yaml | grep -m1 '  name:'

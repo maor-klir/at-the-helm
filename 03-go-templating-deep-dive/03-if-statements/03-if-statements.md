@@ -9,6 +9,7 @@ Here's a brief summary of what we'll implement:
 2. Add a Service template that uses the named templates for its name, labels, and selector.
 3. Render the container port only when the Service is enabled.
 4. Choose the replica count inline with `if` and `else`, and keep the output free of extra spaces.
+5. Chain more than two cases with `else if`.
 
 ## Step-by-step guide
 
@@ -110,7 +111,8 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-named
 
    Now the line renders as `replicas: 5`, and with `--set environment=staging`, or no `environment` at all, as `replicas: 2`.
 
-   For a choice between two values, the Sprig `ternary` function is shorter. The function list describes it: "The `ternary` function takes two values, and a test value. If the test value is true, the first value will be returned. If the test value is empty, the second value will be returned."
+   For a choice between two values, the Sprig `ternary` function is shorter.
+   The function list describes it: "The `ternary` function takes two values, and a test value. If the test value is true, the first value will be returned. If the test value is empty, the second value will be returned."
 
    ```yaml
    replicas: {{ ternary 5 2 (eq .Values.environment "production") }}

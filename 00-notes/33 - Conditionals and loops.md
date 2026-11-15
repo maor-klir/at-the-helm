@@ -98,7 +98,7 @@ Inside `range`, the dot is the current element, so `.Values` and `.Release` can'
 Passing `.` to `include` gives the named template the element: `include "go-templating-deep-dive.fullname" .` fails in the helper at `<.Release.Name>` with `nil pointer evaluating interface {}.Name`.
 
 `$` keeps the top-level object: Helm's variables guide says *"there is one variable that will always point to the root context"*.
-Inside the loop, `include "go-templating-deep-dive.fullname" $` and `$.Values.containerPorts.http` work.
+Inside the loop, `include "go-templating-deep-dive.fullname" $` and `$.Values.containerPorts.http` work (see **35 - The dot and with blocks**).
 
 ## Several objects from one template
 
@@ -146,7 +146,7 @@ On a list, `--set 'services[1].port=8080'` builds a new list whose first item is
 
 ## Verify
 
-Our `go-templating-deep-dive` chart renders one Service per key of `services`:
+From `03-go-templating-deep-dive/07-range-maps`, our `go-templating-deep-dive` chart renders one Service per key of `services`:
 
 ```bash
 helm template go-templating-deep-dive -s templates/service.yaml | grep -E '^  name:|^  type:'

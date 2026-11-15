@@ -39,6 +39,7 @@ metadata:
 ```
 
 **`include` rather than `template`:** Go template syntax has a `template` action for the same job, but *"Because `template` is an action, and not a function, there is no way to pass the output of a `template` call to other functions; the data is simply inserted inline."*
+
 The guide's advice follows: *"It is considered preferable to use `include` over `template` in Helm templates simply so that the output formatting can be handled better for YAML documents."*
 
 With `template`, a pipe applies to its argument instead of its output.
@@ -46,6 +47,8 @@ With `template`, a pipe applies to its argument instead of its output.
 
 **A named template's output is text:** labels written as YAML need no `toYaml`, but their indentation has to match each place they're included.
 In a Deployment, that's `nindent 4` under `metadata.labels`, `nindent 6` under `spec.selector.matchLabels`, and `nindent 8` under the Pod template's `labels` (see **31 - Functions and pipelines**).
+
+**A named template can also output nothing:** a validator checks its context and stops the render with `fail`, and its `include` sits on a line of its own (see **36 - Validating values**).
 
 ## The context
 
@@ -56,6 +59,8 @@ Passing `.` gives the template everything: `.Values`, `.Release`, `.Chart`, and 
 A narrower value is allowed, *"We could just as easily pass `.Values` or `.Values.favorite` or whatever scope we want."*, but then the template sees only that.
 
 `{{ include "go-templating-deep-dive.fullname" .Values }}` fails inside the helper, at `<.Release.Name>`, with `nil pointer evaluating interface {}.Name`: inside it, `.Release.Name` now means `.Values.Release.Name`.
+
+`$` follows the context too: inside a named template, `$` is the second argument of `include`, not the chart's top-level object (see **35 - The dot and with blocks**).
 
 ## Building a name
 
@@ -92,7 +97,7 @@ A named template can include another one, as `labels` does here.
 
 ## Verify
 
-Our `go-templating-deep-dive` chart includes the name and labels templates in its Deployment and Service:
+From `03-go-templating-deep-dive/03-if-statements`, our `go-templating-deep-dive` chart includes the name and labels templates in its Deployment and Service:
 
 ```bash
 helm template my-app go-templating-deep-dive --set service.enabled=true | grep -E '^kind|  name:|app:|release:'

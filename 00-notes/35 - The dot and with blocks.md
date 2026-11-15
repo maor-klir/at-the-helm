@@ -93,7 +93,7 @@ This renders `# a/ClusterIP` and `# a/NodePort`: the dot is `"a"`, and `$svc` is
 
 ## Verify
 
-Our `go-templating-deep-dive` chart prints the dot inside the Service's loop and sets the security context through `with`:
+From `03-go-templating-deep-dive/09-with-blocks`, our `go-templating-deep-dive` chart prints the dot inside the Service's loop and sets the security context through `with`:
 
 ```bash
 helm template go-templating-deep-dive -s templates/service.yaml | grep '^# The value'

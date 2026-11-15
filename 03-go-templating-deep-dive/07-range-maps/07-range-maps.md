@@ -9,6 +9,7 @@ Here's what we'll aim to implement:
 2. Update the defaults and the loop variable in the templates.
 3. Check that the rendered Services no longer depend on the order of the values.
 4. Override a single Service, and compare that with overriding a list item.
+5. Choose keys that are valid in object names.
 
 ## Step-by-step guide
 
@@ -45,7 +46,7 @@ It continues from exercise 06's chart, so to follow the steps, copy `../06-range
    ```
 
    The Services are already named `release-name-go-templating-deep-dive-svc1` and `release-name-go-templating-deep-dive-svc2`, because `range` gives a map's key as its first variable.
-   The Go template syntax defines both cases: "`$index` and `$element` are set to the successive values of the array/slice index or map key and element, respectively."
+   The Go template syntax defines both cases: "$index and $element are set to the successive values of the array/slice index or map key and element, respectively."
 
 2. **Update the defaults and the loop variable:**
 

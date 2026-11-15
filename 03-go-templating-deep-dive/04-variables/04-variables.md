@@ -29,7 +29,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
 
 2. **Store the name in a variable:**
 
-   The Go template syntax defines a variable declaration: "A pipeline inside an action may initialize a variable to capture the result. The initialization has syntax `$variable := pipeline`".
+   The Go template syntax defines a variable declaration: "A pipeline inside an action may initialize a variable to capture the result." The syntax is `$variable := pipeline`.
    In `templates/_helpers.tpl`, capture the raw name in `$fullName`, and pipe the variable on instead of the expression:
 
    ```yaml
@@ -61,7 +61,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
    {{- end -}}
    ```
 
-   The reassignment uses `=`, not `:=`: "Variables previously declared can also be assigned, using the syntax `$variable = pipeline`".
+   The reassignment uses `=`, not `:=`: "Variables previously declared can also be assigned", with `$variable = pipeline`.
    The `if` needs no comparison, because an empty string counts as false; Helm's list of false values includes "an empty string".
 
    Render again, and it fails:

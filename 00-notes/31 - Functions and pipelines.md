@@ -108,7 +108,7 @@ Named templates, such as a chart's labels, are piped through `nindent` the same 
 
 ## Verify
 
-Our `go-templating-deep-dive` chart renders a list and a dictionary through `toYaml | nindent` in `templates/sandbox.yaml`:
+From `03-go-templating-deep-dive/01-functions-and-pipelines`, our `go-templating-deep-dive` chart renders a list and a dictionary through `toYaml | nindent` in `templates/sandbox.yaml`:
 
 ```bash
 helm template go-templating-deep-dive -s templates/sandbox.yaml
