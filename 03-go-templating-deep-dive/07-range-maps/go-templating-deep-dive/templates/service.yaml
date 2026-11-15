@@ -1,0 +1,17 @@
+{{- range $key, $svc := (.Values.services | default dict) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "go-templating-deep-dive.fullname" $ }}-{{ $key }}
+  labels:
+    {{- include "go-templating-deep-dive.selectorLabels" $ | nindent 4 }}
+spec:
+  type: {{ $svc.type }}
+  selector:
+    {{- include "go-templating-deep-dive.selectorLabels" $ | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: {{ $svc.port }}
+      targetPort: {{ $.Values.containerPorts.http }}
+{{- end }}

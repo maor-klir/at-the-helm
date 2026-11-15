@@ -20,7 +20,7 @@ It continues from exercise 03's chart, so to follow the steps, copy `../03-if-st
    Add the value at the top of `values.yaml`, empty by default:
 
    ```yaml
-   ## @param customName allows to set a custom resource name for the K8s resources in the chart.
+   ## @param customName allows to set a custom resource name for the Kubernetes resources in the chart.
    ##        Defaults to {{ .Release.Name }}-{{ .Chart.Name }}
    customName: ''
    ```
