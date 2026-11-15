@@ -1,0 +1,34 @@
+## @param customName allows setting a custom resource name for the Kubernetes resources in the chart.
+##        Defaults to {{ .Release.Name }}-{{ .Chart.Name }}
+customName: ''
+
+## @param replicaCount Number of nginx replicas to deploy
+replicaCount: 3
+
+## Settings for nginx image
+##
+## @param image.name nginx image name to use
+## @param image.tag nginx image tag to use
+image:
+  name: nginx
+  tag: '1.27.0'
+
+## nginx container ports
+##
+## @param containerPorts.http
+containerPorts:
+  http: 80
+
+## Settings for nginx Services
+## services is a map with the following schema
+##
+## @param services["*"].type The type of Service in front of the nginx Pods
+## @param services["*"].port The port where the Service is receiving requests
+services:
+  svc1:
+    type: ClusterIP
+    port: 80
+  svc2:
+    type: NodePort
+    port: 30007
+  
