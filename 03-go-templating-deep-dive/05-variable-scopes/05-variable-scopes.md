@@ -1,35 +1,111 @@
-# Understanding Variable Scopes in Helm Templates
+# Understanding Variable Scope in Helm Templates
 
 ## Overview
 
-In this exercise, we're going to explore the concept of variable scopes within Helm templates. Variable scopes dictate where a variable can be accessed in your code, similar to internal variables in programming functions. Your goal is to gain a solid understanding of how to properly declare and use variables in templates to prevent any scope-related errors.
+In this exercise, we'll see where a variable can be used: only inside the block that declares it, and in the blocks nested in it.
+Here's what we'll aim to implement:
 
-To get started, here’s a quick overview of the steps you should try to implement on your own:
-
-1. Create a variable in your Helm template.
-2. Attempt to access the variable from outside its declaration block and observe the error it generates.
-3. Use an `if-else` statement to declare a variable and see how its scope works.
-4. Modify the declaration to be available outside the `if` block and see it in action.
-5. Run the `helm template` command to verify that there are no undefined variable errors.
-
-Give it a go, and once you’ve made your attempts, feel free to check the step-by-step guide for any clarifications! 🚀
+1. Use a named template's variable in the Deployment, and read the error.
+2. Declare a variable in the branches of an `if` and `else`, and use it after the `end`.
+3. Declare the variable before the `if`, and reassign it inside.
+4. See what `:=` does inside the `if` instead of `=`.
 
 ## Step-by-Step Guide
 
-Here’s how you can approach the task systematically:
+Run the commands from this folder. This exercise ends where exercise 04 ends, so it has no chart copy of its own.
+To follow the steps, copy `../04-variables/go-templating-deep-dive` into an empty directory and edit that copy.
 
-1. **Declare a Variable:** Open your `_helpers.tpl` file and declare a variable using the colon-equal syntax (e.g., `{{ $fullName := .Values.name }}`).
+1. **Use a Variable Outside Its Template:**
 
-2. **Access the Variable:** In your `deployment.yaml`, try to access the variable declared in `helpers.tpl`. Notice that this will lead to an error since the scope of the variable is limited to its block.
+   In `templates/deployment.yaml`, add a placeholder label under `metadata.labels` that reads `$defaultName`, the variable from the `fullname` named template:
 
-3. **Using If-Else:** Wrap your variable declaration within an `if` condition (e.g., `{{ if .Values.customName }} ... {{ else }} ... {{ end }}`) and assign different values to `$fullName`.
+   ```yaml
+       {{- include "go-templating-deep-dive.selectorLabels" . | nindent 4 }}
+       placeholder: {{ $defaultName }}
+   ```
 
-4. **Scope Confirmation:** Ensure that the use of `$fullName` in `_helpers.tpl` falls within the same block of code where it is declared.
+   ```bash
+   helm template go-templating-deep-dive
+   ```
 
-5. **Rescope if Necessary:** Instead of using `:=` within the `if`, use `=` to update the variable without redefining it, allowing it to be accessed in nested blocks.
+   ```text
+   Error: parse error at (go-templating-deep-dive/templates/deployment.yaml:7): undefined variable "$defaultName"
+   ```
 
-6. **Rerun the Template:** Run `helm template` again to confirm that there are no errors and everything works as intended.
+   The Go template syntax defines how far a variable reaches: "A variable's scope extends to the "end" action of the control structure ("if", "with", or "range") in which it is declared, or to the end of the template if there is no such control structure."
+   `$defaultName` is declared in the `define` block, so it ends at the `define`'s `end`. It's a parse error, so Helm reports it with the file and line before rendering anything.
+
+   The other direction fails too: "A template invocation does not inherit variables from the point of its invocation."
+   A variable declared in `deployment.yaml` before the `include` is undefined inside the named template, and so is one declared in `_helpers.tpl` outside the `define`.
+   A named template gets its values only from its context (see **32 - Named templates**).
+
+   Remove the placeholder label.
+
+2. **Declare the Variable Inside `if` and `else`:**
+
+   In `templates/_helpers.tpl`, build the name with `if` and `else`, and declare `$fullName` with `:=` in each branch:
+
+   ```yaml
+   {{- define "go-templating-deep-dive.fullname" -}}
+   {{- if .Values.customName }}
+   {{- $fullName := .Values.customName }}
+   {{- else }}
+   {{- $fullName := printf "%s-%s" .Release.Name .Chart.Name }}
+   {{- end }}
+   {{- $fullName | trunc 63 | trimSuffix "-"  -}}
+   {{- end -}}
+   ```
+
+   ```text
+   Error: parse error at (go-templating-deep-dive/templates/_helpers.tpl:7): undefined variable "$fullName"
+   ```
+
+   Line 7 is the pipeline after the `end`. Each `$fullName` exists only inside its branch, so neither is left when the pipeline uses it.
+
+3. **Declare Before, Reassign Inside:**
+
+   Declare `$fullName` before the `if`, and reassign it inside with `=`, as in exercise 04:
+
+   ```yaml
+   {{- define "go-templating-deep-dive.fullname" -}}
+   {{- $fullName := printf "%s-%s" .Release.Name .Chart.Name }}
+   {{- if .Values.customName }}
+   {{- $fullName = .Values.customName }}
+   {{- end }}
+   {{- $fullName | trunc 63 | trimSuffix "-"  -}}
+   {{- end -}}
+   ```
+
+   ```bash
+   helm template go-templating-deep-dive --set customName=my-custom-release
+   ```
+
+   The render succeeds, and the Deployment is named `my-custom-release`.
+   `$fullName` is now declared at the level of the `define`, so its scope runs to the `define`'s `end`, and the `if` nested inside can reassign it.
+
+4. **See What `:=` Does Inside the `if`:**
+
+   Change the assignment inside the `if` to `:=`:
+
+   ```yaml
+   {{- $fullName := .Values.customName }}
+   ```
+
+   Render again with `--set customName=my-custom-release`. There's no error, but the Deployment is named `release-name-go-templating-deep-dive`: the custom name is ignored.
+   `:=` declares a second `$fullName` that hides the first one until the `end` and is then gone, so the pipeline after the `end` uses the unchanged first one.
+
+5. **Revert to the `default` Version:**
+
+   Restore the named template from exercise 04, which needs no `if`:
+
+   ```yaml
+   {{- define "go-templating-deep-dive.fullname" -}}
+   {{- $defaultName := printf "%s-%s" .Release.Name .Chart.Name }}
+   {{- .Values.customName | default $defaultName | trunc 63 | trimSuffix "-"  -}}
+   {{- end -}}
+   ```
 
 ## Conclusion
 
-Understanding variable scopes in Helm templates is crucial to avoid scope-related issues that can lead to errors. Remember that a variable is only accessible within the block it is declared in, unless you've structured it to be available in nested blocks. Keep experimenting with these concepts to strengthen your knowledge, and don’t hesitate to revisit this guide as needed. Happy coding! 😊
+In this exercise, we saw that a variable lives until the `end` of the block that declares it, is visible in the blocks nested in it, and never crosses into another template.
+To change a variable inside an `if`, declare it before the `if` and reassign it with `=`; the same rules apply to the `range` and `with` blocks in the next exercises.
