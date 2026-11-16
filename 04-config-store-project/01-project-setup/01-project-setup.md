@@ -3,7 +3,7 @@
 ## Overview
 
 In this exercise, we'll create the repository for config-store, the Express application with a PostgreSQL database that the next sections package and deploy with Helm, and set up its Node.js project.
-The application lives in its own repository, `config-store`, not in this one. The course's version is `lm-academy/config-store`, and its commit `fd45b9a`, "chore(config-store): project setup", is the state at the end of this exercise.
+The application lives in its own repository, `maor-klir/config-store`, next to this one, and the exercises in this section run their commands there.
 
 Here's a quick summary of the main steps:
 
@@ -24,7 +24,7 @@ The commands assume Node.js 22 and npm 10, the versions on this machine.
 
    ```bash
    cd ~/repositories/github/maor-klir
-   gh repo create config-store --public --description "Repository hosting the config-store application, used for demonstration in multiple courses." --add-readme --gitignore Node --license mit --clone
+   gh repo create config-store --public --description "A repository made for hosting the config-store application that is being used in some courses I took" --add-readme --gitignore Node --license mit --clone
    cd config-store
    ```
 
@@ -113,4 +113,3 @@ The commands assume Node.js 22 and npm 10, the versions on this machine.
 ## Conclusion
 
 In this exercise, we created the `config-store` repository, initialized its Node.js project with exact dependency versions, and prepared the files for the image and for Compose.
-`package.json` now matches the course's commit `fd45b9a`, apart from the newer versions, the MIT license, and the repository links npm read from the git remote.
