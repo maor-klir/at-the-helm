@@ -14,26 +14,26 @@ Take some time to explore these steps and attempt the implementation yourself! O
 
 ## Step-by-Step Guide
 
-1. **Start Docker Compose**: Open your terminal and run the command `docker-compose up`. Ensure that your containers are properly set up.
-2. **Testing the API**:
+1. **Start Docker Compose:** Open your terminal and run the command `docker-compose up`. Ensure that your containers are properly set up.
+2. **Testing the API:**
 
    - Use Postman to send a request to your API endpoint at `/kv` to check initial responses.
    - Create a key-value pair by sending a POST request with appropriate JSON format including both the key and value.
    - Test the GET request to retrieve the value using the key created previously.
    - Use PUT and DELETE requests to modify or remove keys, confirming appropriate error messages for invalid requests.
 
-3. **Docker Hub Authentication**:
+3. **Docker Hub Authentication:**
 
    - Create a Docker Hub account if you don’t already have one.
    - Generate a personal access token from your Docker Hub account settings.
    - Open your terminal and run `docker login` using your Docker username and the personal access token.
 
-4. **Building Your Docker Image**:
+4. **Building Your Docker Image:**
 
    - Make sure you are in the directory containing your Dockerfile.
    - Use the command `docker build` to create your image. Tag it appropriately (e.g., `username/config-store:1.0.0`) and specify the platforms if necessary.
 
-5. **Pushing the Docker Image**:
+5. **Pushing the Docker Image:**
    - Use the `--push` flag with your build command to automatically push your image to Docker Hub once it’s built.
    - Verify the image has been uploaded by checking your Docker Hub repository.
 
