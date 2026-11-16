@@ -21,6 +21,7 @@ What the application itself expects at startup is in **41 - The config-store app
 | the `db` service, `postgres:17.12` | a chart dependency, Bitnami `postgresql` 16.2.2, which renders a StatefulSet |
 | the `postgres-data` volume | a PersistentVolumeClaim |
 | `networks` | the cluster's Pod network; a NetworkPolicy restricts it |
+| the image's default user, root | the Pod's `securityContext`: UID 1000, a read-only root filesystem, and no capabilities (see **41 - The config-store application**) |
 | `develop.watch` | none |
 
 ## Configuration and the password

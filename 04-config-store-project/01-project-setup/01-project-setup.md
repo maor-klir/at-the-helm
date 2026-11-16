@@ -107,7 +107,8 @@ The commands assume Node.js 22 and npm 10, the versions on this machine.
    .env*
    ```
 
-   The Docker documentation describes the file: "You can use a `.dockerignore` file to exclude files or directories from the build context. This helps avoid sending unwanted files and directories to the builder, improving build speed, especially when using a remote builder."
+   The Docker documentation describes the file: "You can use a `.dockerignore` file to exclude files or directories from the build context."
+   It gives the reason: "This helps avoid sending unwanted files and directories to the builder, improving build speed, especially when using a remote builder."
    `node_modules` is installed inside the image instead, and `.env*` keeps local secrets out of the image.
 
 ## Conclusion

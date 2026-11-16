@@ -52,8 +52,8 @@ Run the commands from the `config-store` repository, `~/repositories/github/maor
 
    ```json
    "scripts": {
-     "dev": "nodemon src/index.js",
-     "test": "echo \"Error: no test specified\" && exit 1"
+     "test": "echo \"Error: no test specified\" && exit 1",
+     "dev": "nodemon src/index.js"
    },
    ```
 

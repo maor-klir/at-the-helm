@@ -49,6 +49,24 @@ Until PostgreSQL accepts connections, the application container exits and restar
 **The readiness probe follows the same order:** *"Readiness probes determine when a container is ready to accept traffic."*
 The server answers `/` only after the database connection works, so the Pod receives traffic only from then on.
 
+## Running as the chart runs it
+
+The image runs as root by default: its configuration has user `0`.
+The `config-store` chart overrides that, and sets resources for the container:
+
+| Chart setting | Value |
+|---|---|
+| `securityContext.runAsNonRoot` and `runAsUser` | `true` and `1000` |
+| `securityContext.readOnlyRootFilesystem` | `true` |
+| `securityContext.capabilities.drop` | `ALL` |
+| `resources.requests` and `limits` | `100m` and `128Mi`, `200m` and `256Mi` |
+
+**The image works under these settings:** run with `--user 1000 --read-only --cap-drop ALL`, it connects to PostgreSQL, binds port 80, and serves the API, at about 38 MiB of memory.
+The application writes no files, so the read-only root filesystem doesn't affect it.
+
+**Port 80 as UID 1000 depends on the runtime:** Docker sets `net.ipv4.ip_unprivileged_port_start` to `0` inside containers, while the host's value is `1024`, so an unprivileged process may bind low ports there.
+On a cluster, the container runtime decides; the Kubernetes documentation on sysctls lists `net.ipv4.ip_unprivileged_port_start` among the safe sysctls a Pod may set, since Kubernetes 1.22.
+
 ## Verify
 
 From `~/repositories/github/maor-klir/config-store`, the production image without a database:
