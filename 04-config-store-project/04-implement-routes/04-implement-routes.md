@@ -1,160 +1,225 @@
-# Implementing Routes for a Database Model in a Web Application 🚀
+# Implementing the key-value API
 
 ## Overview
 
-In this exercise, we will be implementing the application logic for a web application that interacts with a database model. The focus is on creating routes that allow us to perform CRUD (Create, Read, Update, Delete) operations on a simple key-value pair model. Before diving into the step-by-step guide, it’s always beneficial to try tackling the challenge yourself! Here's a brief summary of the main steps you'll need to implement:
+In this exercise, we'll add a Sequelize model for key-value pairs and an Express router with the five routes that read, create, update, and delete them under `/api/kv`.
+Here's a quick summary of the main steps:
 
-1. Stop any hot reloading to avoid synchronization issues while creating models.
-2. Create a new `models.js` file to define a key-value model using Sequelize.
-3. Create a `routes.js` file to set up API routes for your key-value operations.
-4. Implement GET, POST, PUT, and DELETE methods in your routes.
-5. Test your routes using Postman to ensure everything works as expected.
+1. Stop the Compose stack while the model is written.
+2. Define the `KV` model.
+3. Write the routes, and mount them under `/api`.
+4. Start the stack, and test every route with `curl`.
 
-Give it a shot! Try to implement the solution before checking out the detailed guide below.
+## Step-by-step guide
 
-## Step-by-Step Guide
+Run the commands from the `config-store` repository, `~/repositories/github/maor-klir/config-store`.
 
-### 1. Stop Hot Reloading
+1. **Stop the stack:**
 
-Make sure to stop your Docker Compose project to avoid issues with model synchronization.
+   Stop `docker compose up --watch` with Ctrl+C before writing the model.
+   With the watch running, every save restarts the application, and `db.sync()` runs against whatever the model file holds at that moment.
 
-### 2. Create the Model
+   `sync()` only creates missing tables: in the Sequelize documentation, it "creates the table if it doesn't exist (and does nothing if it already exists)".
+   A table created from a half-written model keeps its wrong columns until it's dropped.
 
-- In your `source` folder, create a file named `models.js`.
-- Import the necessary Sequelize components:
-  ```javascript
-  const { Sequelize, DataTypes } = require('sequelize');
-  const DB = require('./DB');
-  ```
-- Define the model:
-  ```javascript
-  const kv = DB.define('kv', {
-    key: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    value: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  });
-  module.exports = { kv };
-  ```
+2. **Define the model:**
 
-### 3. Set Up Routes
+   Create `src/models.js`:
 
-- Create a new file named `routes.js` in the `source` folder.
-- Import Express and the kv model:
-  ```javascript
-  const express = require('express');
-  const { kv } = require('./models');
-  const api = express.Router();
-  ```
+   ```javascript
+   const { DataTypes } = require('sequelize');
+   const db = require('./db');
 
-### 4. Implement CRUD Operations
+   const KV = db.define('KV', {
+     key: {
+       type: DataTypes.STRING,
+       allowNull: false,
+       unique: true,
+     },
+     value: {
+       type: DataTypes.STRING,
+       allowNull: false,
+     },
+   });
 
-#### GET Requests
+   module.exports = { KV };
+   ```
 
-- Retrieve all key-value pairs:
-  ```javascript
-  api.get('/kv', async (req, res) => {
-    try {
-      const pairs = await kv.findAll();
-      res.json(pairs);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  ```
-- Retrieve a specific key-value pair:
-  ```javascript
-  api.get('/kv/:key', async (req, res) => {
-    const key = req.params.key;
-    try {
-      const pair = await kv.findOne({ where: { key } });
-      if (pair) {
-        res.json(pair);
-      } else {
-        res.status(404).json({ error: 'Key not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  ```
+   Keys are required and unique; values are required and may repeat. The course's file requires `./db` twice, as `db` and as `sequelize`; one is enough.
 
-#### POST Request
+3. **Write the routes:**
 
-- Create a new key-value pair:
-  ```javascript
-  api.post('/kv', async (req, res) => {
-    const { key, value } = req.body;
-    if (!key || !value) {
-      return res
-        .status(400)
-        .json({ error: 'Both key and value fields are required' });
-    }
-    try {
-      const existingPair = await kv.findOne({ where: { key } });
-      if (existingPair) {
-        return res.status(400).json({ error: 'Key already present' });
-      }
-      const newPair = await kv.create({ key, value });
-      res.status(201).json(newPair);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  ```
+   Create `src/routes.js`:
 
-#### PUT Request
+   ```javascript
+   const express = require('express');
+   const { KV } = require('./models');
 
-- Update a key-value pair:
-  ```javascript
-  api.put('/kv/:key', async (req, res) => {
-    const key = req.params.key;
-    const { value } = req.body;
-    if (!value) {
-      return res.status(400).json({ error: 'Value field is required' });
-    }
-    try {
-      const [updatedCount] = await kv.update({ value }, { where: { key } });
-      if (updatedCount > 0) {
-        const updatedPair = await kv.findOne({ where: { key } });
-        res.json(updatedPair);
-      } else {
-        res.status(404).json({ error: 'Key not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  ```
+   const apiRouter = express.Router();
 
-#### DELETE Request
+   apiRouter.get('/kv', async (req, res) => {
+     try {
+       const kvs = await KV.findAll();
+       return res.json({ data: kvs });
+     } catch (err) {
+       return res.status(500).json({ error: err.message });
+     }
+   });
 
-- Remove a key-value pair:
-  ```javascript
-  api.delete('/kv/:key', async (req, res) => {
-    const key = req.params.key;
-    try {
-      const deletedCount = await kv.destroy({ where: { key } });
-      if (deletedCount > 0) {
-        res.sendStatus(204);
-      } else {
-        res.status(404).json({ error: 'Key not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  ```
+   apiRouter.get('/kv/:key', async (req, res) => {
+     const { key } = req.params;
 
-### 5. Test Using Postman
+     try {
+       const kv = await KV.findOne({ where: { key } });
 
-After setting up your routes, use Postman to test your API endpoints to ensure they work correctly.
+       if (kv) {
+         return res.json({ data: kv });
+       } else {
+         return res.status(404).json({ error: 'key not found' });
+       }
+     } catch (err) {
+       return res.status(500).json({ error: err.message });
+     }
+   });
+
+   apiRouter.post('/kv', async (req, res) => {
+     const { key, value } = req.body;
+
+     if (!key || !value) {
+       return res
+         .status(400)
+         .json({ error: 'both key and value fields are required.' });
+     }
+
+     try {
+       const existingKv = await KV.findOne({ where: { key } });
+
+       if (existingKv) {
+         return res.status(400).json({ error: 'key already present in DB.' });
+       } else {
+         const newKv = await KV.create({ key, value });
+         return res.status(201).json({ data: newKv });
+       }
+     } catch (err) {
+       return res.status(500).json({ error: err.message });
+     }
+   });
+
+   apiRouter.put('/kv/:key', async (req, res) => {
+     const { key } = req.params;
+     const { value } = req.body;
+
+     if (!value) {
+       return res.status(400).json({ error: 'value field is required.' });
+     }
+
+     try {
+       const [updatedCount] = await KV.update({ value }, { where: { key } });
+
+       if (updatedCount > 0) {
+         const updatedKv = await KV.findOne({ where: { key } });
+
+         if (updatedKv) {
+           return res.json({ data: updatedKv });
+         } else {
+           return res.status(404).json({ error: 'key not found' });
+         }
+       } else {
+         return res.status(404).json({ error: 'key not found' });
+       }
+     } catch (err) {
+       return res.status(500).json({ error: err.message });
+     }
+   });
+
+   apiRouter.delete('/kv/:key', async (req, res) => {
+     const { key } = req.params;
+
+     try {
+       const deleted = await KV.destroy({ where: { key } });
+
+       if (deleted > 0) {
+         return res.sendStatus(204);
+       } else {
+         return res.status(404).json({ error: 'key not found' });
+       }
+     } catch (err) {
+       return res.status(500).json({ error: err.message });
+     }
+   });
+
+   module.exports = apiRouter;
+   ```
+
+   Successful responses wrap the result in `data`, and errors in `error`.
+   `KV.update` returns an array whose first element is the number of updated rows, so a `0` means the key doesn't exist.
+
+   The delete route needs `res.sendStatus(204)`. With `res.status(204)` alone, the status is set but the response is never sent: the request hangs, and `curl -m 5` gives up with exit code 28.
+
+4. **Mount the router:**
+
+   In `src/index.js`, require the router, and mount it after the JSON parser:
+
+   ```javascript
+   const apiRouter = require('./routes');
+   ```
+
+   ```javascript
+   app.use(bodyParser.json());
+   app.use('/api', apiRouter);
+   ```
+
+   The router's `/kv` routes now answer under `/api/kv`. `GET /` still returns `Hello world!`.
+
+5. **Start the stack:**
+
+   ```bash
+   docker compose up --build --watch
+   ```
+
+   On startup, `sync()` creates the table. Sequelize names it after the model in the plural, `"KVs"`:
+
+   ```text
+   app-1   | Executing (default): CREATE TABLE IF NOT EXISTS "KVs" ("id"   SERIAL , "key" VARCHAR(255) NOT NULL UNIQUE, "value" VARCHAR(255) NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY ("id"));
+   ```
+
+   Sequelize adds the `id` key and the two timestamps on its own.
+
+6. **Test every route:**
+
+   In a second terminal:
+
+   ```bash
+   curl localhost:3000/api/kv
+   curl -X POST -H 'Content-Type: application/json' -d '{"key":"color","value":"blue"}' localhost:3000/api/kv
+   curl -X PUT -H 'Content-Type: application/json' -d '{"value":"green"}' localhost:3000/api/kv/color
+   curl -X DELETE -i localhost:3000/api/kv/color
+   ```
+
+   | Request | Status | Body |
+   |---|---|---|
+   | `GET /api/kv` on an empty table | 200 | `{"data":[]}` |
+   | `POST /api/kv` with `color` and `blue` | 201 | `{"data":{"id":1,"key":"color","value":"blue",…}}` |
+   | the same `POST` again | 400 | `{"error":"key already present in DB."}` |
+   | `POST /api/kv` without `value` | 400 | `{"error":"both key and value fields are required."}` |
+   | `GET /api/kv/color` | 200 | `{"data":{"id":1,"key":"color","value":"blue",…}}` |
+   | `GET /api/kv/missing` | 404 | `{"error":"key not found"}` |
+   | `PUT /api/kv/color` with `green` | 200 | `{"data":{…,"value":"green",…}}` |
+   | `PUT /api/kv/color` without `value` | 400 | `{"error":"value field is required."}` |
+   | `DELETE /api/kv/color` | 204 | none |
+   | the same `DELETE` again | 404 | `{"error":"key not found"}` |
+
+   A form-encoded body, `-d 'key=a&value=b'`, also gets a 400: only JSON is parsed.
+
+7. **Stop the stack:**
+
+   ```bash
+   docker compose down
+   ```
+
+   The pairs stay in the `config-store_postgres-data` volume for the next `up`.
 
 ## Conclusion
 
-We've successfully implemented routes for handling key-value pairs in our web application. Remember that our focus was on creating a minimal application for demonstration purposes, and there are plenty of opportunities to enhance error handling and structure. Keep experimenting with your code and exploring the possibilities! Happy coding! 😊
+In this exercise, we added the `KV` model and the five `/api/kv` routes, and tested each status code with `curl`.
+The application is complete: exercise 05 builds its production image and pushes it to a registry.

@@ -1,4 +1,4 @@
-#helm #kubernetes #config-store
+#helm #kubernetes
 
 # The config-store application
 
@@ -21,6 +21,21 @@ A chart deploys two containers, the application and PostgreSQL, and has to provi
 | Image | the Dockerfile's `production` stage: distroless Node.js 22 running `src/index.js` | `image.repository` and `image.tag` |
 
 The development stage, with `nodemon`, exists only for Compose; a chart always runs the production image.
+
+## The API
+
+The application serves its key-value pairs under `/api/kv`, with results in a `data` field and errors in an `error` field:
+
+| Request | Success | Failures |
+|---|---|---|
+| `GET /api/kv` | 200, every pair | 500 |
+| `GET /api/kv/<key>` | 200, the pair | 404, 500 |
+| `POST /api/kv` with a JSON `key` and `value` | 201, the new pair | 400 for a missing field or an existing key, 500 |
+| `PUT /api/kv/<key>` with a JSON `value` | 200, the updated pair | 400, 404, 500 |
+| `DELETE /api/kv/<key>` | 204, no body | 404, 500 |
+
+**Health checks call `/`, not the API:** the chart's probes and its `helm test` Pod, which runs `wget` against the Service, all request `/`, which answers `Hello world!` without a query.
+With the database stopped after startup, `/` still returns 200 while `/api/kv` returns 500 with `getaddrinfo ENOTFOUND db`, so the probes don't notice a lost database.
 
 ## Startup without a database
 
@@ -50,4 +65,4 @@ ConnectionRefusedError [SequelizeConnectionRefusedError]: connect ECONNREFUSED 1
 exit code: 0
 ```
 
-With the database, `docker compose up --build --watch` waits for `Container config-store-db-1 Healthy`, and `curl localhost:3000` returns `Hello world!`.
+With the database, `docker compose up --build --watch` waits for `Container config-store-db-1 Healthy`, `curl localhost:3000` returns `Hello world!`, and `curl localhost:3000/api/kv` returns `{"data":[]}` on an empty table.

@@ -1,4 +1,4 @@
-#helm #kubernetes #config-store
+#helm #kubernetes
 
 # From Compose to a Helm chart
 
