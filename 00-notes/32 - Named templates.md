@@ -62,6 +62,23 @@ A narrower value is allowed, *"We could just as easily pass `.Values` or `.Value
 
 `$` follows the context too: inside a named template, `$` is the second argument of `include`, not the chart's top-level object (see **35 - The dot and with blocks**).
 
+## Across a parent chart and its subcharts
+
+The Subcharts and Global Values guide: *"Parent charts and subcharts can share templates. Any defined block in any chart is available to other charts."*
+`config-store` can include `demo-subchart.fullname` from its subchart's `_helpers.tpl`, and the dot each include passes decides the result:
+
+| Included from | Its dot holds the values of | `nameOverride` there | Result |
+|---|---|---|---|
+| `config-store/templates/from-subchart.yaml` | `config-store` | `override-from-parent` | `release-name-override-from-parent` |
+| `demo-subchart/templates/configmap.yaml` | `demo-subchart` | `override-from-subchart` | `release-name-override-from-subchart` |
+
+A helper that reads a value the parent sets under `global` returns the same value with either dot, since every chart's values carry the parent's `global` section (see **54 - Passing values to subcharts**).
+
+**The parent's definition wins a name clash:** Helm's source parses the templates of the deepest paths first and the parent chart's last.
+A `demo-subchart.fullname` defined in `config-store` replaced the subchart's own, and renamed the subchart's ConfigMap to its output as well.
+
+**The include needs the subchart:** without `charts/demo-subchart`, rendering fails with `template: no template "demo-subchart.fullname" associated with template "gotpl"`.
+
 ## Building a name
 
 The name helper builds the name with `printf`, so the result can be piped on:
