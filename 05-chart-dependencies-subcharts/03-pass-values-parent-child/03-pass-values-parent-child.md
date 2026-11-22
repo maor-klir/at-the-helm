@@ -1,52 +1,157 @@
-# Passing Values Between Parent and Subcharts in Helm
-
-Welcome! In this guide, we’ll explore how to effectively pass values from a parent Helm chart to its subcharts. By the end of this exercise, you should be able to implement this technique creatively in your own projects. 🌟 Let’s dive in!
+# Passing values from a parent chart to its subcharts
 
 ## Overview
 
-Before jumping into the specifics, here's what you can aim to achieve in this exercise:
+In this exercise, we'll create a small subchart inside config-store's `charts/` directory, and use it to see how the parent chart's values reach a subchart.
+Here's a quick summary of the main steps:
 
-1. **Set Up** your base directory and create a new subchart.
-2. **Clean Up** the generated subchart files to focus on passing values.
-3. **Configure** your `values.yaml` to include custom values.
-4. **Establish Dependencies** in your parent chart’s configuration.
-5. **Override Values** from the parent chart in the subchart’s context.
+1. Create `demo-subchart` with `helm create`, and reduce it to a single ConfigMap.
+2. Declare it as a dependency without a repository.
+3. Override its value from the parent, first at the top level, then under the subchart's name.
+4. See that values under one subchart's name don't reach another subchart.
 
-Feel free to give it a try on your own before peeking at the step-by-step guide!
+## Step-by-step guide
 
-## Step-by-Step Guide
+The chart in `subcharts/config-store/` is the end state of this exercise, and continues from exercise 02's chart.
+To build it yourself, copy exercise 02's `subcharts` directory into an empty directory, and run the steps there.
 
-Here’s a straightforward process to implement the passing of values from a parent chart to subcharts:
+1. **Create the subchart:**
 
-1. **Create a Subchart:**
-   - Navigate to the charts folder within your project directory.
-   - Run the `helm create` command to create a new subchart (e.g., `demo subchart`).
-2. **Clean the Subchart:**
+   ```bash
+   cd subcharts/config-store/charts
+   helm create demo-subchart
+   ```
 
-   - Remove unnecessary files, retaining only what you want to use.
-   - Change the `service account` file to a `config map` and make the adjustments in `helpers.tpl`.
+   Helm 4's scaffold also creates `templates/httproute.yaml`, which goes in the next step together with the other templates.
 
-3. **Update values.yaml:**
+2. **Reduce it to a ConfigMap:**
 
-   - Replace its content with a single custom value (e.g., `hello from demo-subchart`).
+   ```bash
+   cd demo-subchart/templates
+   rm deployment.yaml hpa.yaml httproute.yaml ingress.yaml NOTES.txt service.yaml
+   rm -r tests
+   mv serviceaccount.yaml configmap.yaml
+   ```
 
-4. **Edit Chart.yaml:**
+   Replace the content of `configmap.yaml`:
 
-   - Add your new subchart as a dependency in your parent chart’s `Chart.yaml`.
-   - Specify the version: `0.1.0`.
+   ```yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: {{ include "demo-subchart.fullname" . }}
+   data:
+     test-value: {{ .Values.customValue }}
+   ```
 
-5. **Run Dependency Update:**
+   In `_helpers.tpl`, keep only `demo-subchart.name` and `demo-subchart.fullname`, and replace the content of the subchart's `values.yaml` with a single value:
 
-   - Execute `helm dependency update` in the base directory to refresh the dependencies.
+   ```yaml
+   customValue: 'hello from demo-subchart'
+   ```
 
-6. **Override Values:**
+   **The test has to go as well:** the scaffold's `templates/tests/test-connection.yaml` includes `demo-subchart.labels`, which the shortened `_helpers.tpl` no longer defines. If it stays, rendering fails:
 
-   - Add a new custom value in the parent chart's `values.yaml` (e.g., `hello from config-store`).
-   - Nest it under a key that matches your subchart's name.
+   ```text
+   Error: config-store/charts/demo-subchart/templates/tests/test-connection.yaml:6:8
+     executing "config-store/charts/demo-subchart/templates/tests/test-connection.yaml" at <include "demo-subchart.labels" .>:
+       error calling include:
+   template: no template "demo-subchart.labels" associated with template "gotpl"
+   ```
 
-7. **Verify Changes:**
-   - Run `helm template` to confirm that the values from the parent are being correctly passed to the subchart.
+3. **Declare the subchart:**
+
+   In config-store's `Chart.yaml`, add a second entry, without a `repository`:
+
+   ```yaml
+   dependencies:
+     - name: postgresql
+       version: '16.2.2'
+       repository: 'https://charts.bitnami.com/bitnami'
+     - name: demo-subchart
+       version: '0.1.0'
+   ```
+
+   `version` is the one in `demo-subchart/Chart.yaml`. From `config-store/`:
+
+   ```bash
+   helm dependency update
+   helm dependency list
+   ```
+
+   The update downloads PostgreSQL again and prints `Dependency demo-subchart did not declare a repository. Assuming it exists in the charts directory`. It leaves the `demo-subchart/` directory in place, and `Chart.lock` records the new entry with `repository: ""`.
+
+   ```text
+   NAME         	VERSION	REPOSITORY                        	STATUS
+   postgresql   	16.2.2 	https://charts.bitnami.com/bitnami	ok
+   demo-subchart	0.1.0  	                                  	unpacked
+   ```
+
+   **The entry is optional for a chart in `charts/`:** without it, `helm template` still renders `demo-subchart`, and `helm dependency list` prints `WARNING: "charts/demo-subchart" is not in Chart.yaml.`
+   Declaring it lists it with the other dependencies, and allows the fields that exercise 06 uses, such as `condition`.
+
+   The course prefers to develop each chart in its own directory and reference it with a `file://` repository, so that a subchart doesn't look like part of its parent. This exercise keeps `demo-subchart` in `charts/` for quick tests, and exercise 07 removes it.
+
+4. **Render the subchart's default:**
+
+   ```bash
+   helm template . | grep -A6 'demo-subchart/templates/configmap'
+   ```
+
+   ```text
+   # Source: config-store/charts/demo-subchart/templates/configmap.yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: release-name-demo-subchart
+   data:
+     test-value: hello from demo-subchart
+   ```
+
+5. **Set the value at the parent's top level:**
+
+   Add to the end of config-store's `values.yaml`:
+
+   ```yaml
+   customValue: 'hello from config-store'
+   ```
+
+   The render still shows `test-value: hello from demo-subchart`. A top-level key in the parent's values belongs to the parent's own templates.
+
+6. **Nest the value under the subchart's name:**
+
+   Move the key under `demo-subchart`:
+
+   ```yaml
+   demo-subchart:
+     customValue: 'hello from config-store'
+   ```
+
+   The render now shows `test-value: hello from config-store`, and the subchart's template still reads `.Values.customValue`.
+   The Subcharts and Global Values guide, with its example subchart `mysubchart`: *"Any directives inside of the `mysubchart` section will be sent to the `mysubchart` chart."*
+
+   A subchart can't know the name of the chart that includes it, so it never reads `.Values.config-store.…`. The `postgresql:` block from exercise 02 works the same way.
+
+7. **Check that values stay with their subchart:**
+
+   Under `postgresql:` in config-store's `values.yaml`, add `fullnameOverride: my-new-name`, and in `demo-subchart/templates/configmap.yaml` add a line that reads the same key:
+
+   ```yaml
+     test-value2: {{ .Values.fullnameOverride }}
+   ```
+
+   ```bash
+   helm template . | grep -E '^  name: |test-value'
+   ```
+
+   The PostgreSQL objects are now named `my-new-name` and `my-new-name-hl`, but the ConfigMap shows `test-value2:` with nothing after it. `postgresql.fullnameOverride` reaches only the `postgresql` chart.
+   The line renders no value at all, which YAML reads as null, not as an empty string.
+
+   Remove `fullnameOverride` from `postgresql:` again, and keep the `test-value2` line. Global values, which every chart can read, are exercise 04's topic.
+
+   **Change a packaged dependency only through values:** the PostgreSQL chart is the archive in `charts/`, and `helm dependency update` replaces it with the downloaded one, so edits inside it wouldn't last.
 
 ## Conclusion
 
-This exercise introduces you to the essential practice of passing values from parent charts to subcharts in Helm. Remember, being able to customize these configurations can significantly improve the flexibility and scalability of your applications. The key takeaway is understanding the importance of maintaining organization and clarity within your configurations. Keep experimenting and honing this skill! 🚀
+In this exercise, we created `demo-subchart` inside config-store's `charts/` directory, declared it without a repository, and passed it a value under its own name in the parent's `values.yaml`.
+Exercise 04 sets global values, which the parent and every subchart can read.
