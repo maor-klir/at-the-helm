@@ -19,30 +19,37 @@ Give these steps a go before checking the detailed guide below!
 
 Follow these steps to integrate the PostgreSQL subchart into your project:
 
-1. **Clean Up**:
+1. **Clean Up:**
 
    - Remove the demo subchart from your dependencies and delete its related files.
    - Run the command `helm dependency update` to update the `Chart.lock` file.
 
-2. **Configure PostgreSQL**:
+2. **Configure PostgreSQL:**
 
    - Navigate to the PostgreSQL chart documentation on ArtifactHub.
    - In your `values.yaml` file, set the username and database, while securely configuring the password through an existing Kubernetes secret.
+   - Under `postgresql:`, point the image to `bitnamilegacy`:
+     ```yaml
+     postgresql:
+       image:
+         repository: bitnamilegacy/postgresql
+     ```
+     > **Bitnami images moved:** PostgreSQL chart 16.2.2 renders `docker.io/bitnami/postgresql:17.2.0-debian-12-r0`, which is gone. The same tag is in `docker.io/bitnamilegacy`. Without this override, the database pod fails with `ErrImagePull`.
 
-3. **Create Secrets**:
+3. **Create Secrets:**
 
    - Add a `.env` file at the root of your repository to store your sensitive information.
    - Use the command `kubectl create secret generic postgres-creds --from-env-file=.env` to create the secret in your Kubernetes cluster.
 
-4. **Update Deployment Configuration**:
+4. **Update Deployment Configuration:**
 
    - Update the `deployment.yaml` file to include environment variables for your application that reference the PostgreSQL credentials, ensuring that the password is fetched from the Kubernetes secret.
 
-5. **Build Connection String**:
+5. **Build Connection String:**
 
    - Construct the database URL using the values you've set. Ensure that the service name is predictable and set via the `fullNameOverride` key in the `values.yaml`.
 
-6. **Verify and Test**:
+6. **Verify and Test:**
 
    - Install the Helm chart and confirm that your PostgreSQL service is up and running using `kubectl get pods`.
    - Test your API with tools like Postman to confirm that it's correctly interfacing with the PostgreSQL database.

@@ -16,11 +16,11 @@ Give it a try! Implement the solution on your own before checking out the detail
 
 Here’s a straightforward guide to help you through the process:
 
-1. **Define the Value in the Subchart**: In your `helpers.tpl`, define a value like `demo subchart.fullname` to hold a name you want to reference in your parent chart.
-2. **Create a YAML File in the Parent Chart**: Navigate to your parent chart's config store and create a file named `from-subchart.yaml`. Add a simple comment in this file.
-3. **Include the Subchart Value**: Copy the value definition from your `helpers.tpl` and paste it into your `from-subchart.yaml`, ensuring you pass the current context (using `.`).
-4. **Test with Helm**: Use the terminal to run the Helm template command and verify the output, searching for your newly created definition.
-5. **Experiment with Name Overrides**: Adjust the `nameOverride` value in both the parent and subchart `values.yaml` to see how context affects the template evaluation.
+1. **Define the Value in the Subchart:** In your `helpers.tpl`, define a value like `demo subchart.fullname` to hold a name you want to reference in your parent chart.
+2. **Create a YAML File in the Parent Chart:** Navigate to your parent chart's config store and create a file named `from-subchart.yaml`. Add a simple comment in this file.
+3. **Include the Subchart Value:** Copy the value definition from your `helpers.tpl` and paste it into your `from-subchart.yaml`, ensuring you pass the current context (using `.`).
+4. **Test with Helm:** Use the terminal to run the Helm template command and verify the output, searching for your newly created definition.
+5. **Experiment with Name Overrides:** Adjust the `nameOverride` value in both the parent and subchart `values.yaml` to see how context affects the template evaluation.
 
 ## Conclusion
 
