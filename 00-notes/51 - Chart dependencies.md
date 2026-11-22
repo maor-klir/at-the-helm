@@ -34,13 +34,15 @@ The `helm dependency` reference describes the three fields:
 - **`version`:** *"The 'version' field should contain a semantic version or version range."*
 - **`repository`:** *"The 'repository' URL should point to a Chart Repository. Helm expects that by appending '/index.yaml' to the URL, it should be able to retrieve the chart repository's index."*
 
-**The repository has to be added first:** the Charts documentation adds, *"Note that you must also use `helm repo add` to add that repo locally."*
+**An `https://` repository has to be added first:** the Charts documentation adds, *"Note that you must also use `helm repo add` to add that repo locally."*
 Without it, Helm 4 stops with `Error: no repository definition for https://charts.bitnami.com/bitnami. Please add the missing repos via 'helm repo add'`.
 
 `repository` also accepts a repository's name, as `@bitnami` or `alias:bitnami`, an `oci://` registry, or a local path starting with `file://`.
 A local path needs no `helm repo add`: *"If the dependency chart is retrieved locally, it is not required to have the repository added to helm by "helm add repo"."*
+An `oci://` registry needs none either, since Helm pulls from it directly (see **53 - OCI registries and classic chart repositories**).
 
-Other optional fields, `condition`, `tags`, `alias`, and `import-values`, control whether a dependency is installed, under which name, and which of its values the parent reads.
+Other optional fields, `condition`, `tags`, `alias`, and `import-values`, control whether a dependency is installed, under which name, and which of its values the parent reads (see **55 - Enabling subcharts with conditions and tags** and **54 - Passing values to subcharts**).
+An `alias` also becomes the dependency's key in the parent's values.
 The best practices ask for them on optional dependencies: *"Conditions or tags should be added to any dependencies that _are optional_."*
 
 ## The `charts/` directory
@@ -64,6 +66,10 @@ Without the directory, the update fails with `Error: directory config-store/char
 | `helm dependency build <chart>` | *"Build out the charts/ directory from the Chart.lock file."* | downloaded `16.2.2`, byte-identical to the committed archive |
 
 `update` chooses versions; `build` repeats the choice recorded in `Chart.lock`, which is why a chart's archive can be rebuilt from its lock file on any machine.
+
+**`install`, `upgrade`, and `template` can fetch a missing dependency:** without the archive, `helm template` fails with `You may need to run 'helm dependency build' to fetch missing dependencies: found in Chart.yaml, but missing in charts/ directory: postgresql`.
+With `--dependency-update`, it downloaded 16.2.2 and rendered.
+Helm's source shows that the flag runs `update`, not `build`, and only when a dependency is missing, so with a version range it can choose a newer version and rewrite `Chart.lock`.
 
 ## `Chart.lock`
 
@@ -95,7 +101,7 @@ With `version: '^16.2.2'`, `helm dependency update` resolved to 16.7.27 and brou
 Bitnami's repository index points into an OCI registry: building from `https://charts.bitnami.com/bitnami` prints `Pulled: registry-1.docker.io/bitnamicharts/postgresql:16.2.2`.
 The `repository` in `Chart.yaml` names where Helm looks the chart up, and the index entry decides where the archive is downloaded from.
 
-How a parent passes values to its dependencies is in **13 - Overriding chart values**.
+How a parent passes values to its dependencies is in **54 - Passing values to subcharts**, and the `--set` paths for them in **13 - Overriding chart values**.
 
 ## Verify
 

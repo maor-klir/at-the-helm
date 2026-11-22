@@ -32,6 +32,9 @@ The same key at the parent's top level doesn't reach it, and the subchart's own 
 **A section reaches only its own subchart:** with `postgresql.fullnameOverride: my-new-name`, the PostgreSQL objects are renamed, while `{{ .Values.fullnameOverride }}` in `demo-subchart` renders nothing.
 The rendered line is `test-value2:` with no value, which YAML reads as null.
 
+**An alias renames the section:** *"Adding an alias for a dependency chart would put a chart in dependencies using alias as name of new dependency."*
+With `alias: demo` on the `demo-subchart` dependency, the parent's `demo-subchart:` block no longer reached it, and `--set demo.customValue=via-alias` did; its ConfigMap was renamed `release-name-demo` as well, since the alias also becomes the subchart's `.Chart.Name`.
+
 **A packaged dependency changes only through values:** its templates are inside the archive in `charts/`, and `helm dependency update` replaces that archive with the downloaded one (see **51 - Chart dependencies**).
 
 ## Global values
@@ -63,6 +66,7 @@ PostgreSQL 16.2.2 reads only a few keys from `global`: `imageRegistry`, `imagePu
 
 **Globals go down, not up:** *"There is no way for a subchart to influence the values of the parent chart."*
 A `global.fromSub` key in `demo-subchart`'s `values.yaml` reached the subchart's own templates, and rendered nothing in a template of `config-store`.
+Only the parent can bring a subchart's values up, with `import-values` in its own `Chart.yaml`.
 
 **The parent's globals win:** *"Also, global variables of parent charts take precedence over the global variables from subcharts."*
 With `global.defaultStorageClass: 'subchart-default'` in `demo-subchart`'s `values.yaml`, its ConfigMap still showed the parent's `my-custom-storageclass`.
@@ -80,6 +84,26 @@ Which one wins is written in the chart's templates, and differs from value to va
 
 The function reference describes `coalesce`: *"The `coalesce` function takes a list of values and returns the first non-empty one."*
 For our own charts, the same choice applies to every key that has both a global and a local form, and the chart's values documentation is where to state it.
+
+## Values from a subchart to its parent
+
+The Charts documentation: *"In some cases it is desirable to allow a child chart's values to propagate to the parent chart and be shared as common defaults."*
+The parent's dependency entry lists them under `import-values`, either as keys from the child's `exports` section, or as `child` and `parent` paths:
+
+```yaml
+dependencies:
+  - name: demo-subchart
+    version: '0.1.0'
+    import-values:
+      - data
+      - child: default.data
+        parent: myimports
+```
+
+With `exports.data.fromExports` in `demo-subchart`'s values, `config-store`'s templates read it as `.Values.fromExports`, without the `data` key.
+
+**The parent's own values win:** with `myimports.myint: 0` in `config-store`'s values and `default.data.myint: 999` in the subchart's, the parent kept `0`, and `--set myimports.myint=5` gave `5`.
+Helm's source states the rule, *"Imported values from a child to a parent chart have a lower priority than the parents values."*, while the Charts documentation's example still shows the child's value replacing the parent's.
 
 ## Verify
 

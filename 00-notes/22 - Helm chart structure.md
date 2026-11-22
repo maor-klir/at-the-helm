@@ -145,6 +145,10 @@ Patterns are globs matched with Go's `filepath.Match`, one per line, with `!` fo
 Unlike `.gitignore`, `**` isn't supported, and the file *"does not exclude itself by default"*.
 The scaffold's `.helmignore` lists version control directories, editor files, and backup files, but not itself, so `.helmignore` ends up in the archive.
 
+**Every other file is part of the chart:** a `.env` with test passwords in the `config-store` chart's directory ended up in the archive as `config-store/.env`.
+Helm's source also stores a chart's files in the release record (`Files []*common.File` with the JSON key `files`), so such a file is kept with every revision of a release installed from the directory.
+Secrets that the chart only references belong outside its directory, or in `.helmignore`.
+
 ## `charts/`
 
 `charts/` holds the chart's dependencies, also called subcharts, in one of two forms.

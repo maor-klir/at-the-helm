@@ -90,7 +90,8 @@ To build it yourself, copy exercise 02's `subcharts` directory into an empty dir
    **The entry is optional for a chart in `charts/`:** without it, `helm template` still renders `demo-subchart`, and `helm dependency list` prints `WARNING: "charts/demo-subchart" is not in Chart.yaml.`
    Declaring it lists it with the other dependencies, and allows the fields that exercise 06 uses, such as `condition`.
 
-   The course prefers to develop each chart in its own directory and reference it with a `file://` repository, so that a subchart doesn't look like part of its parent. This exercise keeps `demo-subchart` in `charts/` for quick tests, and exercise 07 removes it.
+   The course prefers to develop each chart in its own directory and reference it with a `file://` repository, so that a subchart doesn't look like part of its parent. Helm's dependency best practices treat that as an exception: *"File URLs (`file://...`) are considered a "special case" for charts that are assembled by a fixed deployment pipeline."*
+   This exercise keeps `demo-subchart` in `charts/` for quick tests, and exercise 07 removes it.
 
 4. **Render the subchart's default:**
 

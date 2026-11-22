@@ -107,7 +107,7 @@ helm -n wordpress install local-wp bitnami/wordpress --version 23.1.20 \
 
 `local-wp` is the release name, and `--create-namespace` does what the reference page says: *"create the release namespace if not present"*.
 `--values` (`-f`) can *"specify values in a YAML file or a URL (can specify multiple)"*.
-The chart reference forms `helm install` accepts, and the release record it writes, are in **01 - The role of Helm in Kubernetes.**
+The chart reference forms `helm install` accepts, and the release record it writes, are in **01 - The role of Helm in Kubernetes**.
 
 ## Inspecting a release: `helm list`, `helm status`, and `helm get`
 

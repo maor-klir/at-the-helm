@@ -46,6 +46,8 @@ The Kubernetes documentation describes the `$(…)` references: *"To set depende
 **The password stays out of the chart:** the chart's README creates the Secret before the install, from a separate `.env` file with the keys `password` and `postgres-password`: `kubectl create secret generic postgres-creds --from-env-file=.env`.
 That file is not the application's Compose `.env`, whose keys are `DB_USER`, `DB_PASSWORD`, and `DB_NAME`.
 
+**The `.env` belongs outside the chart's directory:** the scaffold's `.helmignore` doesn't list it, so Helm would load it with the chart's files, into a packaged archive and into the release record (see **22 - Helm chart structure**).
+
 ## Names on the network
 
 Compose resolves service names: *"Each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by its service name."*
@@ -60,6 +62,7 @@ The Using Helm guide lists the order, *"Helm installs resources in the following
 
 So the application's Deployment is created before PostgreSQL's StatefulSet, and *"Helm does not wait until all of the resources are running before it exits."*
 The application's restarts and its readiness probe cover the gap (see **41 - The config-store application**).
+On k3d-argocd, the application's Pod restarted three times while PostgreSQL's image was pulled and the database started, and was ready about 70 seconds after the install.
 
 ## Storage
 
@@ -70,3 +73,19 @@ As with the volume, the data outlives the workload: `helm uninstall` leaves the 
 
 The image build, the development stage with `nodemon`, `develop.watch`, and the `.env` file with local credentials exist only for development on one machine.
 The chart starts from a pushed image and a Secret in the cluster.
+
+## Verify
+
+From `05-chart-dependencies-subcharts/07-integrate-postgresql`, the chart builds `DB_URL` from its values and the Secret:
+
+```bash
+helm template config-store subcharts/config-store --show-only templates/deployment.yaml | grep -A1 -E 'name: (DB_URL|DB_PASSWORD)'
+```
+
+```text
+            - name: DB_PASSWORD
+              valueFrom:
+--
+            - name: DB_URL
+              value: postgresql://$(DB_USER):$(DB_PASSWORD)@postgresql-db:5432/$(DB_NAME)
+```

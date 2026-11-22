@@ -18,7 +18,7 @@ helm show values bitnami/wordpress --version 23.1.20 --jsonpath '{.mariadb.auth}
 
 **A subchart's values live under its name:** MariaDB is a dependency of the WordPress chart, and the `mariadb:` block in the parent's values goes to it.
 Helm's chart documentation says *"a values file can supply values to the chart as well as to any of its dependencies."*
-So the root password is `mariadb.auth.rootPassword`, and the password of the `bn_wordpress` user is `mariadb.auth.password`.
+So the root password is `mariadb.auth.rootPassword`, and the password of the `bn_wordpress` user is `mariadb.auth.password` (see **54 - Passing values to subcharts**).
 
 **A wrong path fails silently:** a key that no template reads changes nothing, and Helm doesn't report it.
 `--set mariadb.rootPassword=…` renders without an error and leaves the generated password in place.
@@ -121,7 +121,7 @@ helm -n wordpress install local-wp bitnami/wordpress --version 23.1.20 --create-
 ```
 
 `helm template` with the same flags shows the `local-wp-mariadb` Secret holding exactly `myAwesomePassword` and `myUserPassword`.
-A reinstall on a retained MariaDB volume then sends the passwords that the database's data expects, which avoids the failure in **12 - Uninstalling releases and persistent data.**
+A reinstall on a retained MariaDB volume then sends the passwords that the database's data expects, which avoids the failure in **12 - Uninstalling releases and persistent data**.
 
 ## Sensitive values
 
