@@ -15,28 +15,28 @@ Give it a go! Once you’ve given it your best shot, feel free to look at the st
 
 ## Step-by-Step Guide
 
-1. **Create a Library Chart Directory**: Start by creating a new directory named `library-charts` under your code directory.
-2. **Create a Common Chart**: Move into the `library-charts` directory and create a new chart by running:
+1. **Create a Library Chart Directory:** Start by creating a new directory named `library-charts` under your code directory.
+2. **Create a Common Chart:** Move into the `library-charts` directory and create a new chart by running:
 
    ```bash
    helm create common
    ```
 
-3. **Modify the Chart Type**: Open the `Chart.yaml` file in the `common` directory and change the type field from `application` to `library`.
+3. **Modify the Chart Type:** Open the `Chart.yaml` file in the `common` directory and change the type field from `application` to `library`.
 
-4. **Clean Up Unnecessary Files**: Delete all files inside the `templates` folder and the `values.yaml` file, keeping the folder itself intact.
+4. **Clean Up Unnecessary Files:** Delete all files inside the `templates` folder and the `values.yaml` file, keeping the folder itself intact.
 
-5. **Create Utility Files**: Create a new template file, perhaps named `_naming.tpl`, and move any necessary functions from the parent chart’s helpers into this file.
+5. **Create Utility Files:** Create a new template file, perhaps named `_naming.tpl`, and move any necessary functions from the parent chart’s helpers into this file.
 
-6. **Update the Parent Chart**: In the parent chart's `Chart.yaml`, specify `common` as a dependency, pointing to the relative path of your library chart.
+6. **Update the Parent Chart:** In the parent chart's `Chart.yaml`, specify `common` as a dependency, pointing to the relative path of your library chart.
 
-7. **Run Dependency Update**: Navigate to the parent chart directory in your terminal and execute:
+7. **Run Dependency Update:** Navigate to the parent chart directory in your terminal and execute:
 
    ```bash
    helm dependency update
    ```
 
-8. **Test for Errors**: Run the `helm template` command to ensure everything is working correctly and troubleshoot any issues related to naming and referencing.
+8. **Test for Errors:** Run the `helm template` command to ensure everything is working correctly and troubleshoot any issues related to naming and referencing.
 
 ## Conclusion
 

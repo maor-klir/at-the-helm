@@ -16,11 +16,11 @@ Before moving on to the step-by-step guide, I encourage you to give these steps 
 
 ## Step-by-Step Guide
 
-1. **Create a new Helm chart**:
+1. **Create a new Helm chart:**
 
    - Use the command line to create a new Helm chart folder and name it something like `helm-hooks`.
 
-2. **Define the Kubernetes job**:
+2. **Define the Kubernetes job:**
 
    - In the new chart directory, create a `backup-db.yaml` file under a new folder called `hooks`.
    - Specify the job's metadata, including name and labels, while ensuring to add the necessary Helm hook annotations:
@@ -28,15 +28,15 @@ Before moving on to the step-by-step guide, I encourage you to give these steps 
      - `helm.sh/hook-weight: <desired weight>`
      - `helm.sh/hook-delete-policy: before-hook-creation or hook-succeeded`
 
-3. **Configure the job specifications**:
+3. **Configure the job specifications:**
 
    - Define the job specifications inside `backup-db.yaml`, setting the correct image and commands to simulate a backup.
 
-4. **Install and Upgrade**:
+4. **Install and Upgrade:**
 
    - Use `helm install` to deploy your chart. After that, introduce changes to your chart or values and use `helm upgrade` to see your hook in action.
 
-5. **Adjust and Test Hook Policies**:
+5. **Adjust and Test Hook Policies:**
    - Experiment with different `hook-delete-policies` to understand how they affect the lifecycle of the job.
 
 ## Conclusion

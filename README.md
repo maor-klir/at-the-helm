@@ -1,4 +1,4 @@
-<h1 align="center">At the Helm</h1>
+# At the Helm
 
 <p align="center">
   <picture>

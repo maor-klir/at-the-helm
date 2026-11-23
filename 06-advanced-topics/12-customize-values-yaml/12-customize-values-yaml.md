@@ -15,28 +15,28 @@ Feel free to attempt these steps before checking out the detailed guide! Ready? 
 
 ## Step-by-Step Guide
 
-1. **Open the `values.yaml` File**:
+1. **Open the `values.yaml` File:**
 
    - Scroll to the bottom and add a new section for your test configurations.
 
-2. **Define Test Values**:
+2. **Define Test Values:**
 
    - Set the `tests.enabled` value to `true`, along with specifying other necessary container configurations like `image repository`, `image tag`, and `volume configuration`.
 
-3. **Update the Test Connection File**:
+3. **Update the Test Connection File:**
 
    - Modify the connection file to leverage values from the `values.yaml` file using a clearer structure.
    - Utilize `with` blocks for better readability and organization.
 
-4. **Implement Conditional Rendering**:
+4. **Implement Conditional Rendering:**
 
    - Use conditions to control when your test resources are included based on whether `tests.enabled` is set to `true` or `false`.
 
-5. **Add a Deletion Policy for Test Resources**:
+5. **Add a Deletion Policy for Test Resources:**
 
    - Implement a strategy that allows for automatic deletion of resources based on the outcome of the tests (successful or failed).
 
-6. **Run and Validate**:
+6. **Run and Validate:**
    - Execute `helm template` to verify your configuration.
    - Perform `helm upgrade` and `helm test` commands to ensure your modifications work as intended.
 

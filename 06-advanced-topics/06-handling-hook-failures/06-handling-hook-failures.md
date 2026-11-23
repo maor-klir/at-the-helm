@@ -16,15 +16,15 @@ Before looking at the detailed guide, give it a try and see if you can follow th
 
 ## Step-by-Step Guide
 
-1. **Install the Release**: Begin by installing the demo hooks using the Helm install command. Ensure the release is up and running.
-2. **Modify the Hook**: Open your hook file and change the command to something that fails, such as `echo "I will fail"` and set the exit code to 1. This simulates a hook failure.
-3. **Run Helm Upgrade**: Execute the `helm upgrade` command with your demo hooks. Watch the terminal to see if the upgrade fails, and check the status using `helm history`.
+1. **Install the Release:** Begin by installing the demo hooks using the Helm install command. Ensure the release is up and running.
+2. **Modify the Hook:** Open your hook file and change the command to something that fails, such as `echo "I will fail"` and set the exit code to 1. This simulates a hook failure.
+3. **Run Helm Upgrade:** Execute the `helm upgrade` command with your demo hooks. Watch the terminal to see if the upgrade fails, and check the status using `helm history`.
 
-4. **Check Pod States**: Use `kubectl get pods` to observe any pods associated with the failed job. Describe these pods to understand their current state.
+4. **Check Pod States:** Use `kubectl get pods` to observe any pods associated with the failed job. Describe these pods to understand their current state.
 
-5. **Change Hook Types**: Change the hook type from pre-upgrade to post-upgrade in your hook file. Repeat the helm upgrade and observe the difference.
+5. **Change Hook Types:** Change the hook type from pre-upgrade to post-upgrade in your hook file. Repeat the helm upgrade and observe the difference.
 
-6. **Use the --atomic Flag**: Finally, try adding the `--atomic` flag to your upgrade command. This should enable automatic rollback if your hook fails.
+6. **Use the --atomic Flag:** Finally, try adding the `--atomic` flag to your upgrade command. This should enable automatic rollback if your hook fails.
 
 ## Conclusion
 

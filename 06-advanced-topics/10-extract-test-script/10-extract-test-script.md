@@ -17,30 +17,30 @@ Give it a shot! Don’t worry if you miss something; we’ll go through it in de
 
 ## Step-by-Step Guide
 
-1. **Create the Config Map File**:
+1. **Create the Config Map File:**
 
    - Navigate to your test directory and create a new file named `test-files.yaml`.
    - Define the API version, kind, metadata, and annotations, ensuring you include `Helm.sh/hook: test`.
 
-2. **Load Script Data**:
+2. **Load Script Data:**
 
    - Within the `data` section of your config map file, use the `files.glob` method to specify the pattern for loading your test scripts.
 
-3. **Set Up the Files Directory**:
+3. **Set Up the Files Directory:**
 
    - Create a `files` directory at the top level of your chart.
    - Inside it, create a `test-scripts` directory.
 
-4. **Write the run.sh Script**:
+4. **Write the run.sh Script:**
 
    - In the `test-scripts` directory, create a file named `run.sh`.
    - Write the necessary shell commands: first, install curl, and then execute a curl command targeting your test hook.
 
-5. **Ensure Correct Template Usage**:
+5. **Ensure Correct Template Usage:**
 
    - Ensure you utilize Gold template functions and the `TPL` function to dynamically replace placeholders with appropriate context values.
 
-6. **Testing the Configuration**:
+6. **Testing the Configuration:**
    - Run the `helm template` command from your terminal to verify that the contents are correctly processed and variables are replaced.
 
 ## Conclusion

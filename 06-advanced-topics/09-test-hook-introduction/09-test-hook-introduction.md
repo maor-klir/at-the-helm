@@ -19,51 +19,51 @@ Give these steps a go before checking out the detailed guide!
 
 Here’s a detailed guide for the steps you should follow:
 
-1. **Create the Helm chart**:
+1. **Create the Helm chart:**
    ```bash
    helm create test-hook
    ```
-2. **Check the values.yaml file**:
+2. **Check the values.yaml file:**
    Open `values.yaml` and ensure that the service type is set to `ClusterIP`. If not, change it accordingly.
 
-3. **Inspect the test file**:
+3. **Inspect the test file:**
    Navigate to the `tests` directory and open `testconnection.yaml`. Take note of how it’s structured, especially the annotations.
 
-4. **Install your chart locally**:
+4. **Install your chart locally:**
    Run the following command to install the chart:
 
    ```bash
    helm install local-test --name test-hook
    ```
 
-5. **Verify pod creation**:
+5. **Verify pod creation:**
    Check if the pod is running:
 
    ```bash
    kubectl get pods
    ```
 
-6. **Run the test command**:
+6. **Run the test command:**
    Execute the following command to run your test:
 
    ```bash
    helm test local-test-hook
    ```
 
-7. **Explore test options**:
+7. **Explore test options:**
    Use the `--help` flag to see all available options with the `helm test` command.
 
-8. **Modify the test file**:
+8. **Modify the test file:**
    Change a value in `testconnection.yaml` to something invalid, save it, and rerun the test to observe the failure.
 
-9. **Upgrade your release**:
+9. **Upgrade your release:**
    Any changes to the test files require an upgrade to take effect. Run:
 
    ```bash
    helm upgrade local-test-hook test-hook
    ```
 
-10. **Check the new test outcome**:
+10. **Check the new test outcome:**
     Rerun the `helm test` command to see the updated results.
 
 ## Conclusion

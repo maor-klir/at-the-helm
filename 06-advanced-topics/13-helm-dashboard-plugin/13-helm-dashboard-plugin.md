@@ -16,10 +16,10 @@ I encourage you to try implementing the solution on your own before checking out
 
 ## Step-by-Step Guide
 
-1. **Explore Community Plugins**: Understand that Helm plugins are developed by the community and not part of the core Helm software. Check the [Helm website](https://helm.sh) for the latest plugins.
-2. **Find the Helm Dashboard Plugin**: Navigate to the Helm Dashboard GitHub repository, which should have a significant number of stars and active maintenance.
+1. **Explore Community Plugins:** Understand that Helm plugins are developed by the community and not part of the core Helm software. Check the [Helm website](https://helm.sh) for the latest plugins.
+2. **Find the Helm Dashboard Plugin:** Navigate to the Helm Dashboard GitHub repository, which should have a significant number of stars and active maintenance.
 
-3. **Install the Plugin**:
+3. **Install the Plugin:**
 
    - Open your terminal.
    - Run the command:
@@ -28,7 +28,7 @@ I encourage you to try implementing the solution on your own before checking out
      ```
    - Confirm the installation was successful.
 
-4. **Launch the Dashboard**:
+4. **Launch the Dashboard:**
 
    - Use the command:
      ```
@@ -36,9 +36,9 @@ I encourage you to try implementing the solution on your own before checking out
      ```
    - Make sure your Kubernetes cluster is up and running (you may need to start it if it's down).
 
-5. **Explore the Dashboard**: Once the dashboard is running, examine its interface. Try adding repositories, installing charts, and viewing resources.
+5. **Explore the Dashboard:** Once the dashboard is running, examine its interface. Try adding repositories, installing charts, and viewing resources.
 
-6. **Manage Plugins**: Practice uninstalling the dashboard with:
+6. **Manage Plugins:** Practice uninstalling the dashboard with:
    ```
    helm plugin uninstall dashboard
    ```
