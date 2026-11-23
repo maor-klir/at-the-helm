@@ -55,10 +55,10 @@ DOCKER_CONFIG=$(mktemp -d) docker pull ghcr.io/maor-klir/config-store:1.0.0
 
 The first lists a `linux/amd64` manifest and the build's attestation manifest, `unknown/unknown`; the second pulls the image without credentials.
 
-From the repository root, the chart with the image:
+From `05-chart-dependencies-subcharts/01-bootstrap-config-store-chart`, the chart with the image:
 
 ```bash
-helm template config-store subcharts/config-store --set image.repository=ghcr.io/maor-klir/config-store -s templates/deployment.yaml | grep -E 'image(PullPolicy)?:'
+helm template config-store subcharts/config-store -s templates/deployment.yaml | grep -E 'image(PullPolicy)?:'
 ```
 
 ```text

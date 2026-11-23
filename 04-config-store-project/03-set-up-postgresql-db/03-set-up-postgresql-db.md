@@ -12,7 +12,7 @@ Here's a quick summary of the main steps:
 
 ## Step-by-step guide
 
-Run the commands from the `config-store` repository, `~/repositories/github/maor-klir/config-store`.
+Run the commands from your clone of the `config-store` repository, created in exercise 01.
 
 1. **Create the `.env` file:**
 

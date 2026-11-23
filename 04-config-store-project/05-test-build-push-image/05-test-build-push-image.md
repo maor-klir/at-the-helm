@@ -12,7 +12,7 @@ Here's a quick summary of the main steps:
 
 ## Step-by-step guide
 
-Run the commands from the `config-store` repository, `~/repositories/github/maor-klir/config-store`.
+Run the commands from your clone of the `config-store` repository, created in exercise 01.
 
 1. **Test the API:**
 
@@ -71,7 +71,7 @@ Run the commands from the `config-store` repository, `~/repositories/github/maor
    ```
 
    The `POST` returns 201, and the `GET` returns the pair: the distroless image connects and serves the API as the development stage does.
-   `--user 1000 --read-only --cap-drop ALL` runs it the way the chart in `subcharts/config-store` will: as UID 1000, with a read-only root filesystem and no capabilities (see **41 - The config-store application**).
+   `--user 1000 --read-only --cap-drop ALL` runs it the way the config-store chart in `05-chart-dependencies-subcharts/` will: as UID 1000, with a read-only root filesystem and no capabilities (see **41 - The config-store application**).
    Clean up with `docker rm -f config-store-prod` and `docker compose down`.
 
 6. **Push the image:**

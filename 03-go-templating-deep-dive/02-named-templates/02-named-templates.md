@@ -24,10 +24,10 @@ It continues from exercise 01's chart, so to follow the steps, copy `../01-funct
 
 2. **Bring in a Deployment and its values:**
 
-   From your working directory, copy the nginx chart's Deployment into the chart's `templates/`:
+   From your working directory, copy the nginx chart's Deployment into the chart's `templates/`, where `<repo>` is your clone of this repository:
 
    ```bash
-   cp ~/repositories/github/maor-klir/at-the-helm/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/deployment.yaml go-templating-deep-dive/templates/
+   cp <repo>/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/deployment.yaml go-templating-deep-dive/templates/
    ```
 
    It reads values the chart doesn't have yet. Replace `values.yaml` with the nginx chart's settings for the Deployment; `test` and `environment` can go, since `sandbox.yaml` no longer uses them:

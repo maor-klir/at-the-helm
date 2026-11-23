@@ -146,4 +146,4 @@ Error: execution error at (go-templating-deep-dive/templates/validation.yaml:5:4
 Error: execution error at (go-templating-deep-dive/templates/validation.yaml:2:10): securityContext.runAsUser is required when setting securityContext and enabled is true
 ```
 
-The chart keeps upstream's `eq 0` check, so `--set securityContext.runAsUser=-1` renders without an error.
+The chart's check is `eq 0`, so `--set securityContext.runAsUser=-1` renders without an error.

@@ -11,7 +11,7 @@ A dependency is either required for the chart to work, or enables an optional fe
 
 | Use | Example |
 |---|---|
-| A database the application needs | the `config-store` chart in `subcharts/config-store` depends on Bitnami's `postgresql` chart |
+| A database the application needs | the `config-store` chart in `05-chart-dependencies-subcharts/` depends on Bitnami's `postgresql` chart |
 | A service several applications share | a cache or a message broker, packaged once as a chart |
 | Shared template code | Bitnami's `postgresql` chart itself depends on the `common` library chart |
 

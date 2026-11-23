@@ -20,10 +20,9 @@ The commands assume Node.js 22 and npm 10, the versions on this machine.
 1. **Create the repository:**
 
    Create a public repository named `config-store` with a README file, the Node `.gitignore` template, and the MIT license.
-   In the GitHub web interface, all four are options on the new repository page. With the GitHub CLI, one command creates the repository and clones it into the current directory:
+   In the GitHub web interface, all four are options on the new repository page. With the GitHub CLI, one command creates the repository and clones it into the current directory. Run it from the folder that holds your clone of this repository:
 
    ```bash
-   cd ~/repositories/github/maor-klir
    gh repo create config-store --public --description "A repository made for hosting the config-store application that is being used in some courses I took" --add-readme --gitignore Node --license mit --clone
    cd config-store
    ```
@@ -32,10 +31,9 @@ The commands assume Node.js 22 and npm 10, the versions on this machine.
 
 2. **Clone the repository:**
 
-   If you created the repository in the web interface, clone it next to this repository, instead of in a separate `apps` directory as the course does:
+   If you created the repository in the web interface, clone it next to this repository, instead of in a separate `apps` directory as the course does. From the folder that holds your clone of this repository:
 
    ```bash
-   cd ~/repositories/github/maor-klir
    git clone git@github.com:maor-klir/config-store.git
    cd config-store
    ```

@@ -70,7 +70,7 @@ On k3d-argocd, a Pod's network namespace reads `0` as well, and the chart's Pod 
 
 ## Verify
 
-From `~/repositories/github/maor-klir/config-store`, the production image without a database:
+From a clone of `maor-klir/config-store`, the production image without a database:
 
 ```bash
 docker build --target production -t config-store:local .

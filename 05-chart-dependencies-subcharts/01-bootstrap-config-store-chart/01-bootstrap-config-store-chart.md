@@ -86,7 +86,7 @@ To build the chart yourself, run the steps in an empty directory, then compare y
    The course uses its own image, `lmacademy/config-store:1.0.0`; this chart uses ours, built and pushed in the config-store section.
    With `IfNotPresent`, a node keeps the image it already has, so a rebuilt image needs a new tag; reusing a tag needs `pullPolicy: Always` instead (see **43 - The application image**).
 
-   The course uses `NodePort` to reach the Service from minikube. Node ports on k3d-argocd aren't reachable from the laptop, so `kubectl port-forward` reaches the Service either way.
+   Node ports on k3d-argocd aren't reachable from the laptop, so `kubectl port-forward` reaches the Service, whatever its type.
 
 5. **Set the chart's application version:**
 

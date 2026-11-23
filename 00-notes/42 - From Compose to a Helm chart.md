@@ -4,7 +4,7 @@
 
 This repository is about Helm, and config-store's `compose.yaml` matters here only as a contrast.
 Compose runs the application and its database on one machine during development; a Helm chart describes the same two services as Kubernetes objects.
-The `config-store` chart in `subcharts/config-store` is the example throughout.
+The `config-store` chart, in its final form in `05-chart-dependencies-subcharts/07-integrate-postgresql/subcharts/config-store`, is the example throughout.
 
 What the application itself expects at startup is in **41 - The config-store application**.
 

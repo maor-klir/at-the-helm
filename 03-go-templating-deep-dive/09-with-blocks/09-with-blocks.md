@@ -155,7 +155,7 @@ It continues from exercise 08's chart, so to follow the steps, copy `../08-under
          containers:
    ```
 
-   The chart in this folder keeps the container placement, as upstream does.
+   The chart in this folder keeps the container placement, as the course's chart does.
 
 7. **Reach the top level with `$`:**
 

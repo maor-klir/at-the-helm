@@ -34,10 +34,10 @@ It continues from exercise 02's chart, so to follow the steps, copy `../02-named
 
 2. **Add the Service template:**
 
-   From your working directory, copy the nginx chart's Service into `templates/`:
+   From your working directory, copy the nginx chart's Service into `templates/`, where `<repo>` is your clone of this repository:
 
    ```bash
-   cp ~/repositories/github/maor-klir/at-the-helm/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/service.yaml go-templating-deep-dive/templates/
+   cp <repo>/02-creating-your-own-helm-charts/08-ide-package-chart/creating-charts/nginx/templates/service.yaml go-templating-deep-dive/templates/
    ```
 
    Replace its hardcoded name, labels, and selector with the named templates from exercise 02.

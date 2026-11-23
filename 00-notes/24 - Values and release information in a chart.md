@@ -124,7 +124,7 @@ A missing value counts as false: with `--set service.enabled=null`, which remove
 
 ## Verify
 
-From the folder that holds our final `creating-charts/nginx` chart, the names, labels, and the shared port render as described:
+From `02-creating-your-own-helm-charts/08-ide-package-chart`, which holds our final `creating-charts/nginx` chart, the names, labels, and the shared port render as described:
 
 ```bash
 helm template local-nginx creating-charts/nginx | grep -E '^kind|  name:|release:'

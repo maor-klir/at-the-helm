@@ -1,69 +1,67 @@
-# Config Store
+# config-store
 
-A Helm chart for demonstrating using subcharts and deploying the config-store application.
+A Helm chart that deploys the config-store application, with Bitnami's `postgresql` chart as a subchart for its database.
 
-## Setup Instructions
+## Setup instructions
 
-Follow these steps to set up and deploy the config-store project:
+Follow these steps to deploy the chart in the `config-store` namespace.
 
-### 1. Configure Environment Variables
+### 1. Configure the passwords
 
-Create a `.env` file based on the provided example and populate it with your database passwords:
+Create a `.env` file outside the chart's directory, with the two keys from `.env.example`:
+
+- `password` for the password of the application's database user
+- `postgres-password` for the password of the `postgres` admin user
+
+A `.env` inside the chart's directory would be packaged with the chart and stored in the release.
+The application's password becomes part of its `DB_URL`, so it must not contain characters with a special meaning in a URL, such as `@`, `:`, or `/`. `openssl rand -hex 16` produces only `0`–`9` and `a`–`f`.
+
+### 2. Create the Kubernetes Secret
+
+Create the namespace, and a Secret from your `.env` file:
 
 ```bash
-cp .env.example .env
+kubectl create namespace config-store
+kubectl -n config-store create secret generic postgres-creds --from-env-file=path/to/.env
 ```
 
-Edit the `.env` file and add your password values:
+### 3. Install the chart
 
-- Set `postgres-password` for the database root password
-- Set `password` for the application user password
-
-### 2. Create Kubernetes Secret
-
-Create a Kubernetes secret from your `.env` file:
+From the chart's directory, for a new installation:
 
 ```bash
-kubectl create secret generic postgres-creds --from-env-file=.env
-```
-
-### 3. Install the Chart
-
-Deploy the application using Helm:
-
-For a new installation:
-
-```bash
-helm install config-store .
+helm -n config-store install config-store .
 ```
 
 Or with a single command for both new installation and upgrades:
 
 ```bash
-helm upgrade config-store . --install
+helm -n config-store upgrade config-store . --install
 ```
 
-Follow the creation and deployment of pods with `kubectl get pod --watch`. The application pod might restart a few times until the DB pod is up and running, just wait a few moments until everything is up and running.
+Follow the creation and deployment of the Pods with `kubectl -n config-store get pods --watch`. The application's Pod restarts a few times until the database Pod is up and running.
 
 ## Troubleshooting
 
-### 1. PostgreSQL pod stuck in `CreateContainerConfigError`
+### 1. PostgreSQL or config-store Pod stuck in `CreateContainerConfigError`
 
-This is probably due to a missing secret or password key in the present secret. Make sure that:
+Both Pods read their passwords from the Secret `postgres-creds`, so this is probably due to a missing Secret or password key. Make sure that:
 
-1. There is a secret named `postgres-creds` present in the same namespace where the chart is deployed.
-2. The secret contains both the `password` and `postgres-password` keys.
+1. There is a Secret named `postgres-creds` in the namespace where the chart is deployed.
+2. The Secret contains both the `password` and `postgres-password` keys.
 
-### 2. Config-store pod continuously restarting
+The kubelet keeps retrying, and the Pod's events, shown by `kubectl -n config-store describe pod <pod>`, name the missing Secret or key.
 
-One of the most common reasons for that is the database pod not being available, leading the config-store pod to not initializing correctly. Make sure that the PostgreSQL pod is correctly initialized (might take a few seconds to a couple of minutes after deploying the chart).
+### 2. config-store Pod continuously restarting
 
-Another common reason is the incorrect configuration of the deployment template for the application. Make sure that its values are correctly configured, especially the environment variables that specify database credentials and connection strings.
+One of the most common reasons is that the database Pod isn't available yet, so the config-store Pod can't initialize. Make sure that the PostgreSQL Pod is running and ready, which can take from a few seconds to a couple of minutes after deploying the chart.
 
-### 3. Config-store not able to authenticate into DB
+Another common reason is an incorrect configuration of the application's Deployment template. Make sure that its values are correctly configured, especially the environment variables that specify the database credentials and the connection string.
 
-This can happen if the chart was installed, uninstalled, and then re-installed again. This is due to the fact that the underlying PVC and PV for the database are **not** removed upon uninstalling the chart. The solution for that is as follows:
+### 3. config-store not able to authenticate to the database
 
-1. Uninstall the chart with `helm uninstall config-store`
-2. Remove the corresponding PVC with `kubectl delete pvc data-postgresql-db-0`, and make sure that the PV is also deleted (should be the case when using dynamic provisioning of PVs with minikube; otherwise, make sure to delete and re-create the PV manually)
-3. Reinstall the chart
+This can happen if the chart was installed, uninstalled, and then installed again. The database's PersistentVolumeClaim is **not** removed when the chart is uninstalled, and keeps the data initialized with the old passwords. The solution is as follows:
+
+1. Uninstall the chart with `helm -n config-store uninstall config-store`.
+2. Remove the PersistentVolumeClaim with `kubectl -n config-store delete pvc data-postgresql-db-0`. With a dynamic provisioner whose reclaim policy is `Delete`, such as k3d-argocd's `local-path`, its PersistentVolume is deleted too; otherwise, delete it manually.
+3. Install the chart again.

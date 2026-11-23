@@ -143,7 +143,7 @@ For each version, the cycle closes the same way:
 
 ## Verify
 
-From the folder that holds our `creating-charts/nginx` chart, lint it and package it to a scratch folder:
+From `02-creating-your-own-helm-charts/08-ide-package-chart`, which holds our final `creating-charts/nginx` chart, lint it and package it to a scratch folder:
 
 ```bash
 helm lint creating-charts/nginx

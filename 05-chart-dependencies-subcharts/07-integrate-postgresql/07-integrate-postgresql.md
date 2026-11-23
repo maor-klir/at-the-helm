@@ -174,7 +174,7 @@ To build it yourself, copy exercise 04's `subcharts` directory into an empty dir
 
 7. **Test the API:**
 
-   The course uses `minikube service`. On k3d-argocd, a port-forward reaches the Service:
+   A port-forward reaches the Service from the laptop:
 
    ```bash
    kubectl -n config-store port-forward svc/config-store 8080:80 > /dev/null 2>&1 &

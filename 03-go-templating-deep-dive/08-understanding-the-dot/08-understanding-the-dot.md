@@ -100,7 +100,7 @@ It continues from exercise 07's chart, so to follow the steps, copy `../07-range
    In a nested `{{ range list "a" }}`, `.` is `"a"`, and `$svc.type` still renders `ClusterIP`.
 
    The comment line is for exploring only: it ends up in the rendered manifest, and printed at the top level, it would include every value, secrets passed as values among them.
-   The chart in this folder keeps it, as upstream does; leave it out of real charts.
+   The chart in this folder keeps it, as the course's chart does; leave it out of real charts.
 
 5. **Check why the Deployment keeps `.`:**
 

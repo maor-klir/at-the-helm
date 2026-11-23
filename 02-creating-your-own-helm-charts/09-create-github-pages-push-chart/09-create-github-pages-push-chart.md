@@ -16,7 +16,7 @@ Here’s a quick summary of what you should aim to implement:
 ## Step-by-step guide
 
 This exercise has no chart of its own: it publishes exercise 08's chart in a separate repository.
-The commands assume that repository is `maor-klir/helm-charts`, cloned next to this one, in `~/repositories/github/maor-klir/`.
+The commands assume that repository is `maor-klir/helm-charts`, cloned next to this one.
 
 1. **Create a GitHub repository:**
 
@@ -45,10 +45,9 @@ The commands assume that repository is `maor-klir/helm-charts`, cloned next to t
 
 3. **Clone the repository:**
 
-   Clone it next to this repository, not inside it:
+   Clone it next to this repository, not inside it. From the folder that holds your clone of this repository:
 
    ```bash
-   cd ~/repositories/github/maor-klir
    git clone git@github.com:maor-klir/helm-charts.git
    ```
 

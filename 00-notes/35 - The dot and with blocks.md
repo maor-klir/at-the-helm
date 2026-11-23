@@ -109,4 +109,4 @@ helm template go-templating-deep-dive -s templates/deployment.yaml | grep -A2 's
 ```
 
 With `--set securityContext=null`, the Deployment renders no `securityContext`.
-The chart keeps upstream's container placement of `fsGroup`, which a server-side dry run rejects.
+The chart still places `fsGroup` in the container's `securityContext`, which a server-side dry run rejects.
