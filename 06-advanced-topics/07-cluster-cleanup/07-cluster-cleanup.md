@@ -1,43 +1,53 @@
-# Cluster Cleanup Guide
-
-Welcome to the Cluster Cleanup guide! In this session, we’ll walk through the important steps needed to clean up your cluster after using hooks. Before diving into the details, let’s take a moment to try it out on your own. Here’s what you’ll be trying to achieve:
+# Cleaning up after hooks
 
 ## Overview
 
-We want to ensure that our cluster is tidy and free from unnecessary jobs or remnants from previous operations. Here’s a quick rundown of the steps you might take to clean up:
+In this exercise, we'll remove the `demo-hooks` release from exercises 04–06, and the hook Jobs that `helm uninstall` leaves behind.
+Here's a quick summary of the main steps:
 
-1. Uninstall the Helm release and its associated Kubernetes objects.
-2. Check if any pods are still running from the jobs that were created by the hooks.
-3. Delete leftover jobs manually.
-4. Confirm that there are no remaining pods or jobs in the cluster.
+1. Uninstall the release.
+2. Find the hook Jobs and Pods that remain.
+3. Delete them, or the whole namespace.
 
-Give it a shot! Attempt to implement these steps yourself before checking out the detailed guide below. 😊
+## Step-by-step guide
 
-## Step-by-Step Guide
+This exercise has no chart of its own; it cleans up after exercise 06's `demo-hooks` release in the namespace `helm-hooks`.
 
-1. **Uninstall Helm Release:** Start by uninstalling the Helm release with the command:
+1. **Uninstall the release:**
+
+   ```bash
+   helm -n helm-hooks uninstall demo-hooks
    ```
-   helm uninstall your-release-name
+
+   The uninstall runs the `pre-delete` hook, `second`, and then removes the release's own objects: the Deployment, the Service, and the ServiceAccount.
+
+2. **Find what remains:**
+
+   ```bash
+   kubectl -n helm-hooks get jobs,pods
    ```
-2. **Check for Running Pods:** Run the command to see if there are any running pods:
+
+   The hook Jobs are still there, with their Pods: `backup-db` from the last upgrade and `second` from the uninstall. The hooks documentation explains why: *"The resources that a hook creates are currently not tracked or managed as part of the release."*
+
+3. **Delete the Jobs:**
+
+   ```bash
+   kubectl -n helm-hooks delete job demo-hooks-helm-hooks-backup-db demo-hooks-helm-hooks-second
+   kubectl -n helm-hooks get jobs,pods
    ```
-   kubectl get pods
+
+   ```text
+   job.batch "demo-hooks-helm-hooks-backup-db" deleted from helm-hooks namespace
+   job.batch "demo-hooks-helm-hooks-second" deleted from helm-hooks namespace
+   No resources found in helm-hooks namespace.
    ```
-3. **Check for Active Jobs:** Next, look for any jobs that may still be active:
-   ```
-   kubectl get jobs
-   ```
-4. **Delete Leftover Jobs:** If you find any jobs, delete them using the command:
-   ```
-   kubectl delete job <job-name>
-   ```
-   Repeat this for any jobs that are listed.
-5. **Confirm Cleanup:** Finally, confirm that there are no pods or jobs left by running the initial commands again:
-   ```
-   kubectl get pods
-   kubectl get jobs
-   ```
+
+   Deleting a Job also deletes its Pods. The labs used their own namespace, so `kubectl delete namespace helm-hooks` removes everything at once, the Jobs included.
+
+   **Hooks can clean up after themselves:** the hooks documentation names two ways, *"either add a custom `helm.sh/hook-delete-policy` annotation to the hook template file, or set the time to live (TTL) field of a Job resource"*.
+   `hook-succeeded` and `hook-failed` delete the Job as soon as the hook ends (exercise 04). A Job's `.spec.ttlSecondsAfterFinished` lets Kubernetes delete it some time after it has finished, which leaves time to read its logs.
 
 ## Conclusion
 
-In this session, we covered how to clean up your cluster by uninstalling the Helm release and removing any leftover jobs and pods. It’s a straightforward process, but it’s essential to keep your environment clean as you continue with your projects. Keep practicing these commands, and don't hesitate to explore further as you learn. Happy coding! 🚀
+In this exercise, we removed the `demo-hooks` release and the hook Jobs it left behind, and saw the two ways a hook can remove its own Job.
+Exercise 08 starts the library charts part of the section.

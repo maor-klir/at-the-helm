@@ -1,31 +1,129 @@
-# Understanding Hook Failures in Helm
+# Handling hook failures
 
 ## Overview
 
-In this exercise, we will explore the behavior of Helm when hooks fail during execution. Hooks are an essential feature in Helm that allow us to run specific commands before or after an upgrade, install, or rollback. However, it's crucial to understand what happens when these hooks don't complete successfully.
+In this exercise, we'll make the `backup-db` hook fail, first as a `pre-upgrade` hook and then as a `post-upgrade` hook, and see what each failure leaves in the cluster and in the release history. Then we'll let Helm roll back automatically with `--rollback-on-failure`.
+Here's a quick summary of the main steps:
 
-Here’s a quick summary of the steps you can take to implement the solution:
+1. Make the `pre-upgrade` hook fail, and upgrade.
+2. Upgrade with a new image tag while the hook still fails.
+3. Upgrade successfully once, to have a good revision.
+4. Move the failing hook to `post-upgrade`, and upgrade.
+5. Upgrade with `--rollback-on-failure`.
 
-1. Install the Helm release with demo hooks.
-2. Modify the hook command to intentionally fail.
-3. Observe how the Helm upgrade command handles the failed hook.
-4. Experiment with changing the hook type and observing the resource states.
-5. Use the `--atomic` flag when upgrading to see the rollback effect in action.
+## Step-by-step guide
 
-Before looking at the detailed guide, give it a try and see if you can follow the steps above! It could give you a deeper understanding of the concepts. 🚀
+The chart in `helm-hooks/` is the end state of this exercise, and continues from exercise 05's chart: its `backup-db` hook is a `post-upgrade` hook that always fails, so every upgrade of it fails on purpose.
+To follow the steps, copy exercise 05's `helm-hooks` into an empty directory. The release is `demo-hooks` in the namespace `helm-hooks`.
 
-## Step-by-Step Guide
+In `templates/hooks/backup-db.yaml`, keep only the `pre-upgrade` event, and install the release with the image tag `1.27.0` from exercise 04:
 
-1. **Install the Release:** Begin by installing the demo hooks using the Helm install command. Ensure the release is up and running.
-2. **Modify the Hook:** Open your hook file and change the command to something that fails, such as `echo "I will fail"` and set the exit code to 1. This simulates a hook failure.
-3. **Run Helm Upgrade:** Execute the `helm upgrade` command with your demo hooks. Watch the terminal to see if the upgrade fails, and check the status using `helm history`.
+```yaml
+    "helm.sh/hook": pre-upgrade
+```
 
-4. **Check Pod States:** Use `kubectl get pods` to observe any pods associated with the failed job. Describe these pods to understand their current state.
+```bash
+helm -n helm-hooks install demo-hooks helm-hooks --create-namespace
+```
 
-5. **Change Hook Types:** Change the hook type from pre-upgrade to post-upgrade in your hook file. Repeat the helm upgrade and observe the difference.
+1. **Make the `pre-upgrade` hook fail:**
 
-6. **Use the --atomic Flag:** Finally, try adding the `--atomic` flag to your upgrade command. This should enable automatic rollback if your hook fails.
+   Replace the hook's command with one that exits with code 1:
+
+   ```yaml
+             command: ["sh", "-c", "echo 'I will fail.'; exit 1;"]
+   ```
+
+   ```bash
+   helm -n helm-hooks upgrade demo-hooks helm-hooks
+   ```
+
+   The Job retries twice, as `backoffLimit: 2` allows, and the upgrade fails after 34 seconds:
+
+   ```text
+   Error: UPGRADE FAILED: pre-upgrade hooks failed: resource Job/helm-hooks/demo-hooks-helm-hooks-backup-db not ready. status: Failed, message: Job Failed. failed: 3/1
+   ```
+
+   `helm -n helm-hooks history demo-hooks` shows revision 2 as `failed`, with the same message. The three failed Pods are kept, so `kubectl -n helm-hooks logs` can still read them, and nginx still runs its Pod from the install.
+
+2. **Upgrade with a new image tag:**
+
+   Set `image.tag: '1.27.1'` in `values.yaml`, and upgrade again. `before-hook-creation` deletes the failed Job and its three Pods before the new attempt.
+
+   The upgrade fails the same way, and nginx is still the same Pod, created at the install, with `nginx:1.27.0`. A failed pre-hook stops the operation before Helm changes any of the release's resources. The other operations' pre-hooks run at the same point, before any change, as the hooks documentation's install lifecycle shows.
+
+3. **Upgrade successfully once:**
+
+   Set `image.tag: '1.16.0'`, the chart's `appVersion`, and let the hook succeed:
+
+   ```yaml
+             command: ["sh", "-c", "echo 'I will not fail.'; exit 0;"]
+   ```
+
+   The upgrade succeeds as revision 4, and nginx runs `nginx:1.16.0`.
+
+4. **Make a `post-upgrade` hook fail:**
+
+   Change the hook's event, and make it fail again:
+
+   ```yaml
+       "helm.sh/hook": post-upgrade
+   ```
+
+   ```yaml
+             command: ["sh", "-c", "echo 'I will fail.'; exit 1;"]
+   ```
+
+   Set `image.tag: '1.27.0'`, and upgrade. Eight seconds in, while the hook is still retrying, nginx already runs a new Pod with `nginx:1.27.0`.
+   The upgrade then fails with `post-upgrade hooks failed`, and the new Pod stays: Helm doesn't revert the resources it has already updated. Revision 5 is `failed`, while `helm history` still lists revision 4 as `deployed`.
+
+5. **Roll back on failure:**
+
+   Set `image.tag: '1.27.1'`, and upgrade with `--rollback-on-failure`, Helm 4's name for Helm 3's `--atomic`. `--atomic` still works, with the warning `Flag --atomic has been deprecated, use --rollback-on-failure instead`.
+
+   ```bash
+   helm -n helm-hooks upgrade demo-hooks helm-hooks --rollback-on-failure
+   ```
+
+   ```text
+   Error: UPGRADE FAILED: release demo-hooks failed, and has been rolled back due to rollback-on-failure being set: post-upgrade hooks failed: resource Job/helm-hooks/demo-hooks-helm-hooks-backup-db not ready. status: Failed, message: Job Failed. failed: 3/1
+   ```
+
+   ```bash
+   helm -n helm-hooks history demo-hooks
+   ```
+
+   Without the `UPDATED`, `CHART`, and `APP VERSION` columns, and with the long descriptions shortened:
+
+   ```text
+   REVISION  STATUS      DESCRIPTION
+   1         superseded  Install complete
+   2         failed      Upgrade "demo-hooks" failed: pre-upgrade hooks failed: …
+   3         failed      Upgrade "demo-hooks" failed: pre-upgrade hooks failed: …
+   4         superseded  Upgrade complete
+   5         failed      Upgrade "demo-hooks" failed: post-upgrade hooks failed: …
+   6         failed      Upgrade "demo-hooks" failed: post-upgrade hooks failed: …
+   7         deployed    Rollback to 4
+   ```
+
+   Helm rolled back to revision 4, the last successful one, not to the failed revision 5, so nginx runs `nginx:1.16.0` again. The rollback also ran the `second` hook, whose events include `pre-rollback`.
+   The flag's help explains how it waits: *"The --wait flag will be defaulted to "watcher" if --rollback-on-failure is set"*. The command took 60 seconds.
+
+   **Print a failing hook's output:** with `"helm.sh/hook-output-log-policy": hook-failed` added to the hook's annotations (see exercise 04), a failed upgrade prints the hook's output once for each failed attempt, before the error:
+
+   ```text
+   level=INFO msg="I will fail."
+   level=INFO msg="I will fail."
+   level=INFO msg="I will fail."
+   ```
+
+   To finish, set `image.tag` back to `'1.27.0'`, as the chart in this folder has it, and delete the namespace:
+
+   ```bash
+   kubectl delete namespace helm-hooks
+   ```
 
 ## Conclusion
 
-Through this exercise, we learned how helm hooks interact with the release process and what occurs when they fail. It’s essential to grasp these concepts to manage resources effectively in Kubernetes. Remember, when a pre-hook fails, the entire command will halt, but with the `--atomic` flag, we can safeguard against broken states by ensuring rollbacks occur to the last stable revision. Keep practicing and exploring more about Helm and its hooks! 🌟
+In this exercise, we saw that a failed pre-hook stops an upgrade before any change, that a failed post-hook leaves the upgraded resources in place, and that `--rollback-on-failure` rolls back to the last successful revision.
+Exercise 07 cleans up the cluster.

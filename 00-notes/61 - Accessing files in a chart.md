@@ -25,6 +25,14 @@ Helm's source explains it: the chart loader stores those in their own fields, an
 
 None of them is an error, so a typo in a path renders an empty value.
 
+**A non-template file can't live under `templates/`:** Helm renders every file there as a manifest. A shell script at `templates/tests/run.sh` failed the render, before `.Files.Get` mattered:
+
+```text
+Error: YAML parse error on q/templates/tests/run.sh: error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type util.SimpleHead
+```
+
+`helm lint` rejects it by its extension, `file extension '.sh' not valid. Valid extensions are .yaml, .yml, .tpl, or .txt`, a rule in Helm's source (`validateAllowedExtension`). Moved to `files/run.sh`, the script loads with `.Files.Get "files/run.sh"`, and the lint passes.
+
 **The files are part of the chart:** the guide warns, *"Charts must be smaller than 1M because of the storage limitations of Kubernetes objects."*
 A client-side dry run's release record lists them under the chart's `files`, so every revision of the release stores them (see **22 - Helm chart structure**).
 
