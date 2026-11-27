@@ -97,7 +97,7 @@ The `helm create` scaffold renders all four, plus the optional `app.kubernetes.i
 > *"A library chart is a type of Helm chart that defines chart primitives or definitions which can be shared by Helm templates in other charts. This allows users to share snippets of code that can be re-used across charts, avoiding repetition and keeping charts DRY."*
 
 A chart with `type: library` in `Chart.yaml` cannot be installed: `helm install` stops with `library charts are not installable`.
-Application charts list it as a dependency and include its named templates, so a label or security context defined once in the library reaches every chart that updates to the new library version.
+Application charts list it as a dependency and include its named templates, so a label or security context defined once in the library chart reaches every chart that updates to the new library chart version.
 
 **Checks on the values and the cluster:** `values.schema.json` rejects values that don't match the chart's schema (see **02 - Benefits and limitations of Helm**), and `required` and `fail` stop a render from inside the templates.
 `kubeVersion` in `Chart.yaml` limits the Kubernetes versions a chart installs on: *"Helm will validate the version constraints when installing the chart and fail if the cluster runs an unsupported Kubernetes version."*
