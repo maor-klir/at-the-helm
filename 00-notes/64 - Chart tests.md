@@ -7,6 +7,9 @@ The chart tests documentation: *"The container should exit successfully (exit 0)
 
 Tests are hooks, so the hook annotations apply to them (see **62 - Chart hooks**): *"annotations like `helm.sh/hook-weight` and `helm.sh/hook-delete-policy` may be used with test resources."*
 
+**The annotation makes a test, not the folder:** the documentation offers `templates/tests/` as a place for tests, *"You are welcome to nest your test suite under a `tests/` directory like `<chart-name>/templates/tests/` for more isolation."*
+In a chart created with `helm create`, a Pod in `templates/tests/` without the annotation was listed under `MANIFEST:` by `helm install --dry-run`, as an object of the release, and `helm template --skip-tests` kept it. A Pod with the annotation directly in `templates/` was listed under `HOOKS:`.
+
 ## The test chart
 
 The results below come from one chart on a k3s cluster: `test-hook`, created with `helm create`, whose Deployment runs nginx behind a ClusterIP Service on port 80.
@@ -122,7 +125,8 @@ The same chart passed when a ConfigMap from an earlier run still existed, so the
 
 ## Deleting the test objects
 
-Without a `helm.sh/hook-delete-policy`, the default `before-hook-creation` keeps the test objects after a run, and deletes them just before the next run creates them again. Their logs stay readable with `kubectl logs` until then.
+Without a `helm.sh/hook-delete-policy`, the default `before-hook-creation` keeps the test objects after a run, and deletes them just before the next run creates them again.
+A passed test's Pod stays with the status `Completed`, not running, and its log stays readable with `kubectl logs` until then.
 
 With `before-hook-creation,hook-succeeded`, a successful run deleted both the Pod and the ConfigMap.
 `--logs` still printed the Pod's log, as `helm test --help` describes the flag: *"this runs after all tests are complete, but before any cleanup"*.
@@ -133,6 +137,11 @@ The ConfigMap, whose test had passed, was deleted: according to Helm's source (`
 `helm get hooks` still showed the script as it rendered, with `curl http://inexistent:80`. On the next run, `before-hook-creation` deleted the failed Pod before Helm created a new one.
 
 **`before-hook-creation` stays in any list of policies:** naming a policy replaces the default, and `before-hook-creation` is the only one that deletes an object left by an earlier run before the next run creates it (see **62 - Chart hooks**).
+
+With `hook-succeeded` as the only policy, a failed run left its Pod, and the next run failed again in under a second, although the script had been fixed and the release upgraded.
+Helm 4 applied the test Pod over the failed one with server-side apply: the Pod kept its creation time and its `Failed` phase, and Helm reported that phase.
+
+After `helm upgrade --server-side=false`, the same run failed with `pods "local-test-hook-test-connection" already exists` instead. With `before-hook-creation,hook-succeeded`, the next run passed and deleted both test objects.
 
 ## Configurable tests
 

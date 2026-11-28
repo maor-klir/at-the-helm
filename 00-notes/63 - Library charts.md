@@ -20,6 +20,7 @@ The scaffold's `name` and `fullname` helpers moved from `parent-chart` into `com
 
 A library chart's templates are therefore named templates, in files whose names start with `_`, such as `_naming.tpl`.
 Bitnami's charts share theirs the same way: WordPress and PostgreSQL both depend on Bitnami's `common` library chart.
+A library chart is published like any other chart: `common` 2.41.0, with `type: library`, is in both Bitnami's OCI registry and its HTTP repository.
 
 ## Using a library chart
 

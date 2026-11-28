@@ -1,0 +1,10 @@
+clusterRoleBinding:
+  # The chart binds its ServiceAccount to cluster-admin by default.
+  # Read-only is enough to browse a cluster.
+  clusterRoleName: view
+config:
+  oidc:
+    # No OIDC provider here, so skip the empty Secret the chart
+    # would otherwise render.
+    secret:
+      create: false
