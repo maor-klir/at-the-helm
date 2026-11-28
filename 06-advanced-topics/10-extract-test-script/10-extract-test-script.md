@@ -1,48 +1,108 @@
-# README for Extracting Test Scripts
+# Extracting the test script
 
 ## Overview
 
-In this exercise, we're going to focus on enhancing our testing structure by creating a more decoupled approach between our tests and the pods executing them. The goal is to extract the command and arguments into their own script and utilize a config map and volumes to mount this script as a file inside our container.
+In this exercise, we'll move the test's logic out of the test Pod into a shell script, `files/test-scripts/run.sh`, and load it into a ConfigMap that the test Pod can mount in exercise 11.
+Here's a quick summary of the main steps:
 
-Before diving into the step-by-step guide, here's a quick summary of what you'll be implementing. I encourage you to try these steps on your own first:
+1. Add a ConfigMap, created as a `test` hook, that loads every file under `files/test-scripts/`.
+2. Write the test script, with template actions for the Service's name and port.
+3. Render the script's template actions with `tpl`.
+4. See why the script can't live under `templates/`.
 
-1. Create a new config map file under the test directory.
-2. Set up the necessary metadata and annotations for the config map.
-3. Load the script data correctly into the config map.
-4. Create a `files` directory and a subdirectory for test scripts.
-5. Write a `run.sh` script that installs curl and executes a curl command.
-6. Ensure that template functions are used correctly to replace variable placeholders in your script.
+## Step-by-step guide
 
-Give it a shot! Don’t worry if you miss something; we’ll go through it in detail.
+Run the commands from this folder. The chart in `test-hook/` is the end state of this exercise, and continues from exercise 09's chart.
+To build it yourself, copy exercise 09's `test-hook` into an empty directory, and run the steps there. This exercise only renders the chart.
 
-## Step-by-Step Guide
+1. **Add a ConfigMap for the test files:**
 
-1. **Create the Config Map File:**
+   Create `templates/tests/test-files.yaml`. The `test` hook makes Helm create the ConfigMap when `helm test` runs, together with the test Pod:
 
-   - Navigate to your test directory and create a new file named `test-files.yaml`.
-   - Define the API version, kind, metadata, and annotations, ensuring you include `Helm.sh/hook: test`.
+   ```yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: {{ include "test-hook.fullname" . }}-test-files
+     annotations:
+       "helm.sh/hook": test
+   data:
+   {{ (.Files.Glob "files/test-scripts/*").AsConfig | indent 2 }}
+   ```
 
-2. **Load Script Data:**
+   Exercise 11 gives the test objects weights, and exercise 12 a deletion policy.
 
-   - Within the `data` section of your config map file, use the `files.glob` method to specify the pattern for loading your test scripts.
+2. **Write the test script:**
 
-3. **Set Up the Files Directory:**
+   Create `files/test-scripts/run.sh`, at the chart's root, outside `templates/`. The script installs `curl` in an Alpine container, and requests the chart's Service:
 
-   - Create a `files` directory at the top level of your chart.
-   - Inside it, create a `test-scripts` directory.
+   ```sh
+   #!/bin/sh
 
-4. **Write the run.sh Script:**
+   echo "Installing curl..."
+   apk update && apk add --no-cache curl
 
-   - In the `test-scripts` directory, create a file named `run.sh`.
-   - Write the necessary shell commands: first, install curl, and then execute a curl command targeting your test hook.
+   echo "Executing curl request to {{ .Release.Name }}"
+   curl http://{{ include "test-hook.fullname" . }}:{{ .Values.service.port }}
+   ```
 
-5. **Ensure Correct Template Usage:**
+   The template actions don't render yet:
 
-   - Ensure you utilize Gold template functions and the `TPL` function to dynamically replace placeholders with appropriate context values.
+   ```bash
+   helm template local-test-hook test-hook --show-only templates/tests/test-files.yaml
+   ```
 
-6. **Testing the Configuration:**
-   - Run the `helm template` command from your terminal to verify that the contents are correctly processed and variables are replaced.
+   ```text
+   data:
+     run.sh: |-
+       #!/bin/sh
+
+       echo "Installing curl..."
+       apk update && apk add --no-cache curl
+
+       echo "Executing curl request to {{ .Release.Name }}"
+       curl http://{{ include "test-hook.fullname" . }}:{{ .Values.service.port }}
+   ```
+
+   The ConfigMap's own name renders as `local-test-hook-test-files`, but `.AsConfig` copies the file's content as it is (see **61 - Accessing files in a chart**).
+
+3. **Render the script with `tpl`:**
+
+   The `tpl` function renders a string as a template. The chart tips and tricks guide: *"The `tpl` function allows developers to evaluate strings as templates inside a template."*
+   Its syntax is `{{ tpl TEMPLATE_STRING VALUES }}`: two arguments, the string to render and the context to render it with.
+
+   ```yaml
+   data:
+   {{ tpl (.Files.Glob "files/test-scripts/*").AsConfig . | indent 2 }}
+   ```
+
+   | Argument | Here |
+   |---|---|
+   | `TEMPLATE_STRING` | `(.Files.Glob "files/test-scripts/*").AsConfig`, the script as text |
+   | `VALUES` | `.`, the chart's top-level object, which holds `.Release`, `.Values`, `.Chart`, and the named templates |
+
+   The script's `{{ .Release.Name }}` and `{{ .Values.service.port }}` are resolved against that second argument:
+
+   ```text
+       echo "Executing curl request to local-test-hook"
+       curl http://local-test-hook:80
+   ```
+
+   Without the `.`, the render fails with `wrong number of args for tpl: want 2 got 1`.
+   `tpl` renders the whole `.AsConfig` output, so every file the pattern matches can use `.Values`, `.Release`, and the chart's named templates.
+   A server-side dry run, `helm template local-test-hook test-hook | kubectl -n default apply --dry-run=server -f -`, accepts the ConfigMap with the rest of the chart.
+
+4. **See why the script lives in `files/`:**
+
+   Helm renders every file under `templates/` as a manifest. A copy of `run.sh` at `templates/tests/random.sh` stops the render:
+
+   ```text
+   Error: YAML parse error on test-hook/templates/tests/random.sh: error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type util.SimpleHead
+   ```
+
+   `helm lint test-hook` names the reason: `file extension '.sh' not valid. Valid extensions are .yaml, .yml, .tpl, or .txt`. Delete `random.sh` again.
 
 ## Conclusion
 
-You've just learned how to extract commands and arguments from your pod configurations into their own scripts, using config maps and volumes. This decoupled structure is crucial for clean and manageable testing. Keep practicing with these concepts as they will be valuable for your development toolkit! 🌱
+In this exercise, we moved the test's logic into `files/test-scripts/run.sh`, loaded it into a ConfigMap with `.Files.Glob` and `.AsConfig`, and rendered its template actions with `tpl`.
+Exercise 11 mounts the ConfigMap in the test Pod and runs the script.

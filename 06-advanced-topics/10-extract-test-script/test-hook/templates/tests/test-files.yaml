@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "test-hook.fullname" . }}-test-files
+  annotations:
+    "helm.sh/hook": test
+data:
+{{ tpl (.Files.Glob "files/test-scripts/*").AsConfig . | indent 2 }} 
