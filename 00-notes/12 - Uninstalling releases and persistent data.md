@@ -6,6 +6,12 @@
 Objects that Helm never managed, and the data on volumes, can outlive the release.
 A reinstall on top of that data fails when the chart generates new credentials.
 
+## The example release
+
+The examples below use the release `local-wp` of Bitnami's WordPress chart 23.1.20, installed with `helm install --create-namespace` into the namespace `wordpress` on a k3s cluster, with the images pointed at `bitnamilegacy` (see **11 - Exploring charts and releases with the Helm CLI**), and otherwise the chart's default values.
+
+WordPress keeps its files on a PersistentVolumeClaim from the chart's templates, and the chart's MariaDB subchart runs the database as a StatefulSet with a volume of its own.
+
 ## What `helm uninstall` deletes
 
 The reference page sums it up: *"It removes all of the resources associated with the last release of the chart as well as the release history, freeing it up for future use."*

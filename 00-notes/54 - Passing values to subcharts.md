@@ -7,6 +7,12 @@ The Subcharts and Global Values guide starts from the subchart's side: *"A subch
 
 Two rules follow from it: *"For that reason, a subchart cannot access the values of its parent."* and *"A parent chart can override values for subcharts."*
 
+## The example charts
+
+The examples below use `config-store`, the chart of a small key-value store application (see **41 - The config-store application**), with two subcharts in its `charts/` directory.
+Bitnami's PostgreSQL chart 16.2.2 runs its database.
+`demo-subchart`, created with `helm create` and cut down to one ConfigMap, renders a single value, `customValue`, whose own default is `hello from demo-subchart`.
+
 ## Values under the subchart's name
 
 A top-level key named after a dependency goes to that dependency: *"Any directives inside of the `mysubchart` section will be sent to the `mysubchart` chart."*

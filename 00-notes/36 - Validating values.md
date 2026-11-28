@@ -5,6 +5,10 @@
 Users override a chart's values, and a missing or invalid value can render a manifest that the API server rejects, or one that it accepts and that runs with the wrong settings.
 A chart can check its values instead, and stop with a message that names the value: with the `required` and `fail` functions, with validators built from named templates, and with a `values.schema.json` that Helm checks before rendering.
 
+The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language: a Deployment of nginx Pods, with a `securityContext` value for the Pod's user and group, one Service per entry of the `services` map, and `templates/validation.yaml`, a template that renders nothing and only checks the values.
+
+Its `templates/sandbox.yaml` holds template experiments and isn't a Kubernetes object, so the chart is only rendered with `helm template`.
+
 ## `required`
 
 Helm's function list defines it: *"If `.Bar` is empty or not defined (see default on how this is evaluated), the template will not render and will return the error message supplied instead."*

@@ -6,6 +6,14 @@
 Every upgrade writes a new revision, and the previous ones stay in the release's history.
 Which values the new revision gets depends on the flags we pass.
 
+## The example release
+
+The examples below use the release `local-wp` of Bitnami's WordPress chart in the namespace `wordpress`, on a k3s cluster, with the images pointed at `bitnamilegacy` (see **11 - Exploring charts and releases with the Helm CLI**).
+Revision 1 installed chart 23.1.20 with a values file that set `replicaCount: 3`, an admin user, and the user's password from an existing Secret.
+
+Revision 2, the upgrade to autoscaling, passed a file without `replicaCount` that turned on a HorizontalPodAutoscaler for 2 to 10 Pods, together with `--reuse-values`.
+Revision 3 upgraded the chart to 23.1.28 with `--reset-then-reuse-values`.
+
 ## What an upgrade does
 
 The Using Helm guide: *"An upgrade takes an existing release and upgrades it according to the information you provide. Because Kubernetes charts can be large and complex, Helm tries to perform the least invasive upgrade. It will only update things that have changed since the last release."*
@@ -96,6 +104,31 @@ The Kubernetes server-side apply documentation says what happens to a field that
 
 Helm was the only manager of `replicas`, so the field fell back to its default of 1, and two of the three Pods were deleted.
 Fifteen seconds later, the HorizontalPodAutoscaler raised the Deployment to its minimum of 2.
+
+## Changes made outside Helm
+
+A change made with `kubectl` to an object that Helm manages makes `kubectl` a manager of the fields it changed, next to Helm.
+The Kubernetes server-side apply documentation: *"A _conflict_ is a special status error that occurs when an `Apply` operation tries to change a field that another manager also claims to manage. This prevents an applier from unintentionally overwriting the value set by another user."*
+
+The results in this section come from a separate release, `headlamp`, of the Headlamp chart 0.46.0, a Kubernetes web UI, installed with Helm 4's CLI.
+`kubectl scale deployment headlamp --replicas=2` changed its Deployment, and the Deployment's field managers then included `kubectl`, for the `scale` subresource.
+
+**Server-side apply stops at the conflict:** `helm upgrade --reuse-values`, with the same chart and values, failed, and the replicas stayed at 2:
+
+```text
+Error: UPGRADE FAILED: conflict occurred while applying object headlamp/headlamp apps/v1, Kind=Deployment: Apply failed with 1 conflict: conflict with "kubectl" with subresource "scale" using apps/v1: .spec.replicas
+```
+
+`helm history` recorded the attempt as a `failed` revision with the same message.
+`helm upgrade --dry-run=server` didn't report the conflict: it showed `STATUS: pending-upgrade`, as for any valid upgrade.
+
+**`--force-conflicts` takes the fields back:** the `helm upgrade` reference describes the flag as *"if set server-side apply will force changes against conflicts"*.
+The next upgrade with it succeeded, the replicas returned to the chart's 1, and `kubectl` was no longer among the Deployment's field managers.
+
+The Kubernetes documentation describes the forced apply: *"This forces the operation to succeed, changes the value of the field, and removes the field from all other managers' entries in `managedFields`."*
+
+**Client-side apply overwrites the change without a conflict:** a release of the same chart installed with client-side apply, by Helm Dashboard, which runs Helm 3's library (see **65 - Helm plugins**), had its replicas changed the same way.
+Its upgrade kept client-side apply, since `--server-side` defaults to `auto`, and set the replicas back to the value in its manifest, 3.
 
 ## Verify
 

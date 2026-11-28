@@ -7,6 +7,9 @@ Repeated by hand, one missed copy still renders and installs without an error: a
 
 A named template defines such a piece once, and `include` renders it wherever it's needed.
 
+The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language: a Deployment of nginx Pods, set by the values `replicaCount`, `image`, and `containerPorts`, whose name and labels come from named templates in `templates/_helpers.tpl`.
+Its `templates/sandbox.yaml` holds template experiments and isn't a Kubernetes object, so the chart is only rendered with `helm template`.
+
 ## Defining a named template
 
 Helm's named templates guide describes the action: *"The `define` action allows us to create a named template inside of a template file."*
@@ -65,6 +68,10 @@ A narrower value is allowed, *"We could just as easily pass `.Values` or `.Value
 ## Across a parent chart and its subcharts
 
 The Subcharts and Global Values guide: *"Parent charts and subcharts can share templates. Any defined block in any chart is available to other charts."*
+
+The examples in this section use `config-store`, the chart of a small key-value store application (see **41 - The config-store application**), with `demo-subchart` in its `charts/` directory, a chart created with `helm create` and cut down to one ConfigMap.
+To show whose values each include reads, `nameOverride` is set in both: `override-from-parent` in `config-store`, and `override-from-subchart` in `demo-subchart`.
+
 `config-store` can include `demo-subchart.fullname` from its subchart's `_helpers.tpl`, and the dot each include passes decides the result:
 
 | Included from | Its dot holds the values of | `nameOverride` there | Result |

@@ -5,6 +5,9 @@
 A variable gives a value a name inside a template, so a long pipeline can be written once and used later.
 Where it can be used depends on where it's declared: a variable lives until the `end` of its block, and never crosses into another template.
 
+The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language: a Deployment of nginx Pods and a Service, whose name comes from the named template `go-templating-deep-dive.fullname` unless the value `customName` sets one.
+Its `templates/sandbox.yaml` holds template experiments and isn't a Kubernetes object, so the chart is only rendered with `helm template`.
+
 ## Declaring and reassigning
 
 The Go template syntax defines the declaration: *"A pipeline inside an action may initialize a variable to capture the result."*

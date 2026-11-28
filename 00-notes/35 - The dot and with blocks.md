@@ -7,6 +7,9 @@ It starts as the chart's top-level object, `range` and `with` move it to a neste
 
 How variables are declared and how far they reach is in **34 - Variables and scope**.
 
+The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language: a Deployment of nginx Pods, with a `securityContext` value for the Pod's user and group, and one Service per entry of the `services` map.
+Its `templates/sandbox.yaml` holds template experiments and isn't a Kubernetes object, so the chart is only rendered with `helm template`.
+
 ## What the dot holds
 
 The Go template syntax names it: *"Execution of the template walks the structure and sets the cursor, represented by a period '.' and called "dot", to the value at the current location in the structure as execution proceeds."*

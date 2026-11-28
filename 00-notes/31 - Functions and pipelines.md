@@ -7,6 +7,9 @@ Pipelines chain functions together, and two functions, `toYaml` and `nindent`, t
 
 The syntax around them, actions, the dot, comments, and whitespace control, is in **23 - Template syntax basics**.
 
+The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language.
+At this stage, besides `Chart.yaml`, it has a `values.yaml` with two strings, `test` and `environment`, and `templates/sandbox.yaml`, a file of template experiments that isn't a Kubernetes object, so the chart is only rendered with `helm template`.
+
 ## Where the functions come from
 
 Helm's chart template guide names the sources: *"Helm has over 60 available functions. Some of them are defined by the Go template language itself. Most of the others are part of the Sprig template library."*

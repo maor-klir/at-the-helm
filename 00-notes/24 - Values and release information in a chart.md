@@ -7,6 +7,11 @@ Settings that differ between installations come from values, and names and label
 
 The rules for both come from three places: Kubernetes, for object names and selectors; YAML, for value types; and Helm, for release names and the metadata it adds to objects.
 
+## The example chart
+
+The examples below use `nginx`, a chart written from scratch: a Deployment of three nginx Pods and a Service, first with fixed names such as `nginx-svc`, then with names and selector labels built from `.Release.Name`.
+It's installed in the namespace `nginx` as the release `local-nginx`, and as a second release, `local-nginx-2`, to show what two releases of one chart need.
+
 ## Values as the chart's interface
 
 A chart's `values.yaml` defines what its users can change: a template can be changed only through the values it reads (see **03 - Helm vs. Kustomize**), and users override them with `--values` and `--set` (see **13 - Overriding chart values**).

@@ -7,6 +7,10 @@ Both close with `end`, and both can have an `else`.
 
 Which values count as false, and how an `if` around a whole template makes an object optional, are in **24 - Values and release information in a chart**.
 
+The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language: a Deployment of nginx Pods, set by the values `replicaCount`, `image`, and `containerPorts`, and Services built from `services`, first a list and later a map with one entry per Service, `svc1` of type `ClusterIP` and `svc2` of type `NodePort`.
+
+Its `templates/sandbox.yaml` holds template experiments and isn't a Kubernetes object, so the chart is only rendered with `helm template`.
+
 ## `if` and `else`
 
 Besides a whole object, an `if` can wrap a few lines of one:

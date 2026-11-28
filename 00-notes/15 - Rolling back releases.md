@@ -6,6 +6,15 @@ When an upgrade breaks a release, Helm can return it to an earlier revision, by 
 Either way, the rollback is recorded as a new revision.
 Objects that Kubernetes created on its own, such as a Deployment's ReplicaSets, are not part of it.
 
+## The example release
+
+The examples below use the release `local-wp` of Bitnami's WordPress chart in the namespace `wordpress`, on a k3s cluster, with the images pointed at `bitnamilegacy` (see **11 - Exploring charts and releases with the Helm CLI**), with a HorizontalPodAutoscaler that keeps two WordPress Pods.
+
+Revision 1 installed chart 23.1.20, revision 2 turned on autoscaling, and revision 3 upgraded the chart to 23.1.28, the last revision that works (see **14 - Upgrading releases**).
+Revision 4 is the broken upgrade below, and revision 5 the rollback to 3.
+
+Revision 6 changed the WordPress Service to `NodePort` with `custom-values.yaml`, a file that repeats the release's values and adds `service.type: NodePort`; revisions 7 and 8 are the guarded upgrade and its automatic rollback.
+
 ## A broken upgrade can still be `deployed`
 
 An upgrade that sets `image.tag=non-existent` on our WordPress release finishes with `STATUS: deployed`.

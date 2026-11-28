@@ -7,6 +7,14 @@ The Charts documentation: *"All charts are loaded by default. If `tags` or `cond
 
 A disabled subchart is left out of the render completely: none of its templates produce objects, and its named templates can't be included either.
 
+## The example charts
+
+The examples below use `config-store`, the chart of a small key-value store application (see **41 - The config-store application**), with two subcharts in its `charts/` directory.
+Bitnami's PostgreSQL chart 16.2.2 runs its database.
+`demo-subchart`, created with `helm create` and cut down to one ConfigMap, renders a single value, `customValue`, whose own default is `hello from demo-subchart`.
+
+With its default values, the PostgreSQL chart renders 7 templates: a StatefulSet, two Services, a Secret, a ServiceAccount, a NetworkPolicy, and a PodDisruptionBudget.
+
 ## Conditions
 
 A condition is a path into the parent's values. The dependency best practices prefer the form `somechart.enabled`, *"Where `somechart` is the chart name of the dependency."*
