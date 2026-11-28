@@ -38,11 +38,13 @@ The `helm dependency` reference describes the three fields:
 Without it, Helm 4 stops with `Error: no repository definition for https://charts.bitnami.com/bitnami. Please add the missing repos via 'helm repo add'`.
 
 `repository` also accepts a repository's name, as `@bitnami` or `alias:bitnami`, an `oci://` registry, or a local path starting with `file://`.
+
 A local path needs no `helm repo add`: *"If the dependency chart is retrieved locally, it is not required to have the repository added to helm by "helm add repo"."*
 An `oci://` registry needs none either, since Helm pulls from it directly (see **53 - OCI registries and classic chart repositories**).
 
 Other optional fields, `condition`, `tags`, `alias`, and `import-values`, control whether a dependency is installed, under which name, and which of its values the parent reads (see **55 - Enabling subcharts with conditions and tags** and **54 - Passing values to subcharts**).
 An `alias` also becomes the dependency's key in the parent's values.
+
 The best practices ask for them on optional dependencies: *"Conditions or tags should be added to any dependencies that _are optional_."*
 
 ## The `charts/` directory
@@ -69,6 +71,7 @@ Without the directory, the update fails with `Error: directory config-store/char
 
 **`install`, `upgrade`, and `template` can fetch a missing dependency:** without the archive, `helm template` fails with `You may need to run 'helm dependency build' to fetch missing dependencies: found in Chart.yaml, but missing in charts/ directory: postgresql`.
 With `--dependency-update`, it downloaded 16.2.2 and rendered.
+
 Helm's source shows that the flag runs `update`, not `build`, and only when a dependency is missing, so with a version range it can choose a newer version and rewrite `Chart.lock`.
 
 ## `Chart.lock`

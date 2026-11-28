@@ -61,6 +61,7 @@ Compose can hold the application back until the database is healthy. Helm has no
 The Using Helm guide lists the order, *"Helm installs resources in the following order:"*, a list that puts Secret before Service, Service before Deployment, and Deployment before StatefulSet.
 
 So the application's Deployment is created before PostgreSQL's StatefulSet, and *"Helm does not wait until all of the resources are running before it exits."*
+
 The application's restarts and its readiness probe cover the gap (see **41 - The config-store application**).
 On k3d-argocd, the application's Pod restarted three times while PostgreSQL's image was pulled and the database started, and was ready about 70 seconds after the install.
 

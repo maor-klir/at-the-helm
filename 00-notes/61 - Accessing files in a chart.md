@@ -25,20 +25,23 @@ Helm's source explains it: the chart loader stores those in their own fields, an
 
 None of them is an error, so a typo in a path renders an empty value.
 
-**A non-template file can't live under `templates/`:** Helm renders every file there as a manifest. A shell script at `templates/tests/run.sh` failed the render, before `.Files.Get` mattered:
+**A non-template file can't live under `templates/`:** Helm renders every file there as a manifest.
+A shell script at `templates/tests/run.sh` failed the render, before `.Files.Get` mattered:
 
 ```text
 Error: YAML parse error on q/templates/tests/run.sh: error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type util.SimpleHead
 ```
 
-`helm lint` rejects it by its extension, `file extension '.sh' not valid. Valid extensions are .yaml, .yml, .tpl, or .txt`, a rule in Helm's source (`validateAllowedExtension`). Moved to `files/run.sh`, the script loads with `.Files.Get "files/run.sh"`, and the lint passes.
+`helm lint` rejects it by its extension, `file extension '.sh' not valid. Valid extensions are .yaml, .yml, .tpl, or .txt`, a rule in Helm's source (`validateAllowedExtension`).
+Moved to `files/run.sh`, the script loads with `.Files.Get "files/run.sh"`, and the lint passes.
 
 **The files are part of the chart:** the guide warns, *"Charts must be smaller than 1M because of the storage limitations of Kubernetes objects."*
 A client-side dry run's release record lists them under the chart's `files`, so every revision of the release stores them (see **22 - Helm chart structure**).
 
 ## One file: `.Files.Get`
 
-`.Files.Get` takes a path from the chart's root and returns the file's contents as a string. Under a block scalar, the indentation has to match:
+`.Files.Get` takes a path from the chart's root and returns the file's contents as a string.
+Under a block scalar, the indentation has to match:
 
 | Template line, under `application.properties: \|-` | Value |
 |---|---|
@@ -50,7 +53,8 @@ A client-side dry run's release record lists them under the chart's `files`, so 
 
 ## Several files: `.Files.Glob`
 
-*"`.Glob` returns a `Files` type, so you may call any of the `Files` methods on the returned object."* Ranging over it gives each file's path and contents:
+*"`.Glob` returns a `Files` type, so you may call any of the `Files` methods on the returned object."*
+Ranging over it gives each file's path and contents:
 
 ```yaml
 data:

@@ -105,6 +105,7 @@ The indent width has to match where the value sits.
 Under `list.values.example`, `nindent 2` puts the items at the level of `values`, and the render fails with `did not find expected key`; `nindent 6` puts them under `example`.
 
 **A wrong width can also produce valid YAML with the wrong structure:** in a Deployment, `nindent 4` under `spec.selector.matchLabels` renders without an error and passes `helm lint`, but the labels become keys of `spec.selector`.
+
 The API server rejects the object with `strict decoding error: unknown field "spec.selector.app"`, which a server-side dry run shows before installing (see **25 - The chart development workflow**).
 
 Named templates, such as a chart's labels, are piped through `nindent` the same way, and their output is YAML already, so they need no `toYaml`.

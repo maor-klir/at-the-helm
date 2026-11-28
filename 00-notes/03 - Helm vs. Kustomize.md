@@ -260,6 +260,7 @@ The current fields replace several older ones, and `kubectl kustomize` warns whe
 `patches` accepts both strategic merge and JSON patches, and `replacements` takes over from `vars`.
 
 **`labels` leaves selectors alone by default:** `commonLabels` adds its labels to selectors as well: *"Labels will be added to resource selector and template fields where applicable."*
+
 A Deployment's `spec.selector` cannot change after creation, so adding a common label to an overlay that is already deployed makes the next apply fail.
 `labels` touches selectors only when `includeSelectors` is set, which *"Defaults to false."*
 
@@ -319,7 +320,7 @@ spec:
 The chart keeps its release lifecycle, and the patches reach fields the chart does not expose.
 
 **Helm inside Kustomize:** the `helmCharts` field renders a chart with `helm template` and adds the result to the kustomization's resources.
-It needs `--enable-helm`, and works with Helm 4.3.1 as the `helm` binary:
+It needs `--enable-helm`, and works with Helm 4.3 as the `helm` binary:
 
 ```yaml
 helmCharts:

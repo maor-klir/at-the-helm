@@ -63,6 +63,7 @@ A chart published once lets every other team install the same reviewed manifests
 
 A chart carries its own documentation.
 The chart documentation says a `README.md` *"should generally contain"* a description of the application, its prerequisites, the options in `values.yaml` with their defaults, and anything else relevant to installing or configuring it.
+
 Hubs display that file: *"When hubs and other user interfaces display details about a chart that detail is pulled from the content in the `README.md` file."*
 
 `templates/NOTES.txt` is printed after `helm install` and by `helm status`.
@@ -125,9 +126,9 @@ Helm looks for that exact file name: on Linux, a chart with a `chart.yaml` stops
 *"Helm reserves use of the `charts/`, `crds/`, and `templates/` directories, and of the listed file names."*
 
 **`apiVersion: v2` is the chart format for Helm 3 and Helm 4:** *"The `apiVersion` field should be `v2` for Helm charts that require at least Helm 3."*
-Helm 4.3.1 still renders `v1` charts written for Helm 2.
+Helm 4.3 still renders `v1` charts written for Helm 2.
 
-Charts v3 *"is in early development and available for experimentation"*: with `HELM_EXPERIMENTAL_CHART_V3=1`, `helm create --chart-api-version=v3` scaffolds a v3 chart, but `helm template` in Helm 4.3.1 still rejects it with `invalid chart apiVersion`.
+Charts v3 *"is in early development and available for experimentation"*: with `HELM_EXPERIMENTAL_CHART_V3=1`, `helm create --chart-api-version=v3` scaffolds a v3 chart, but `helm template` in Helm 4.3 still rejects it with `invalid chart apiVersion`.
 
 The template language combines three sources.
 Helm's documentation says so directly:

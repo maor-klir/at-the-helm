@@ -28,9 +28,7 @@ A small web application with a database already spans eleven objects in one name
 | `ConfigMap`, `Secret` | configuration and credentials for both workloads | referenced by name from the Pod specs |
 | `PersistentVolumeClaim` | the database's storage | created by the StatefulSet from its `volumeClaimTemplates`, one per Pod |
 
-Two mechanisms hold all of this together: **names** and **labels.**
-Names connect an Ingress to a Service or a Pod to a ConfigMap.
-Labels connect everything that selects Pods:
+Two mechanisms hold all of this together: **names** and **labels**.Names connect an Ingress to a Service or a Pod to a ConfigMap. Labels connect everything that selects Pods:
 
 > *"The label selector is the core grouping primitive in Kubernetes."*
 
@@ -237,7 +235,7 @@ Helm uses the same file and current context as `kubectl`, with its own overrides
 A user who may only manage objects in one namespace can install only charts whose objects all live in that namespace.
 
 **Each Helm version supports a range of Kubernetes versions:** *"As of Helm 4, Helm is assumed to be compatible with `n-3` versions of Kubernetes it was compiled against."*
-`helm version` shows that version: Helm 4.3.1 reports `KubeClientVersion:"v1.37"`, and the version skew table lists `1.37.x - 1.34.x` for Helm 4.3.x.
+`helm version` shows that version: Helm 4.3 reports `KubeClientVersion:"v1.37"`, and the version skew table lists `1.37.x - 1.34.x` for Helm 4.3.x.
 
 ### The release record
 
@@ -247,7 +245,7 @@ Helm keeps the state of each release in the cluster:
 
 Helm's source names that Secret `sh.helm.release.v1.<release>.v<revision>` and labels it `owner=helm`, with `name`, `status`, and `version` among its other labels.
 
-The source of Helm 3.22.1 and Helm 4.3.1 defines the same storage type, `sh.helm.release.v1`, so Helm 4 also lists, upgrades, and rolls back releases that Helm 3 created.
+The source of Helm 3.22 and Helm 4.3 defines the same storage type, `sh.helm.release.v1`, so Helm 4 also lists, upgrades, and rolls back releases that Helm 3 created.
 Those releases keep client-side apply: *"all releases created by Helm 3 will default to using client-side apply after upgrading to Helm 4."*
 
 One Secret is written per revision:

@@ -156,6 +156,8 @@ To build it yourself, run the steps in an empty directory. No step needs a clust
    `Tests: 2 passed, 2 total`. With `-d`, the short form of `--debugPlugin`, the plugin also logs each step, including every rendered template.
    The course's commit has a `.debug/` folder with a rendered Deployment, which the plugin's `-d` stored at the time; with 1.3.0, `-d` only logs.
 
+   Each run also leaves an empty `tests/__snapshot__/` directory, where the plugin keeps the files of snapshot tests. Git doesn't track an empty directory, so it doesn't show up in `git status`.
+
 5. **Keep the tests out of the packaged chart:**
 
    The test files don't belong in the chart's archive. The README says to add `tests` to `.helmignore`, but that pattern matches more than the folder of unit tests:

@@ -65,6 +65,7 @@ The `config-store` chart overrides that, and sets resources for the container:
 The application writes no files, so the read-only root filesystem doesn't affect it.
 
 **Port 80 as UID 1000 depends on the runtime:** Docker sets `net.ipv4.ip_unprivileged_port_start` to `0` inside containers, while the host's value is `1024`, so an unprivileged process may bind low ports there.
+
 On a cluster, the container runtime decides; the Kubernetes documentation on sysctls lists `net.ipv4.ip_unprivileged_port_start` among the safe sysctls a Pod may set, since Kubernetes 1.22.
 On k3d-argocd, a Pod's network namespace reads `0` as well, and the chart's Pod bound port 80 as UID 1000 with every capability dropped.
 

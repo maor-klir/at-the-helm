@@ -121,7 +121,7 @@ Status flags such as `--deployed`, `--failed`, and `--uninstalled` narrow the li
 
 `helm status` gives a summary of one release.
 The Using Helm guide puts it this way: *"To keep track of a release's state, or to re-read configuration information, you can use `helm status`"*.
-In Helm 4.3.1 it prints the last deployment time, namespace, status, revision, and description, followed by the release's resources, the last test run, and the chart's notes.
+In Helm 4.3 it prints the last deployment time, namespace, status, revision, and description, followed by the release's resources, the last test run, and the chart's notes.
 
 ### `helm get`
 
@@ -166,7 +166,7 @@ The chart template guide describes the file: *"At the end of a `helm install` or
 `helm get notes` shows that same text without reinstalling.
 
 **`helm get metadata` summarizes the release:** chart name and version, app version, namespace, revision, status, and deployment time.
-Helm 4 adds two fields that the Helm 3.22.1 source doesn't print.
+Helm 4 adds two fields that the Helm 3.22 source doesn't print.
 `LABELS` shows the labels on the release record's Secret, and `APPLY_METHOD` shows how the objects were applied, here `server-side apply` (see **02 - Benefits and limitations of Helm**).
 
 ```text

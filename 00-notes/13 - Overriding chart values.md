@@ -18,6 +18,7 @@ helm show values bitnami/wordpress --version 23.1.20 --jsonpath '{.mariadb.auth}
 
 **A subchart's values live under its name:** MariaDB is a dependency of the WordPress chart, and the `mariadb:` block in the parent's values goes to it.
 Helm's chart documentation says *"a values file can supply values to the chart as well as to any of its dependencies."*
+
 So the root password is `mariadb.auth.rootPassword`, and the password of the `bn_wordpress` user is `mariadb.auth.password` (see **54 - Passing values to subcharts**).
 
 **A wrong path fails silently:** a key that no template reads changes nothing, and Helm doesn't report it.

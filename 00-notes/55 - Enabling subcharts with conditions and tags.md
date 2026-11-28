@@ -17,7 +17,8 @@ With its default values, the PostgreSQL chart renders 7 templates: a StatefulSet
 
 ## Conditions
 
-A condition is a path into the parent's values. The dependency best practices prefer the form `somechart.enabled`, *"Where `somechart` is the chart name of the dependency."*
+A condition is a path into the parent's values.
+The dependency best practices prefer the form `somechart.enabled`, *"Where `somechart` is the chart name of the dependency."*
 
 For PostgreSQL in `config-store`:
 
@@ -41,6 +42,7 @@ Without `enabled` in the values, PostgreSQL still renders, so the parent's `valu
 With `condition: redis.enabled,postgresql.enabled`, `--set postgresql.enabled=false` disabled PostgreSQL, since `redis.enabled` didn't exist; adding `--set redis.enabled=true` enabled it again.
 
 **A shared path switches several charts:** with `condition: global.database.enabled` on both dependencies, `--set global.database.enabled=false` disabled PostgreSQL and `demo-subchart` together, and `true` enabled both.
+
 The best practices ask for tags in this case: *"When multiple subcharts (dependencies) together provide an optional or swappable feature, those charts should share the same tags."*
 A chart can carry several tags, while a shared condition path, once set, overrides any tags as well.
 

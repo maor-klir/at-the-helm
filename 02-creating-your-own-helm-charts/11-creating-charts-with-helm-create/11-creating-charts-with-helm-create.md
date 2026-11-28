@@ -3,7 +3,7 @@
 ## Overview
 
 In this exercise, we'll use the `helm create` command to generate a chart's files instead of writing each one by hand.
-The generated chart uses features of the Helm template language that the Go templating deep-dive section covers in depth, so don't worry if some of it isn't clear yet.
+The generated chart uses features of the Helm template language that section 03 covers in depth, so don't worry if some of it isn't clear yet.
 
 Here's a summary of the main steps:
 
@@ -16,7 +16,7 @@ Here's a summary of the main steps:
 ## Step-by-step guide
 
 Run the commands in an empty directory, so the new chart doesn't end up inside this repository.
-The steps describe what `helm create` generates today, checked with Helm 4.3.2; `creating-charts/backend-app/` in this folder is the older scaffold generated for the lecture.
+The steps describe what `helm create` generates today, checked with Helm 4.3; `creating-charts/backend-app/` in this folder is the older scaffold generated for the lecture.
 
 1. **Read the help:**
 
@@ -99,7 +99,7 @@ The steps describe what `helm create` generates today, checked with Helm 4.3.2; 
 
    Prefixing the named templates with the chart name follows Helm's best practices, which recommend the command for exactly that: "It is highly recommended that new charts are created via `helm create` command as the template names are automatically defined as per this best practice."
    Optional sections are wrapped in `with` blocks, such as `{{- with .Values.resources }}`, so they're rendered only when the value is set.
-   `include`, `nindent`, and `with` are covered in the Go templating deep-dive section.
+   `include`, `nindent`, and `with` are covered in section 03.
 
    For traffic from outside the cluster, the scaffold offers two templates, both off by default: `ingress.yaml` for an Ingress, and `httproute.yaml` for an HTTPRoute from the Gateway API.
    Ingress is stable and still widely used, and most public charts expose it; the Kubernetes documentation notes that its API is frozen and recommends Gateway: "The Kubernetes project recommends using Gateway instead of Ingress. The Ingress API has been frozen."
@@ -119,4 +119,4 @@ The steps describe what `helm create` generates today, checked with Helm 4.3.2; 
 ## Conclusion
 
 In this exercise, we generated a chart with `helm create` and explored its files.
-The scaffold is a good starting point for new charts, and after the Go templating deep-dive section, every part of it will make sense.
+The scaffold is a good starting point for new charts, and after section 03, every part of it will make sense.

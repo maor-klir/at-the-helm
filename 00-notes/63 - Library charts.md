@@ -10,7 +10,8 @@ The scaffold's `name` and `fullname` helpers moved from `parent-chart` into `com
 
 ## What makes a chart a library chart
 
-`type: library` in `Chart.yaml`. The documentation lists what the type brings:
+`type: library` in `Chart.yaml`.
+The documentation lists what the type brings:
 
 | Feature in the documentation | Seen in practice |
 |---|---|
@@ -33,17 +34,22 @@ dependencies:
     repository: 'file://./charts/common'
 ```
 
-**A library chart inside `charts/` ends up there twice:** next to `charts/common/`, the update wrote `charts/common-0.1.0.tgz`, and Helm loaded both. An edit in `charts/common/` rendered without another update.
+**A library chart inside `charts/` ends up there twice:** next to `charts/common/`, the update wrote `charts/common-0.1.0.tgz`, and Helm loaded both.
+An edit in `charts/common/` rendered without another update.
 The documentation's example keeps the library chart outside the application chart, `repository: file://../mylibchart`, so the archive is the only copy inside it.
 
-**Moving a helper renames it:** in the library chart, `parent-chart.fullname` became `common.fullname`, and `parent-chart.name` became `common.name`. Every `include` of the old names, in `parent-chart`'s templates and in its `_helpers.tpl`, has to use the new ones.
+**Moving a helper renames it:** in the library chart, `parent-chart.fullname` became `common.fullname`, and `parent-chart.name` became `common.name`.
+Every `include` of the old names, in `parent-chart`'s templates and in its `_helpers.tpl`, has to use the new ones.
+
 Until it does, the render fails with `template: no template "parent-chart.name" associated with template "gotpl"`, and Helm prints the chain of includes that led to the old name.
 
-**Template names are shared by all charts in a render:** `common` is the usual name for library charts like this, so two of them can define the same template name, and only one definition is used (see **32 - Named templates**). Each template's name starts with its library chart's name, as in `common.fullname`, to make that less likely.
+**Template names are shared by all charts in a render:** `common` is the usual name for library charts like this, so two of them can define the same template name, and only one definition is used (see **32 - Named templates**).
+Each template's name starts with its library chart's name, as in `common.fullname`, to make that less likely.
 
 ## The context a library chart's templates run with
 
-A library chart brings no context of its own to the render. Its templates run with whatever the including template passes as the second argument of `include`.
+A library chart brings no context of its own to the render.
+Its templates run with whatever the including template passes as the second argument of `include`.
 `parent-chart`'s templates pass `.`, their top-level object, which holds `parent-chart`'s `.Chart`, `.Release`, and `.Values`:
 
 ```yaml
@@ -62,7 +68,9 @@ With `--set nameOverride=web`, they read `parent-chart`'s `nameOverride`: the Se
 
 A named template that a parent includes from an application subchart works the same way (see **32 - Named templates**).
 
-**The library chart's own `values.yaml` isn't part of that context:** Helm puts a dependency's values under the dependency's name in the parent's values. With `libValue: set-in-library` in `common/values.yaml`, `.Values.libValue` was empty inside a helper called with `parent-chart`'s `.`, and the value was at `.Values.common.libValue`.
+**The library chart's own `values.yaml` isn't part of that context:** Helm puts a dependency's values under the dependency's name in the parent's values.
+With `libValue: set-in-library` in `common/values.yaml`, `.Values.libValue` was empty inside a helper called with `parent-chart`'s `.`, and the value was at `.Values.common.libValue`.
+
 A library chart's helper that needs a default sets it in the template, as `common.name` does with `default .Chart.Name`.
 
 ## Beyond helpers

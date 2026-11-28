@@ -8,6 +8,7 @@ Repeated by hand, one missed copy still renders and installs without an error: a
 A named template defines such a piece once, and `include` renders it wherever it's needed.
 
 The examples come from `go-templating-deep-dive`, a chart written from scratch to try the Helm template language: a Deployment of nginx Pods, set by the values `replicaCount`, `image`, and `containerPorts`, whose name and labels come from named templates in `templates/_helpers.tpl`.
+
 Its `templates/sandbox.yaml` holds template experiments and isn't a Kubernetes object, so the chart is only rendered with `helm template`.
 
 ## Defining a named template
@@ -103,6 +104,7 @@ The scaffold's `fullname` helper also drops the chart name when the release name
 One named template for the labels keeps every selector consistent with the Pod labels it has to match: a Service including the same `selectorLabels` as its Deployment's Pod template always selects that Deployment's Pods.
 
 **Selector labels are the set to keep stable:** a Deployment's `spec.selector` can't change after it's created, so a later change to the selector labels makes `helm upgrade` fail for releases already installed (see **01 - The role of Helm in Kubernetes**).
+
 The scaffold therefore keeps two named templates: `selectorLabels` for the selectors, and `labels`, which includes `selectorLabels` and adds the labels that may change:
 
 ```yaml

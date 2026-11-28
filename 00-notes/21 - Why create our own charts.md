@@ -31,6 +31,7 @@ A published chart can be changed only through the values its templates read (see
 To serve many users, a general-purpose chart exposes many values: the computed values of our WordPress 23.1.20 release are 794 lines long (see **11 - Exploring charts and releases with the Helm CLI**).
 
 Our own chart's `values.yaml` holds what changes between our installations, such as the image tag, replica count, host names, and resource limits, with defaults that match our environments.
+
 The best practices ask chart authors to plan for how values are overridden: *"When designing the structure of your values, keep in mind that users of your chart may want to override them via either the `-f` flag or with the `--set` option."*
 
 A post-renderer can change fields a published chart doesn't expose, without a chart of our own (see **02 - Benefits and limitations of Helm**).
@@ -100,6 +101,7 @@ A chart with `type: library` in `Chart.yaml` cannot be installed: `helm install`
 Application charts list it as a dependency and include its named templates, so a label or security context defined once in the library chart reaches every chart that updates to the new library chart version.
 
 **Checks on the values and the cluster:** `values.schema.json` rejects values that don't match the chart's schema (see **02 - Benefits and limitations of Helm**), and `required` and `fail` stop a render from inside the templates.
+
 `kubeVersion` in `Chart.yaml` limits the Kubernetes versions a chart installs on: *"Helm will validate the version constraints when installing the chart and fail if the cluster runs an unsupported Kubernetes version."*
 
 ## Reusing existing charts as dependencies
@@ -120,11 +122,12 @@ dependencies:
 ```
 
 `helm dependency update` resolves the range and downloads the chart into `charts/`.
-On Helm 4.3.1 this entry resolves to `postgresql-16.2.5.tgz`, and `Chart.lock` records `16.2.5` (see **02 - Benefits and limitations of Helm**).
+On Helm 4.3 this entry resolves to `postgresql-16.2.5.tgz`, and `Chart.lock` records `16.2.5` (see **02 - Benefits and limitations of Helm**).
 The best practices suggest such patch-level ranges, and a condition for every optional dependency: *"Conditions or tags should be added to any dependencies that _are optional_."*
 
 **A dependency can also come from our own repository:** the Chart Repository Guide defines one: *"A _chart repository_ is an HTTP server that houses an `index.yaml` file and optionally some packaged charts."*
 The same guide suggests an alternative: *"If you are considering creating a chart repository, you may want to consider using an OCI registry instead."*
+
 Either one also hosts the charts we write, so other teams can install them or depend on them.
 
 ## Reasons and the Helm features they rely on

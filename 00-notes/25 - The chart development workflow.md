@@ -57,7 +57,7 @@ The three checks differ in what they read and whether they reach the cluster:
 `helm lint` *"runs a series of tests to verify that the chart is well-formed."*
 `helm template` renders without a cluster: *"Any values that would normally be looked up or retrieved in-cluster will be faked locally. Additionally, none of the server-side testing of chart validity (e.g. whether an API is supported) is done."*
 
-**Lint and Helm's own dry run miss object errors:** on Helm 4.3.2, a misspelled field (`replica:` instead of `replicas:`) and Pod labels that don't match a Deployment's selector both pass `helm lint`.
+**Lint and Helm's own dry run miss object errors:** on Helm 4.3, a misspelled field (`replica:` instead of `replicas:`) and Pod labels that don't match a Deployment's selector both pass `helm lint`.
 They also pass `helm install --dry-run=server`, which ends with `STATUS: pending-install`.
 
 The API server rejects both once `kubectl apply --dry-run=server` sends it the objects:

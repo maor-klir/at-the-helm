@@ -41,7 +41,7 @@ The release and cluster fields get placeholders:
 | `.Release.Name` | `release-name` | the first argument, as in `helm template my-app ./chart` |
 | `.Release.Namespace` | `default`, as our kubeconfig context sets no namespace | `-n` |
 | `.Release.IsInstall`, `.Release.Revision` | `true`, `1` | — |
-| `.Capabilities.KubeVersion` | `v1.37.0`, the Kubernetes version Helm 4.3.2 is built against | `--kube-version` |
+| `.Capabilities.KubeVersion` | `v1.37.0`, the Kubernetes version Helm 4.3 is built against | `--kube-version` |
 
 Our cluster runs Kubernetes 1.35, so a template that checks `.Capabilities.KubeVersion` renders differently under `helm template` than under `helm install`, unless `--kube-version 1.35.5` is given.
 

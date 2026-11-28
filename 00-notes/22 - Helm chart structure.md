@@ -38,7 +38,7 @@ The Charts documentation reserves these names: *"Helm reserves use of the `chart
 Other files are packaged with the chart, and templates can read them through `.Files`, but Helm doesn't render them.
 A manifest at the chart root or in a `manifests/` directory ends up in the archive and never reaches the cluster.
 
-`helm create demo` in Helm 4.3.1 generates `Chart.yaml`, `values.yaml`, `.helmignore`, an empty `charts/`, and a `templates/` directory.
+`helm create demo` in Helm 4.3 generates `Chart.yaml`, `values.yaml`, `.helmignore`, an empty `charts/`, and a `templates/` directory.
 The templates are a Deployment, Service, ServiceAccount, Ingress, HTTPRoute, and HorizontalPodAutoscaler, plus `_helpers.tpl`, `NOTES.txt`, and `tests/test-connection.yaml`.
 
 ## `Chart.yaml`
@@ -72,7 +72,7 @@ The Charts documentation lists its fields:
 The Charts documentation defines the two values: *"The `apiVersion` field should be `v2` for Helm charts that require at least Helm 3. Charts supporting previous Helm versions have an `apiVersion` set to `v1` and are still installable by Helm 3."*
 `v2` added the `dependencies` field, which `v1` charts kept in a separate `requirements.yaml`, and the `type` field.
 
-`helm lint` in Helm 4.3.1 accepts only these two: `apiVersion 'v3' is not valid. The value must be either "v1" or "v2"`.
+`helm lint` in Helm 4.3 accepts only these two: `apiVersion 'v3' is not valid. The value must be either "v1" or "v2"`.
 Charts v3 is still experimental (see **02 - Benefits and limitations of Helm**).
 
 ### `name`
@@ -107,7 +107,7 @@ Our WordPress release includes the MariaDB StatefulSet from its `mariadb` depend
 ### Fields outside the list
 
 The Charts documentation says *"additional fields are not allowed. The recommended approach is to add custom metadata in `annotations`."*
-Helm 4.3.1 is less strict: a `foo: bar` line in `Chart.yaml` makes `helm lint` warn `failed to strictly parse chart metadata file`, and the chart still renders and packages.
+Helm 4.3 is less strict: a `foo: bar` line in `Chart.yaml` makes `helm lint` warn `failed to strictly parse chart metadata file`, and the chart still renders and packages.
 
 ## `Chart.lock`
 
@@ -147,6 +147,7 @@ The scaffold's `.helmignore` lists version control directories, editor files, an
 
 **Every other file is part of the chart:** a `.env` with test passwords in the `config-store` chart's directory ended up in the archive as `config-store/.env`.
 Helm's source also stores a chart's files in the release record (`Files []*common.File` with the JSON key `files`), so such a file is kept with every revision of a release installed from the directory.
+
 Secrets that the chart only references belong outside its directory, or in `.helmignore`.
 
 ## `charts/`
@@ -234,7 +235,7 @@ The scaffold's `tests/test-connection.yaml` is a busybox Pod that runs `wget` ag
 | `templates/*.yaml` | Helm | rendering; the output goes to the API server |
 | `templates/_*.tpl` | Helm | rendering; named templates only, no output |
 | `templates/NOTES.txt` | Helm | printed after `install` and `upgrade`, and by `status` |
-| `templates/tests/` | Helm | created by `helm test` |
+| `templates/tests/`, by convention | Helm | `helm test` creates every template with the `helm.sh/hook: test` annotation, in any directory |
 
 ## Verify
 
